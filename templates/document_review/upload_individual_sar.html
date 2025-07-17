@@ -1,0 +1,48 @@
+{% extends 'document_review/doc_review_base.html' %}
+
+{% block review %}
+    <script src="/static/js/SiteScripts/crypto-js/sha1.js"></script>
+    <script src="/static/js/SiteScripts/crypto-js/crypto-js.js"></script>
+    <script src="/static/js/SiteScripts/crypto-govt js/lib-typedarrays-min.js"></script>
+    <script src="/static/js/SiteScripts/crypto-js/aes.js"></script>
+    <script src="/static/js/SiteScripts/FileHandler.js"></script>
+    <script src="/static/js/SiteScripts/signature_handler.js"></script>
+
+    <div style="margin-top: 2%; margin-left: 2%">
+        <div style="width: 50%">
+        {% if success %}
+            <h2 class="alert-success">Successfully Uploaded Report </h2>
+             <meta http-equiv="refresh" content="2; url=/task_management/document_review/my_sar_review" />
+        {% endif %}
+        <h3>Details of Safety Analysis Report Section-</h3>
+            {% if sar %}
+                <table class="table table-bordered table-responsive-sm" style="width: 95%; text-align: center">
+                    <tr>
+                        <th>Section assigned to Committee</th>
+                        <th>Sub-section Assigned to Review</th>
+                    </tr>
+                        <tr>
+                            <td>
+                                Section: {{ sar.committee.sar_section }}<br> Title: {{ sar.committee.sar_section_title }} <br>
+                                {% if request.user == sar.committee.lead %}
+                                    <a href="/task_management/document_review/delete_sar_reviewer/{{ sar.id }}">(delete)</a>
+                                {% endif %}
+                            </td>
+                            <td>Subsection: {{ sar.assigned_section }}<br> Subsection Title: {{ sar.assigned_section_title }}</td>
+                        </tr>
+                </table>
+            {% endif %}
+        </div>
+        <div>
+            <form enctype="multipart/form-data" action="" method="post">
+                {% csrf_token %}
+                <fieldset>
+                    <input type="text" id="sar_idv_report" name="sar_idv_report_hash" hidden="true">
+                    <input type="file" id="sar_idv_report_file" name="sar_idv_report" accept=".doc, .docs, .docx" onchange="getFileInfo(this.name)">
+                    <input type="submit" value="Submit">
+                </fieldset>
+            </form>
+        </div>
+    </div>
+
+{% endblock %}

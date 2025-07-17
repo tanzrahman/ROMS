@@ -1,0 +1,396 @@
+{% extends 'task_management/task_management_base.html' %}
+{% load document_templatetags %}
+{% load feedback_templatetags %}
+{% block document %}
+    <div>
+        <script src="/static/js/jquery-3.5.1.min.js"></script>
+        <script src="/static/js/task_manager.js"></script>
+        <script src="/static/js/selectize.js"></script>
+
+        <link href="/static/css/selectize.css" rel="stylesheet"/>
+
+        <div>
+            
+        {% if request.user.profile.access_level < 2 %}
+
+
+            <div class="row">
+                <div class="column" style="margin-left: 40%">
+                    <table class="table table-sm table-bordered" style="width: 100%">
+                        <tr>
+                            <td colspan="4">
+                                <h4 style="text-align: center">Requested Documents Summary</h4>
+                            </td>
+                        </tr>
+                        <tr style="text-align: center">
+                            <th>Pending</th>
+                            <th>Approved</th>
+                            <th>Delivered</th>
+
+                        </tr>
+                        <tr style="text-align: center">
+                            <td><button type="button" class="btn btn-outline-info btn-sm" data-toggle="modal" data-target="#doc_level_1"><b>{{ doc_level_1 }}</b></button></td>
+                            <td><button type="button" class="btn btn-outline-info btn-sm" data-toggle="modal" data-target="#doc_level_2"><b>{{ doc_level_2 }}</b></button></td>
+                            <td><button type="button" class="btn btn-outline-info btn-sm" data-toggle="modal" data-target="#doc_level_3"><b>{{ doc_level_3 }}</b></button></td>
+                        </tr>
+                    </table>
+                    <span style="">
+                        <a class="btn btn-outline-primary" href="/document_request/consultant_requests"> Click To View Consultant Document Requests</a>
+                    </span>
+                </div>
+            </div> <br>
+            {% endif %}
+
+            <div style="margin-left: 5%; margin-top: 3%">
+                    <form action="" method="get">
+                        <table style="width: 50%">
+                            <tr>
+                                {% for each_field in form %}
+                                    <td style="text-align: center">
+                                       {{ each_field.label_tag }}
+                                    </td>
+                                    <td style="width: 30%">
+                                        {{ each_field }}
+                                    </td>
+                                {% endfor %}
+                                <td>
+                                    <input style="margin-left: 20%" type="submit" value="Search" class="btn btn-info">
+                                </td>
+                            </tr>
+                        </table>
+                    </form>
+                </div>
+                <br><br>
+
+            <div style="margin-left: 5%">
+                <h5 style="text-align: center; font-weight: bold">Pending Document Requests</h5>
+                <table class="table table-sm table-responsive-sm table-bordered" style="width: 90%; text-align: center; font-size: 0.9em">
+                    <tr>
+                        <th style="width: 5%">Sl No.</th>
+                        <th style="width: 20%">Task</th>
+                        <th style="width: 15%">Requested By </th>
+                        <th style="width: 30%">Documents & Remarks</th>
+                        <th style="width: 10%">Request Date</th>
+                        <th style="width: 9%">Approval Date</th>
+                        <th style="width: 9%">Status</th>
+                    </tr>
+
+                    {% for each in my_requests %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>
+                                <span>
+                                    Milestone ID: {{ each.task.milestone_id }}
+                                </span>
+                                <br>
+                                <span>
+                                    Task ID: {{ each.task.task_id }}
+                                </span>
+                            </td>
+                            <td>
+                                <span>
+                                    {{ each.requested_by }}
+                                </span>
+                            </td>
+
+                            <td>
+                                <span>
+                                    <b>Requested Documents:</b> {{ each.requested_documents }}
+                                </span> <br>
+                                <span>
+                                   <b>My Remarks:</b> {{ each.requester_remarks }}
+                                </span>
+                            </td>
+
+                            <td>
+                                {{ each.requested_at }}
+                            </td>
+                            <td>
+                                {{ each.approved_at }}
+                            </td>
+                            <td>
+                                {{ each.id|get_doc_request_status }}
+                                <a href="/document_request/approve_request/{{ each.task.id }}/{{ each.id }}"
+                                   class="btn btn-outline-primary" target="_blank">Approve</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+
+                </table>
+            </div>
+        </div>
+
+    <!-- modal for unapproved doc list -->
+      <div id="doc_level_1" class="modal fade" role="dialog">
+        <div class="modal-dialog" style="max-width: 90%">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Pending Documents</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <div>
+                <h4 style="text-align: center; padding-top: 20px"><b>List by Division</b></h4>
+                    <table class="table table-sm table-responsive-sm table-bordered" style="width: 50%; text-align: center; font-size: 0.9em; margin-left: auto; margin-right: auto">
+                        <tr>
+                            <th>Division Name</th>
+                            <th>Total Documents</th>
+                        </tr>
+
+                        {% for each in doc_div_level_1 %}
+                            <tr>
+                                <td>{{ each.task__division__division_name }}</td>
+                                <td>{{ each.id__count}}</td>
+                            </tr>
+                        {% endfor %}
+
+                    </table>
+                </div>
+
+                <div class="modal-body" style="overflow-x: auto;">
+                <h4 style="text-align: center"><b>Total List</b></h4>
+                        <table class="table table-sm table-bordered" style="text-align: center; overflow-x: auto; width:100%">
+                            <tr>
+                                <th style="width: 5%">Sl No.</th>
+                                <th style="width: 10%">Task</th>
+                                <th style="width: 5%">Requested By </th>
+                                <th style="width: 10%">Documents & Remarks</th>
+                                <th style="width: 10%">Request Date</th>
+                                <th style="width: 9%">Approval Date</th>
+                            </tr>
+
+                            {% for each in list_doc_level_1 %}
+                                <tr>
+                                    <td>{{ forloop.counter }}</td>
+                                    <td>
+                                        <span>
+                                            Milestone ID: {{ each.task }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span>
+                                            {{ each.requested_by }}
+                                        </span>
+                                    </td>
+
+                                    <td>
+                                        <span>
+                                            <b>Requested Documents:</b> {{ each.requested_documents }}
+                                        </span> <br>
+                                        <span>
+                                           <b>My Remarks:</b> {{ each.requester_remarks }}
+                                        </span>
+                                    </td>
+
+                                    <td>
+                                        {{ each.requested_at }}
+                                    </td>
+                                    <td>
+                                        {{ each.approved_at }}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+
+                        </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+    <!-- modal for approved doc list -->
+      <div id="doc_level_2" class="modal fade" role="dialog">
+        <div class="modal-dialog" style="max-width: 90%">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Approved Documents</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <div>
+                <h4 style="text-align: center; padding-top: 20px"><b>List by Division</b></h4>
+                    <table class="table table-sm table-responsive-sm table-bordered" style="width: 50%; text-align: center; font-size: 0.9em; margin-left: auto; margin-right: auto">
+                        <tr>
+                            <th>Division Name</th>
+                            <th>Total Documents</th>
+                        </tr>
+
+                        {% for each in doc_div_level_2 %}
+                            <tr>
+                                <td>{{ each.task__division__division_name }}</td>
+                                <td>{{ each.id__count}}</td>
+                            </tr>
+                        {% endfor %}
+
+                    </table>
+                </div>
+
+                <div class="modal-body" style="overflow-x: auto;">
+                <h4 style="text-align: center"><b>Total List</b></h4>
+                    <div>
+                        <table class="table table-sm table-bordered" style="text-align: center;">
+                            <tr>
+                                <th style="width: 5%">Sl No.</th>
+                                <th style="width: 20%">Task</th>
+                                <th style="width: 15%">Requested By </th>
+                                <th style="width: 30%">Documents & Remarks</th>
+                                <th style="width: 10%">Request Date</th>
+                                <th style="width: 9%">Approval Date</th>
+                            </tr>
+
+                            {% for each in list_doc_level_2 %}
+                                <tr>
+                                    <td>{{ forloop.counter }}</td>
+                                    <td>
+                                        <span>
+                                            Milestone ID: {{ each.task }}
+                                        </span>
+                                        <br>
+                                        <span>
+                                            Task ID: {{ each.task.task_id }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span>
+                                            {{ each.requested_by }}
+                                        </span>
+                                    </td>
+
+                                    <td>
+                                        <span>
+                                            <b>Requested Documents:</b> {{ each.requested_documents }}
+                                        </span> <br>
+                                        <span>
+                                           <b>My Remarks:</b> {{ each.requester_remarks }}
+                                        </span>
+                                    </td>
+
+                                    <td>
+                                        {{ each.requested_at }}
+                                    </td>
+                                    <td>
+                                        {{ each.approved_at }}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+    <!-- modal for delivered doc list -->
+      <div id="doc_level_3" class="modal fade" role="dialog">
+        <div class="modal-dialog" style="max-width: 90%">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Delivered Documents</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                            <div>
+                <h4 style="text-align: center; padding-top: 20px"><b>List by Division</b></h4>
+                    <table class="table table-sm table-responsive-sm table-bordered" style="width: 50%; text-align: center; font-size: 0.9em; margin-left: auto; margin-right: auto">
+                        <tr>
+                            <th>Division Name</th>
+                            <th>Total Documents</th>
+                        </tr>
+
+                        {% for each in doc_div_level_3 %}
+                            <tr>
+                                <td>{{ each.task__division__division_name }}</td>
+                                <td>{{ each.id__count}}</td>
+                            </tr>
+                        {% endfor %}
+
+                    </table>
+                </div>
+
+                <div class="modal-body" style="overflow-x: auto;">
+                <h4 style="text-align: center"><b>Total List</b></h4>
+                    <div>
+                        <table class="table table-sm table-bordered" style="text-align: center">
+                            <tr>
+                                <th style="width: 5%">Sl No.</th>
+                                <th style="width: 20%">Task</th>
+                                <th style="width: 15%">Requested By </th>
+                                <th style="width: 30%">Documents & Remarks</th>
+                                <th style="width: 10%">Request Date</th>
+                                <th style="width: 9%">Approval Date</th>
+                            </tr>
+
+                            {% for each in list_doc_level_3 %}
+                                <tr>
+                                    <td>{{ forloop.counter }}</td>
+                                    <td>
+                                        <span>
+                                            Milestone ID: {{ each.task }}
+                                        </span>
+                                        <br>
+                                    </td>
+                                    <td>
+                                        <span>
+                                            {{ each.requested_by }}
+                                        </span>
+                                    </td>
+
+                                    <td>
+                                        <span>
+                                            <b>Requested Documents:</b> {{ each.requested_documents }}
+                                        </span> <br>
+                                        <span>
+                                           <b>My Remarks:</b> {{ each.requester_remarks }}
+                                        </span>
+                                    </td>
+
+                                    <td>
+                                        {{ each.requested_at }}
+                                    </td>
+                                    <td>
+                                        {{ each.approved_at }}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+    <div>
+        <script>
+            $(document).ready(function () {
+
+                $('#id_requested_by').selectize({
+                    sortField: 'text',
+                    inputClass: 'no_fetch'
+                });
+            });
+        </script>
+    </div>
+
+{% endblock %}

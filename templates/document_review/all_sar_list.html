@@ -1,0 +1,62 @@
+{% extends 'document_review/doc_review_base.html' %}
+{% load consultant_templatetags %}
+{% load static %}
+{% block review %}
+
+    <script src="/static/js/task_manager.js"></script>
+    <script src="{% static 'js/selectize.js' %}"></script>
+    <link href="/static/css/selectize.css" rel="stylesheet"/>
+
+
+    <div style="padding-left: 20px; margin-top: 1%">
+
+        <div class="col" style="margin-top: 2%; margin-left: 1%; width: 100%">
+            {% if sar_list %}
+                <h3 style="padding-left:30% "> List of Safety Analysis Review</h3>
+                <table class="table table-bordered table-responsive-sm" style="width: 95%; text-align: center; font-size: 0.9em; ">
+                    <tr>
+                        <th>Sl</th>
+                        <th>Section assigned to Committee</th>
+                        <th>Sub-section Assigned to Review</th>
+                        <th>Reviewer</th>
+                        <th>Assigned On</th>
+                        <th>Submitted On</th>
+                        <th>Report</th>
+                    </tr>
+                    {% for each in sar_list %}
+                        <tr>
+                            <td>
+                                {{ forloop.counter }}
+                            </td>
+                            <td style="width: 30%">
+                                Section: {{ each.committee.sar_section }}<br> Title: {{ each.committee.sar_section_title }} <br>
+                            </td>
+                            <td style="width: 30%">Subsection: {{ each.assigned_section }}<br> Subsection Title: {{ each.assigned_section_title }}</td>
+
+                            <td style="width: 15%">
+                                {{ each.user }}
+                            </td>
+                            <td>
+                                {{ each.submitted_on|date }}
+                            </td>
+
+                            <td>
+                                {{ each.assign_date }}
+                            </td>
+                            <td>
+                                {% if each.analysis_report_file %}
+                                    <a href="/feedback/viewfile/{{ each.analysis_report_file }}">Download Report</a> <br>
+                                {% else %}
+                                    <b style="color: red">Not Submitted</b>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+
+            {% endif %}
+        </div>
+
+    </div>
+
+{% endblock %}

@@ -1,0 +1,151 @@
+{% extends 'task_management/task_management_base.html' %}
+{% load document_templatetags %}
+{% load feedback_templatetags %}
+{% block document %}
+    <div>
+        <script src="/static/js/jquery-3.5.1.min.js"></script>
+        <script src="/static/js/task_manager.js"></script>
+
+        <div>
+
+            <div style="margin-left: 5%">
+                {% if msg %}
+                    <h3 style="text-align: center; color: green">{{ msg }}</h3>
+                {% endif %}
+
+                <h5 style="text-align: center; font-weight: bold">Discussion Details</h5>
+                <table class="table table-sm table-responsive-sm table-bordered"
+                       style="width: 80%; text-align: center; font-size: 0.9em;">
+
+                    {% if lecture %}
+                        <tr>
+                            <th style="width: 10%">Division</th>
+                            <td>{{ lecture.target_division }}</td>
+                        </tr>
+
+                        <tr>
+                            <th style="width: 10%">Title</th>
+                            <td>
+                                {{ lecture.lecture_name }}
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <th style="width: 10%">Description</th>
+                            <td>
+                                {{ lecture.lecture_description }}
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <th style="width: 10%">Venue</th>
+                            <td>
+                                {{ lecture.venue }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th style="width: 10%">Schedule</th>
+                            <td>
+                                {{ lecture.schedule }}
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <th style="width: 10%">Lead Presenter</th>
+                            <td>
+                                <b>{{ lecture.lead_presenter }}</b>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <th style="width: 10%">Other Presenter(s)</th>
+                            <td>
+                                {% for each in  lecture.other_presenter.all%}
+                                <b style="color: blue">{{ forloop.counter }}.</b> <b>{{ each }}</b>
+                                {% endfor %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th style="vertical-align: middle">Participants of Tasks</th>
+                            <td style="overflow-wrap: break-word; text-align: left">
+                                {% for each in lecture.tasks.all %}
+                                    <span style="font-size: smaller">
+                                        <b style="color: blue">{{ forloop.counter }}.</b>  <b>{{ each }}:</b>
+                                        <span>{{ each.title }}</span>,<br>
+                                    </span>
+                                {% endfor %}
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <th style="vertical-align: middle">Supervisor Participants({{ sv_participants.count }})</th>
+                            <td style="overflow-wrap: break-word; text-align: left">
+                                {% for each in sv_participants %}
+                                    {% if forloop.counter|divisibleby:5 %}
+                                        <br>
+                                    {% endif %}
+                                    <span style="font-size: smaller">
+                                        <b style="color: blue">{{ forloop.counter }}.</b>  <b>{{ each }}</b> &nbsp
+                                    </span>
+                                {% endfor %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th style="vertical-align: middle">Executor Participants ({{ exec_participants.count }})
+                            </th>
+                            <td style="overflow-wrap: break-word; text-align: left">
+                                {% for each in exec_participants %}
+                                    {% if forloop.counter|divisibleby:5 %}
+                                        <br>
+                                    {% endif %}
+                                    <span style="font-size: smaller">
+                                        <b style="color: blue">{{ forloop.counter }}.</b>  <b>{{ each }}:</b>
+                                    </span>
+                                {% endfor %}
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <th style="width: 10%">Other Participant(s)</th>
+                            <td style="text-align: left">
+                                {% for each in  lecture.other_participants.all%}
+                                <b style="color: blue">{{ forloop.counter }}.</b>
+                                    <b style="font-size: smaller">{{ each }}</b>
+                                    <span style="font-size: smaller; color: blue; font-weight: bold;">{% if each.profile.grade == 75 %} (consultant) {% endif %}</span>
+                                    <br>
+                                {% endfor %}
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <th style="width: 10%">Special Participant(s)</th>
+                            <td style="text-align: left">
+                                <b style="font-size: smaller">{{ lecture.special_participants }}</b>
+                            </td>
+                        </tr>
+
+                    {% endif %}
+                </table>
+
+                {% if request.user.profile.access_level < 3  or perms.task_management.add_lecture%}
+                <div style="padding-bottom: 5%">
+                    {% if lecture.notified_users < 1 %}
+                        <form action="/lecture/notify/{{ lecture.id }}" method="post">
+                            {% csrf_token %}
+                            <input type="submit" class="btn btn-outline-info" value="Notify All Participants">
+                        </form>
+                    {% endif %}
+                    <a href="/lecture/edit/{{ lecture.id }}" class="btn btn-outline-primary"> Edit</a>
+                    <a href="/lecture/add_consultant/{{ lecture.id }}" class="btn btn-outline-primary"> Add Consultant</a>
+
+                    {% if request.user.is_staff %}
+                        <a href="/lecture/send_msg/{{ lecture.id }}?target=all" class="btn btn-outline-primary">
+                            Send Msg to Participants</a>
+                    {% endif %}
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

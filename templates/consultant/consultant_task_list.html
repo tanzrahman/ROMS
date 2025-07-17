@@ -1,0 +1,200 @@
+{% extends 'consultant/consultant_base.html' %}
+{% load static %}
+{% load consultant_templatetags %}
+{% block content %}
+    <script src="{% static 'js/selectize.js' %}"></script>
+    <script src="{% static 'js/SiteScripts/search_results.js' %}"></script>
+    <link href="/static/css/selectize.css" rel="stylesheet"/>
+    <div>
+        <div class="row" style="padding-top: 10px">
+            <div class="column" style="margin-left: 5%">
+                <table class="table table-sm table-bordered" style="width: 100%">
+                    <tr>
+                        <td colspan="4">
+                            <h4 style="text-align: center">Summary of All Tasks</h4>
+                        </td>
+                    </tr>
+                    <tr style="text-align: center">
+                        <th>Total Tasks</th>
+                        <th>{{ total_tasks }}</th>
+                    </tr>
+                    <tr style="text-align: center">
+                        <th>Tasks of Current Month</th>
+                        <th>{{ monthly_tasks }}</th>
+                    </tr>
+                </table>
+            </div>
+            {% if search_summary %}
+                <div class="column" style="margin-left: 10%">
+                    <table class="table table-sm table-bordered" style="width: 100%">
+                        <tr>
+                            <td colspan="4">
+                                <h4 style="text-align: center">Summary of Search Result</h4>
+                            </td>
+                        </tr>
+                        <tr style="text-align: center">
+                            <th>Total Tasks</th>
+                            <th>{{ search_summary.total_tasks }}</th>
+                        </tr>
+                        <tr style="text-align: center">
+                            <th>Tasks of Current Month</th>
+                            <th>{{ search_summary.monthly_tasks }}</th>
+                        </tr>
+                    </table>
+                </div>
+            {% endif %}
+        </div>
+
+        <div>
+
+            <div>
+                <div>
+                    <form action="" method="get" id="task_search_form">
+                        <table class="table table-hover table-bordered table-sm"
+                               style="overflow-wrap: break-word; width: 130%">
+
+                            <tr class="table-success" style="text-align: center; font-size: 0.9em">
+                                <th>SL No.</th>
+                                <th>Milestone ID</th>
+                                <th>Task ID</th>
+                                <th style="width: 5%">Division</th>
+                                <th>Category</th>
+                                <th>Title</th>
+                                <th>System</th>
+                                <th>Facility</th>
+
+                                <th>Supervisor</th>
+                                <th>Executor</th>
+                                <th>Planned start date</th>
+                                <th>Planned end date</th>
+                                <th>Actual start date</th>
+                                <th>Actual end date</th>
+
+                            </tr>
+                            <tr style="font-size: 0.9em">
+
+                                {% csrf_token %}
+                                <td style="text-align:center;">
+                                    <input class="btn  btn-outline-dark btn-light" type="submit" value="Search">
+                                </td>
+                                <formset>
+                                    {% for field in form %}
+
+                                        {% if field.name == 'planned_start_date_from' or field.name == 'planned_end_date_from' or field.name == 'actual_start_date_from' or field.name == 'actual_end_date_from' %}
+
+                                            {% if field.name == 'planned_start_date_from' %}
+                                                <td>From:{{ field }} <br> To:{{ form.planned_start_date_to }}</td>
+                                            {% endif %}
+
+                                            {% if field.name == 'planned_end_date_from' %}
+                                                <td>From:{{ field }} <br> To:{{ form.planned_end_date_to }}</td>
+                                            {% endif %}
+
+                                            {% if field.name == 'actual_start_date_from' %}
+                                                <td>From:{{ field }} <br> To:{{ form.actual_start_date_to }}</td>
+                                            {% endif %}
+
+                                            {% if field.name == 'actual_end_date_from' %}
+                                                <td>From:{{ field }} <br> To:{{ form.actual_end_date_to }}</td>
+                                            {% endif %}
+
+                                        {% else %}
+                                            {% if 'date_to' not in field.name %}
+                                                <td {% if 'system' in field.name %} style="width: 5%" {% endif %}>
+                                                    {{ field }}
+                                                </td>
+                                            {% endif %}
+                                        {% endif %}
+                                    {% endfor %}
+                                </formset>
+
+                            </tr>
+                            <tbody style="text-align: center; font-size: 0.8em">
+                            {% if task_list %}
+                                {% for task in task_list %}
+                                    <tr>
+                                        <td>{{ forloop.counter }}</td>
+                                        <td style="font-size: 0.9em">{{ task.milestone_id }}
+                                            {% if task.id|con_has_not_participated:request.user%}
+                                            <a href="/consultant/task/participate/{{ task.id }}"
+                                               target="_blank">(Participate)</a>
+                                            {% endif %}
+                                        </td>
+
+                                        <td>
+                                            <a href="/consultant/task/open/{{ task.id }}"
+                                               target="_blank">{{ task.task_id }}</a>
+                                        </td>
+                                        <td>{{ task.division }}</td>
+                                        <td>{{ task.task_category }}</td>
+                                        <td>{{ task.title }}</td>
+                                        <td>{{ task.system }}</td>
+                                        <td>{{ task.facility }}</td>
+                                    
+                                        <td>{% for each in task.supervisor_list %} {{ each.first_name }}
+                                            {{ each.last_name }}
+                                            ({{ each.username }})<br> {% endfor %}</td>
+                                        <td>{% for each in task.executor_list %} {{ each.first_name }}
+                                            {{ each.last_name }}
+                                            ({{ each.username }})<br> {% endfor %}</td>
+
+                                        <td>{{ task.planned_start_date }}</td>
+                                        <td>{{ task.planned_end_date }}</td>
+                                        <td>{{ task.actual_start_date }}</td>
+                                        <td>{{ task.actual_end_date }}</td>
+
+                                    </tr>
+                                {% endfor %}
+                            {% else %}
+                                <h2 style="text-align:center; color:red">No Pending Task</h2>
+                            {% endif %}
+                            </tbody>
+                        </table>
+                    </form>
+
+                    <!-- for pagination-->
+                    <div id="pagination_div">
+                        {% if task_list.has_other_pages %}
+                            <ul class="paginator">
+
+                                <span>Page: </span>
+                                {% for i in task_list.paginator.page_range %}
+                                    {% if task_list.number == i %}
+                                        <span class="this-page">{{ i }} <span
+                                                class="sr-only">(current)</span></span>
+                                    {% else %}
+                                        <a href="javascript:next_page_report('{{ i }}')">{{ i }}</a>
+                                    {% endif %}
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </div>
+
+                </div>
+            </div>
+            <br> <br>
+        </div>
+        <script>
+            $(document).ready(function () {
+
+                $('#id_supervisor').selectize({
+                    sortField: 'text',
+                    inputClass: 'no_fetch'
+                });
+                $('#id_task_executor').selectize({
+                    sortField: 'text',
+                    inputClass: 'auto_fetch'
+                });
+                $('#id_division').selectize({
+                    sortField: 'text',
+                    inputClass: 'no_fetch'
+                });
+                $('#id_system').selectize({
+                    sortField: 'text',
+                    inputClass: 'no_fetch'
+                });
+            });
+        </script>
+
+    </div>
+{% endblock %}

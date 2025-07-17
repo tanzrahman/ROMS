@@ -1,0 +1,189 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="user-scalable=yes, width=1920px, initial-scale=1.0, maximum-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="stylesheet" href="{% static 'css/static.css' %}">
+    <script src="/static/js/SiteScripts/jquery-3.5.1.js"></script>
+    <script src="/static/js/apexcharts/apexcharts.js"></script>
+    <link href="{% static 'css/bootstrap.css' %}" rel="stylesheet">
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/SiteScripts/jquery-3.5.1.js' %}"></script>
+    <title>Rooppur NPP Project Task Management System</title>
+
+    <style>
+        .navbar-nav .nav-item:hover .nav-link {
+            color: #fff;
+            background-color: green;
+        }
+
+        .active {
+            background-color: black;
+        }
+
+        .table-wrapper {
+            max-height: 100%;
+            overflow-y: scroll;
+        }
+
+        @keyframes anim-lineUp {
+            0% {
+                opacity: 0;
+                transform: translateY(80%);
+            }
+            20% {
+                opacity: 0;
+            }
+            50% {
+                opacity: 1;
+                transform: translateY(0%);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0%);
+            }
+        }
+
+        @keyframes anim-btnUp {
+            0% {
+                opacity: 0;
+                transform: translateY(80%);
+            }
+            20% {
+                opacity: 0;
+            }
+            40% {
+                opacity: .5;
+            }
+            60% {
+                opacity: .8;
+                transform: translateY(0%);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0%);
+            }
+        }
+
+        h1 {
+            text-align: center;
+            padding: 16px;
+            font-weight: bold;
+            margin: 0;
+        }
+
+        /* crops animations that exceeds one line area */
+        .line {
+            width: 100%;
+            height: 20rem;
+            overflow: hidden;
+            padding: 0;
+            margin-bottom: 16px;
+        }
+
+
+        /* lineup class and keyframes */
+        .lineUp {
+            animation: 2s anim-lineUp ease-in;
+        }
+
+        .btnlineUp {
+            animation: 4s anim-btnUp ease;
+        }
+
+        .button {
+            background-color: #04AA6D;
+            border: black;
+            color: white;
+            padding: 40px;
+
+            text-align: center;
+            text-decoration: solid;
+            display: inline-block;
+            font-size: 1.5em;
+            margin: 4px 2px;
+        }
+
+        .button5 {
+            border-radius: 60%;
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+
+<div id="page-content-wrapper">
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
+
+        <div class="collapse navbar-collapse">
+
+            <ul class="navbar-nav mr-auto">
+                <li class="navbar-item">
+                    <a src="/static/npcbl.png"></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/"><b>Rooppur NPP Project Management System</b></a>
+                </li>
+
+            </ul>
+        </div>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav ml-md-auto">
+
+
+                <li class="nav-item">
+                    <a class="nav-link px-1 mx-1 py-3 my-n2" href="/logout">
+                        {% if not request.user.is_anonymous %}
+                            (logout)
+                        {% endif %}
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</div>
+
+<div style="height:100px;">
+
+    <div class="line">
+        <h1 class='lineUp' style="margin-top: 10% ;text-align: center">
+            Welcome to <br>Rooppur NPP Project Management System
+        </h1>
+    </div>
+    {% if 'pd' in request.user.username %}
+        {% if success %}.
+            <h1 class="lineUp">Total {{ tasks }} task assigned for this week. Notification Sending to {{person}} personnel</h1>
+        {% else %}
+            <div>
+                <h1 class="btnlineUp">
+                    <form action="" method="get">
+                        <input type="hidden" name="launch" value="1">
+                        <button class="button button5">Launch</button>
+                    </form>
+                </h1>
+            </div>
+        {% endif %}
+    {% endif %}
+
+</div>
+
+</body>
+
+<script type="text/javascript">
+    $('.nav-link').click(function () {
+        $(".active").removeClass("active");
+        $($(this).attr('href')).addClass("active");
+    });
+</script>
+</html>

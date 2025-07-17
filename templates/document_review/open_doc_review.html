@@ -1,0 +1,160 @@
+{% extends 'document_review/doc_review_base.html' %}
+{% load consultant_templatetags %}
+
+{% block open_doc %}
+
+    <script src="/static/js/task_manager.js"></script>
+
+    <div style="padding-left: 20px">
+    
+        <div>
+            {% if request.user in task.task_executor.all  or request.user in task.supervisor.all %}
+            <br>
+            <span>
+                <b style="color: red">Choice One Category from below for feedback after studying the document </b>
+            </span>
+            <br>
+            <a href="/task_management/document_review/feedback/{{ task.id }}?doc_category=Operational"
+               class="btn btn-outline-info">
+                Operational and Maintenance Document Feedback
+            </a>
+
+            <a href="/task_management/document_review/feedback/{{ task.id }}?doc_category=Regulation"
+               class="btn btn-outline-info">
+                Regulation Document Feedback
+            </a>
+            <br>
+            <a href="/task_management/document_review/feedback/{{ task.id }}?doc_category=Fire"
+               class="btn btn-outline-info">
+                Fire & Emergency
+            </a>
+                <a href="/task_management/document_review/feedback/{{ task.id }}?doc_category=Other"
+                   class="btn btn-outline-info">
+                    Other Category Document Feedback
+                </a>
+            {% endif %}
+        </div>
+        <br>
+
+        <h2>Task Details</h2>
+
+        {% if task %}
+            <div class="outer-wrapper">
+                <div class="table-wrapper">
+                    <table style="width:50%" class="table table-hover table-bordered table-sm">
+
+                        <tr>
+                            <th>Document ID:</th>
+                            <td>{{ task.task_id }}</td>
+                        </tr>
+
+                        <tr>
+                            <th>Title</th>
+                            <td>{{ task.title }}</td>
+                        </tr>
+                        {% if task|task_consultant %}
+                            <th>Consultant</th>
+                            <td style="color: blue; font-weight: bold">
+                                {{ task|task_consultant }}
+                            </td>
+                        {% endif %}
+                        <tr>
+                        </tr>
+                        <tr>
+                            <th>Supervisor</th>
+                            <td>
+                                {% for each in task.supervisor_list %}
+                                    {% if task.division == each.profile.division %}
+                                        <b>*</b>
+                                    {% endif %}
+                                    {{ each.first_name }} {{ each.last_name }}({{ each.username }}) <br>
+                                {% endfor %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Executor</th>
+                            <td>
+                                {% for each in task.executor_list %}
+                                    {{ each.first_name }} {{ each.last_name }}({{ each.username }})
+                                    <br>
+                                {% endfor %}
+                            </td>
+
+
+                        </tr>
+                        <tr>
+                            <th>System:</th>
+                            <td>
+                                {{ task.system }}
+                            </td>
+
+                        </tr>
+                        <tr>
+                            <th>Facility</th>
+                            <td>{{ task.facility }}</td>
+                        </tr>
+                        <tr>
+                            <th>Planned start date</th>
+                            <td>{{ task.planned_start_date }}</td>
+                        </tr>
+                        <tr>
+                            <th>Planned end date</th>
+                            <td>{{ task.planned_end_date }}</td>
+                        </tr>
+                        <tr>
+                            <th>Actual start date</th>
+                            <td>{{ task.actual_start_date }}</td>
+                        </tr>
+                        <tr>
+                            <th>Actual end date</th>
+                            <td>{{ task.actual_end_date }}</td>
+                        </tr>
+                        <tr>
+                            <th>Active Status</th>
+                            <td>{{ task.is_active }}</td>
+                        </tr>
+                        <tr>
+                            <th>Task Completed (%)</th>
+                            <td>{{ task.percent_completed }}</td>
+                        </tr>
+
+                    </table>
+                </div>
+            </div>
+            <br>
+        {% endif %}
+
+        <br>
+        <a href="javascript:add_comment('{{ task.id }}')" class="btn btn-outline-info">
+                Add Comment
+        </a>
+
+
+        <!-- table for comments -->
+        {% if comment_list %}
+            <div>
+                <h2>Comments</h2>
+
+                <table style="width:50%" class="table table-hover table-bordered">
+
+                    <tr class="table-danger">
+                        <th>User</th>
+                        <th>Comment</th>
+                        <th>Created Date</th>
+                    </tr>
+
+                    {% for each in comment_list %}
+                        <tr>
+                            <td>{{ each.user }}</td>
+                            <td>{{ each.comment }}</td>
+                            <td>{{ each.created_date }}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        {% endif %}
+
+        <br><br>
+
+    </div>
+{% endblock %}

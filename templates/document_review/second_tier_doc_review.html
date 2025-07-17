@@ -1,0 +1,70 @@
+{% extends 'document_review/doc_review_base.html' %}
+{% load static %}
+{% load feedback_templatetags %}
+{% load document_templatetags %}
+{% load document_review_tags %}
+
+{% block review %}
+
+    <script src="{% static 'js/SiteScripts/search_results.js' %}"></script>
+    <script src="{% static 'js/task_manager.js' %}"></script>
+
+    <div>
+    <a href="/static/PMS_manual_2nd_tier_doc_review.pdf" class="blink" style="font-size: 1em; margin-left: 40%">(Download Document Review Manual)</a>
+        {% if doc_list %}
+            <div style="margin-left: 30%; width: 30%; padding-top: 20px">
+                <table class="table table-bordered table-hover" style="text-align: center">
+                    <tr>
+                        <th>Total Feedback</th>
+                        <th>{{ total_reviews }}</th>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="container-fluid">
+                <h2 class="card-header">Second Tier Document Review Feedback List</h2>
+                <table class="table table-bordered table-hover" style="text-align: center">
+                    <tr>
+                        <th>Sl No</th>
+                        <th>Task</th>
+                        <th>Assigned Date</th>
+                        <th>My Recommendation</th>
+                        <th>Deadline</th>
+                    </tr>
+                    {% for each in doc_list %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td><a href="/task_management/document_review/committee_open_review/{{ each.id }}?category={{ each.category }}">{{ each.task }}</a>
+                                {% if each.task.id|has_no_document_request:request.user %}
+                                        <a href="/document_request/create_request/{{ each.task.id }}"
+                                           class="btn btn-outline-info" target="_blank">Request Document</a>
+                                {% endif %}
+                            </td>
+                            <td>{{ each.assigned_date }}</td>
+                            <td>
+                                {% with each.committee_approval|has_approval_from:request.user as approval%}
+                                    {% if approval %}
+                                        {{ approval|remarks_display_str }}
+                                    {% else %}
+                                        {% if each.division_head_approval.signed_by == request.user%}
+                                            {{ each.division_head_approval.remarks|remarks_display_str }}
+                                        {% else %}
+                                            Not Yet Given
+                                        {% endif %}
+                                    {% endif %}
+
+                                {% endwith %}
+                            </td>
+                            <td>{{ each.committee_deadline }}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+
+        {%  else %}
+            <h3>No Review pending</h3>
+
+        {% endif %}
+
+    </div>
+{% endblock %}

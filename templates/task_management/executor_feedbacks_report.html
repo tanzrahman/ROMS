@@ -1,0 +1,112 @@
+{% extends 'task_management/task_management_base.html' %}
+{% load static %}
+{% load feedback_templatetags %}
+{% block task_list %}
+    <div>
+        <script src="{% static 'js/SiteScripts/search_results.js' %}"></script>
+        <div class="row">
+            <div class="column" style="margin-left: 5%">
+                <table class="table table-sm table-bordered" style="width: 100%">
+
+                </table>
+            </div>
+        </div>
+        <div style="width: 80%; margin-top: 2%; margin-left: 2%">
+            <table class="table table-hover table-bordered small" style="text-align: center">
+                <tr>
+                    <td colspan="6">
+                        <h4 style="text-align: center">
+                            Total {{ assigned_task }} task distribution notified <br>
+                            Total Feedbacks from {{ executors_feedbacks.count }} Executors <br>
+                            No Feedback from <button type="button" class="btn btn-outline-info btn-sm" data-toggle="modal"
+                                    data-target="#no_fb"><b>{{ no_feedback_count }}</b></button> Executors
+                        </h4>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Sl No.</th>
+                    <th>Executor</th>
+                    <th>Division & Department</th>
+                    <th>Number of Feedbacks</th>
+                    <th>Total Task as Executor</th>
+                    <th>Action</th>
+                </tr>
+                {% if executors_feedbacks %}
+                    {% for each in executors_feedbacks %}
+                        <tr>
+                            <td>
+                                {{ forloop.counter }}
+                            </td>
+                            <td>
+                                {{ each.1 }}
+                                {% if request.user.is_staff %}
+                                    <a href="?send_msg=1&userid={{ each.0 }}" target="_blank"
+                                       style="font-size: smaller">(send msg)</a>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {{ each.2 }} {% if each.3 is not None %}({{ each.3 }}) {% endif %}
+                            </td>
+                            <td>
+                                {{ each.4 }}
+                            </td>
+                            <td>
+                                {{ each.0|executor_task_count }}
+                            </td>
+                            <td><a href="/feedback/executor_specific_feedbacks/{{ each.0 }}">View Feedbacks</a></td>
+                        </tr>
+                    {% endfor %}
+                {% endif %}
+            </table>
+        </div>
+
+        <div id="no_fb" class="modal fade" role="dialog">
+            <div class="modal-dialog" style="max-width: 90%">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <div>
+                        <h4 style="text-align: center">No Feedback Executors
+                            {% if request.user.is_staff %}
+                                <a href="?send_msg=1&assigned_only=1&tasks=no_feedback" target="_blank"
+                                 style="font-size: smaller">(send msg)</a>
+                            {% endif %}
+                        </h4>
+                        <table class="table table-sm table-responsive-sm table-bordered"
+                               style="width: 50%; text-align: center; font-size: 0.9em; margin-left: auto; margin-right: auto">
+                            <tr>
+                                <th>Sl No.</th>
+                                <th>Executor</th>
+                                <th>Division</th>
+                                <th>Task To Executor</th>
+                            </tr>
+
+                            {% for id,mail,div,task_count in no_feedback_users %}
+                                <tr>
+                                    <td>{{ forloop.counter }}</td>
+                                    <td>{{ mail }}
+                                        {% if request.user.is_staff %}
+                                    <a href="?send_msg=1&assigned_only=1&userid={{ id }}" target="_blank"
+                                       style="font-size: smaller">(send msg)</a>
+                                {% endif %}
+                                    </td>
+                                    <td>{{ div }}</td>
+                                    <td>{{ task_count }}</td>
+                                </tr>
+                            {% endfor %}
+
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+{% endblock %}

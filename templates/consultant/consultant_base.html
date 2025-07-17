@@ -1,0 +1,162 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="user-scalable=yes, width=1920px, initial-scale=1.0, maximum-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="stylesheet" href="{% static 'css/static.css' %}">
+    <script src="/static/js/SiteScripts/jquery-3.5.1.js"></script>
+    <script src="/static/js/apexcharts/apexcharts.js"></script>
+    <link href="{% static 'css/bootstrap.css' %}" rel="stylesheet">
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/SiteScripts/jquery-3.5.1.js' %}"></script>
+    <title>Rooppur NPP Project Task Management System</title>
+
+    <style>
+        img {
+            display: inline-block;
+        }
+        .navbar-nav .nav-item:hover .nav-link{
+            color: #fff;
+            background-color: green;
+        }
+
+        .active { background-color: black; }
+
+        .table-wrapper {
+            max-height: 100%;
+            overflow-y: scroll;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+
+<div id="page-content-wrapper">
+
+    <div class="row">
+
+        <div class="col col-md-3" style="margin-left: 2%;">
+            <img src="{% static '\ministry.png' %}" alt="govt. logo" width="13%" height="100%">
+            <img src="{% static '\baec.png' %}" alt="baec logo" width="13%" height="100%">
+        </div>
+
+        <div class="col col-md-6" style="margin-left: -3%; width: 80%;">
+            <h2 style="color:darkred; text-align: left"><b>Rooppur NPP Project Management System</b></h2>
+        </div>
+
+        <div class="col col-md-3" style="">
+            <img src= "{% static '\npcbl.png' %}" alt="npcbl logo" width="14%" height="100%" style="float: right">
+        </div>
+    </div>
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom py-sm-0">
+
+        <div class="collapse navbar-collapse">
+
+            <ul class="navbar-nav mr-auto">
+                <li class="navbar-item">
+                    <a src="/static/npcbl.png"></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/"><b>Rooppur NPP Project Management System</b></a>
+                </li>
+
+
+                {% if request.user.is_anonymous %}
+                <li class="nav-item">
+                    <a class="nav-link" href="/login">Login</a>
+                </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="/consultant/task_list"><b>All Task List</b></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/consultant/monitored_task_list"><b>Monitored Task List</b></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/consultant/discussion/list"><b>All Discussions</b></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/consultant/discussion/my_list"><b>My Discussions</b></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/consultant/document_request/my_requests"><b>My Document Requests</b></a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav ml-md-auto">
+            {% if not request.user.is_anonymous  %}
+                <li class="nav-item">
+                        <a class="nav-link" href="/notifications/show"><b>My Notifications</b></a>
+                </li>
+            {% endif %}
+                <div class="dropdown" style="float:left;">
+                    <li class="nav-item">
+                        {% if not request.user.is_anonymous %}
+                        <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" >
+                            {{ request.user }}
+                        </button>
+                            <div class="dropdown-menu" style="font-size: 14px">
+                                <a class="dropdown-item" href="/manpower/user/change_password">Change Password</a>
+                            </div>
+                        {% endif %}
+                    </li>
+                </div>
+
+                <li class="nav-item">
+                    <a class="nav-link px-1 mx-1 py-3 my-n2" href="/logout">
+                        {% if not request.user.is_anonymous %}
+                            (logout)
+                        {% endif %}
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</div>
+
+<div style="height:100px;">
+    {% if not request.user.is_anonymous %}
+        {% block content %}
+
+        {% endblock %}
+
+    {% else %}
+
+        {% block userlogin %}
+
+        {% endblock %}
+
+        {% block signup %}
+
+        {% endblock %}
+
+        {% block homepage %}
+
+        {% endblock %}
+
+    {% endif %}
+
+
+</div>
+
+</body>
+
+<script type="text/javascript">
+   $('.nav-link').click(function() {
+        $(".active").removeClass("active");
+        $($(this).attr('href')).addClass("active");
+    });
+</script>
+</html>

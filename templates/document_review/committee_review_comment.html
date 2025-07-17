@@ -1,0 +1,78 @@
+{% extends 'document_review/doc_review_base.html' %}
+{% load consultant_templatetags %}
+
+{% block review %}
+
+    <script src="/static/js/task_manager.js"></script>
+
+    <div style="padding: 5%">
+
+        {% if success %}
+            <h3 style="color: darkred">
+                Comment has been submitted successfully
+            </h3>
+
+        {% endif %}
+        <div class="table-bordered" ; style="width: 100%">
+            {% if doc_rev %}
+                <div style="margin-left: 1%">
+                    <h3>Document Info:</h3>
+                    <span>
+                    <b>Document Code:</b> {{ doc_rev.task }} <br>
+                    <b>Title:</b>   {{ doc_rev.task.title }} <br>
+                    <b>Review Committee:</b> {{ doc_rev.committee }}
+                </span>
+                </div>
+            {% endif %}
+        </div>
+        <br>
+        <br>
+
+        <div class="row">
+            <div class="col">
+                <div style="width: 80%;">
+                    <h3 style="margin-left: 1%">Give Your Comments Below-</h3>
+                    <form action="" method="post" id="comment_form">
+                        {% csrf_token %}
+                        <table class="table table-sm table-bordered ">
+
+                            {% for field in form %}
+                                <tr class="table-info table-sm" style="text-align: center; width: 30%;">
+
+                                    <td style="vertical-align: middle"><b> {{ field.label_tag }} </b></td>
+                                    <td> {{ field }} </td>
+                                </tr>
+                            {% endfor %}
+                        </table>
+                        <input style="margin-left: 50%" class="btn btn-outline-info" type="submit" value="Submit">
+                    </form>
+                </div>
+            </div>
+            {% if committee_rev_cmnt %}
+                <div class="col">
+                    <h3>Existing Committee Review Comments</h3>
+                    <table class="table table-sm table-bordered" style="width: 100%; font-size: 0.8em">
+                        <tr>
+                            <th>SL. No</th>
+                            <th>Section No</th>
+                            <th>Original Text</th>
+                            <th>Proposed Text</th>
+                            <th>Remarks</th>
+                            <th>Comment Info</th>
+                        </tr>
+                        {% for each in committee_rev_cmnt %}
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td>{{ each.section_no }}</td>
+                                <td>{{ each.original_text }}</td>
+                                <td>{{ each.proposed_text }}</td>
+                                <td>{{ each.remarks }}</td>
+                                <td>{{ each.proposed_by }} <br> (On: {{ each.created_at }})</td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

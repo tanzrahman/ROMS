@@ -1,0 +1,52 @@
+{% extends 'task_management/task_management_base.html' %}
+{% load consultant_templatetags %}
+{% block task_comment %}
+
+    <script src="/static/js/task_manager.js"></script>
+    <script src="/static/js/SiteScripts/search_results.js"></script>
+
+    <div style="padding-left: 20px">
+
+        <div>
+            <h2>Comments</h2>
+
+            <table style="width:50%" class="table table-hover table-bordered">
+
+                <tr class="table-danger">
+                    <th>Sl No</th>
+                    <th>Task</th>
+                    <th>Last Comment Date</th>
+                    <th>Last Comment By</th>
+                </tr>
+
+                {% for each in comment_list %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td><a href="/task_management/open_task/{{ each.task_id.id }}" target="_blank">{{ each.task_id }}</a></td>
+                        <td>{{ each.created_date }}</td>
+                        <td>{{ each.user }}</td>
+
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+        <!-- for pagination-->
+        <div id="pagination_div">
+            {% if comment_list.has_other_pages %}
+                <ul class="paginator">
+
+                    <span>Page: </span>
+                    {% for i in comment_list.paginator.page_range %}
+                        {% if comment_list.number == i %}
+                            <span class="this-page">{{ i }} <span
+                                    class="sr-only">(current)</span></span>
+                        {% else %}
+                            <a href="javascript:next_page_report('{{ i }}')">{{ i }}</a>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+    </div>
+
+{% endblock %}

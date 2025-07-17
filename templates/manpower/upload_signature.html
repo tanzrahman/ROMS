@@ -1,0 +1,27 @@
+{% extends 'manpower/user_base.html' %}
+
+
+{% block default %}
+    <script src="/static/js/SiteScripts/crypto-js/sha1.js"></script>
+    <script src="/static/js/SiteScripts/crypto-js/crypto-js.js"></script>
+    <script src="/static/js/SiteScripts/crypto-govt js/lib-typedarrays-min.js"></script>
+    <script src="/static/js/SiteScripts/crypto-js/aes.js"></script>
+    <script src="/static/js/SiteScripts/FileHandler.js"></script>
+    <script src="/static/js/SiteScripts/signature_handler.js"></script>
+
+    <div style="margin-left: 5%; margin-top: 3%">
+        <h6>Upload a signature of size 200px wide & 100 px high</h6>
+        <img id="my_signature" height="100" width="200" hidden="true">
+
+        <form enctype="multipart/form-data" action="" method="post">
+            {% csrf_token %}
+            <fieldset>
+                <input type="text" id="signature" name="signature_hash" hidden="true">
+                <input type="file" id="signature_file" name="signature" accept="image/png, image/jpeg" onchange="load_signature_from_selected_file('signature')">
+                <br> <br>
+                <input type="submit" value="Upload Signature & Save">
+            </fieldset>
+        </form>
+    </div>
+
+{% endblock %}

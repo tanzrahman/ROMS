@@ -1,0 +1,102 @@
+{% extends 'task_management/task_management_base.html' %}
+{% load document_templatetags %}
+{% load feedback_templatetags %}
+{% load consultant_templatetags %}
+{% block document %}
+    <div>
+        <script src="/static/js/jquery-3.5.1.min.js"></script>
+        <script src="/static/js/task_manager.js"></script>
+
+        <div>
+            <h4 style="text-align: center; font-weight: bold">Discussion Sessions </h4>
+            {% if request.user.profile.access_level < 4 %}
+
+                <div style="margin-left: 5%">
+                    <span> Select Division: </span>
+                    <a href="/lecture/lecture_list" class="btn {% if not form.cleaned_data.target_division %}btn-primary{% else %}btn-outline-primary {% endif %}">All</a>
+                    {% for each in lecture_divs %}
+                        <a href="/lecture/lecture_list?target_division={{ each.div_id }}"
+                           class="btn {% if form.cleaned_data.target_division == each %} btn-primary {% else %}btn-outline-primary {% endif %}">
+                            {{ each.division_name }}
+                        </a>
+                    {% endfor %}
+                </div>
+                <div style="margin-left: 5%; margin-top: 3%">
+                    <form action="" method="get">
+                        <table>
+                            <tr>
+                                <td>
+                                    <input type="submit" value="Search">
+                                </td>
+
+                                {% for each_field in form %}
+                                    <td>
+                                        {{ each_field.label_tag }}
+                                    </td>
+                                    <td>
+                                        {{ each_field }}
+                                    </td>
+                                {% endfor %}
+                            </tr>
+                        </table>
+                    </form>
+                </div>
+            {% endif %}
+
+            <div style="margin-left: 5%;margin-top: 2%">
+
+                <table class="table table-sm table-responsive-sm table-bordered" style="width: 90%; text-align: center; font-size: 0.9em">
+                    <tr>
+                        <th style="width: 5%">Sl No.</th>
+                        <th style="width: 5%">Division</th>
+                        <th style="width: 30%">Title</th>
+                        <th style="width: 10%">Category</th>
+                        <th style="width: 20%">Description</th>
+                        <th style="width: 10%">Venue</th>
+                        <th style="width: 10%">Schedule</th>
+                        <th style="width: 10%">Lead Presenter</th>
+                        <th style="width: 5%">Status</th>
+
+                    </tr>
+
+                    {% for each in lectures %}
+                        <tr>
+                            <td>{{ forloop.counter }}
+                            </td>
+                            <td>{{ each.target_division }}</td>
+                            <td>
+                                {{ each.lecture_name }}
+                                <a href="/lecture/open/{{ each.id }}" target="_blank" style="font-size: smaller">(click to view)</a>
+                            </td>
+                            <td>
+                                {{ each.lecture_category }}
+                            </td>
+                            <td>
+                                {{ each.lecture_description }}
+                            </td>
+
+                            <td>
+                                {{ each.venue }}
+                            </td>
+                            <td>
+                                {{ each.schedule }}
+                            </td>
+                            <td>
+                                {{ each.lead_presenter }}
+                            </td>
+                            <td>
+                                {% if each.schedule|is_expired %}
+                                    <span style="background-color: lightgreen">Completed</span>
+                                {% else %}
+                                    <span>Not Yet Started</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+
+                </table>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

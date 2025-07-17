@@ -1,0 +1,110 @@
+{% extends 'manpower/manpower_base.html' %}
+{% load static %}
+{% block content %}
+    <script src="{% static 'js/apexcharts/apexcharts.min.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'js/apexcharts/apexcharts.css' %}">
+    <style>
+        .dropbtn {
+            color: white;
+            font-size: 16px;
+            border: none;
+        }
+
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f1f1f1;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+        }
+
+        .dropdown-content a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #ddd;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .dropdown:hover .dropbtn {
+            background-color: #3e8e41;
+        }
+
+    </style>
+    <div>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
+            <div class="collapse navbar-collapse" style="font-size: 0.9em">
+                <ul class="navbar-nav mr-auto">
+                    <li class="navbar-item">
+                        <a src="/static/npcbl.png"></a>
+                    </li>
+                    {% if request.user.is_staff %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="/manpower/user/create">Create User</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/manpower/user/all">All Users</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/manpower/user_group">User Groups</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="/manpower/user/reset_pass">Password Reset</a>
+                        </li>
+                        <li class="dropdown">
+                            <button class="dropbtn nav-link bg-light">Create Committee</button>
+                            <div class="dropdown-content">
+                                <a class="nav-link" href="/manpower/user/create_committee">Create Document Review Committee</a>
+                                <a class="nav-link" href="/manpower/user/create_sar_committee">Create Safety Analysis Review Committee</a>
+                            </div>
+                        </li>
+                    {% endif %}
+                    <li class="dropdown">
+                        <button class="dropbtn nav-link bg-light">Committee</button>
+                        <div class="dropdown-content">
+                            <a class="nav-link" href="/manpower/user/committee">Document Review Committee</a>
+                            <a class="nav-link" href="/manpower/user/sar_committee">Safety Analysis Review Committee</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+
+    {% block reset_password %}
+
+    {% endblock %}
+
+    {% block activate_user %}
+
+    {% endblock %}
+
+    {% block manage_group %}
+
+    {% endblock %}
+
+    {% block default %}
+
+    {% endblock %}
+
+    {% block signup %}
+
+    {% endblock %}
+{% endblock %}
+
+
+

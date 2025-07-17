@@ -1,0 +1,109 @@
+{% extends 'task_management/task_management_base.html' %}
+{% load document_templatetags %}
+{% load feedback_templatetags %}
+{% block document %}
+    <div>
+        <script src="/static/js/jquery-3.5.1.min.js"></script>
+        <script src="/static/js/task_manager.js"></script>
+        <script src="/static/js/SiteScripts/search_results.js"></script>
+
+        <div>
+
+            <div style="margin-left: 5%">
+                <h5 style="padding-top: 1%; text-align: center; font-weight: bold">Delivered Consultant Document Requests</h5><br>
+
+                <table class="table table-sm table-responsive-sm table-bordered" style="width: 90%; text-align: center; font-size: 0.9em">
+                    <tr>
+                        <th style="width: 5%">Sl No.</th>
+                        <th style="width: 20%">Task</th>
+                        <th style="width: 15%">Requested By </th>
+                        <th style="width: 30%">Documents & Remarks</th>
+                        <th style="width: 10%">Requested Date</th>
+                        <th style="width: 15%">Approved By </th>
+                        <th style="width: 9%">Approval Date</th>
+                        <th style="width: 15%">Delivered By </th>
+                        <th style="width: 9%">Delivered Date</th>
+                        <th style="width: 9%">Status</th>
+                    </tr>
+
+                    {% for each in delivered_consultant_requests %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>
+                                <span>
+                                    <b>Milestone ID:</b> {{ each.task.milestone_id }}
+                                </span>
+                                <br>
+                                <span>
+                                    <b>Task ID:</b> {{ each.task.task_id }}
+                                </span>
+                            </td>
+                            <td>
+                                <span>
+                                    {{ each.requested_by }}
+                                </span>
+                            </td>
+
+                            <td>
+                                <span>
+                                    <b>Requested Documents:</b> {{ each.requested_documents }}
+                                </span> <br>
+                                <span>
+                                   <b>Requester Remarks:</b> {{ each.requester_remarks }}
+                                </span>
+                            </td>
+
+                            <td>
+                                {{ each.requested_at }}
+                            </td>
+                            <td>
+                                <span>{{ each.approved_by }}
+                                </span><br>
+                                <span>
+                                   <b>Approver Remarks:</b> {{ each.approver_remarks }}
+                                </span>
+                            </td>
+                            <td>
+                                {{ each.approved_at }}
+                            </td>
+                            <td>
+                                <span>{{ each.provided_by }}
+                                </span><br>
+                                <span>
+                                   <b>Provider Remarks:</b> {{ each.provider_remarks }}
+                                </span>
+                            </td>
+                            <td>
+                                {{ each.provided_at }}
+                            </td>
+                            <td>
+                                <b>Delivered</b>
+                            </td>
+                        </tr>
+                    {% endfor %}
+
+                </table>
+            </div>
+        </div>
+
+        <!-- for pagination-->
+        <div id="pagination_div">
+            {% if delivered_consultant_requests.has_other_pages %}
+                <ul class="paginator">
+
+                    <span>Page: </span>
+                    {% for i in delivered_consultant_requests.paginator.page_range %}
+                        {% if delivered_consultant_requests.number == i %}
+                            <span class="this-page">{{ i }} <span
+                                    class="sr-only">(current)</span></span>
+                        {% else %}
+                            <a href="javascript:next_page_report('{{ i }}')">{{ i }}</a>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+
+    </div>
+
+{% endblock %}

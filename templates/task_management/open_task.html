@@ -1,0 +1,323 @@
+{% extends 'task_management/task_management_base.html' %}
+{% load consultant_templatetags %}
+{% load task_templatetags %}
+{% block open_task %}
+
+    <script src="/static/js/task_manager.js"></script>
+
+    <div style="padding-left: 20px; width: 120%" >
+
+        {% if task %}
+            <div class="row">
+                <div class="column" style="width: 50%; margin-left: 2%">
+                    <h2>Task Details</h2>
+                    <table style="width:90%" class="table table-hover table-bordered">
+
+                        <tr>
+                            <th>Task ID <br> Milestone ID:</th>
+                            <td>{{ task.task_id }} <br>{{ task.milestone_id }}
+                                <br>
+                                {% if task.division != request.user.profile.division %}
+                                    <a href="javascript:add_person('{{ task.id }}')" class="btn btn-outline-info">
+                                        Add Person from {{ request.user.profile.division.division_name }} Division
+                                    </a>
+                                    <br><br>
+                                {% endif %}
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <th>Title</th>
+                            <td>{{ task.title }}</td>
+                        </tr>
+                    {% if task|task_consultant %}
+                        <th>Consultant</th>
+                        <td style="color: blue; font-weight: bold">
+                            {{ task|task_consultant }}
+                        </td>
+                    {% endif %}
+                    <tr>
+
+                    </tr>
+
+                        <tr>
+                            <th>Supervisor</th>
+                            <td>
+                                {% for each in task.supervisor_list %}
+                                    {% if task.division == each.profile.division %}
+                                        <b>*</b>
+                                    {% endif %}
+                                    {{ each.first_name }} {{ each.last_name }}({{ each.username }}) <br>
+                                {% endfor %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Executor</th>
+                            <td>
+                                {% for each in task.executor_list %}
+                                    {% if task.division == each.profile.division %}
+                                        <b>*</b>
+                                    {% endif %}
+                                    {{ each.first_name }} {{ each.last_name }}({{ each.username }})
+                                    {% if task.lead_executor == each %}
+                                        <span style="font-size: smaller; color: dodgerblue">(Lead)</span>
+                                    {% endif %}
+                                    <br>
+                                {% endfor %}
+                            </td>
+
+
+                        </tr>
+                        <tr>
+                            <th>System:</th>
+                            <td>
+                                {{ task.system }}
+                            </td>
+
+                        </tr>
+                        <tr>
+                            <th>Facility</th>
+                            <td>{{ task.facility }}</td>
+                        </tr>
+                        <tr>
+                            <th>KKS</th>
+                            <td>{{ task.relevant_kks_codes }}</td>
+                        </tr>
+
+                        <tr>
+                            <th>Description</th>
+                            <td>{{ task.description }}</td>
+                        </tr>
+                        <tr>
+                            <th>Planned start date</th>
+                            <td>{{ task.planned_start_date }}</td>
+                        </tr>
+                        <tr>
+                            <th>Planned end date</th>
+                            <td>{{ task.planned_end_date }}</td>
+                        </tr>
+                        <tr>
+                            <th>Actual start date</th>
+                            <td>{{ task.actual_start_date }}</td>
+                        </tr>
+                        <tr>
+                            <th>Actual end date</th>
+                            <td>{{ task.actual_end_date }}</td>
+                        </tr>
+                        <tr>
+                            <th>Active Status</th>
+                            <td>{{ task.is_active }}</td>
+                        </tr>
+                        <tr>
+                            <th>Task Completed (%)</th>
+                            <td>{{ task.percent_completed }}</td>
+                        </tr>
+
+                    </table>
+                </div>
+                <div class="column" style="width: 45%">
+                    {% with task|task_change_log as change_log %}
+                    {% if change_log %}
+                        <h2>Task Edit History</h2>
+                        <table class="table table-hover table-bordered table-sm" style="font-size: .85em; width: 70%">
+
+                            <tr class="table-success">
+                                <th style="width: 5%">SL No.</th>
+                                <th style="width: 15%">Changed By</th>
+                                <th style="width: 50%">Details</th>
+                            </tr>
+
+                            {% for each in change_log %}
+                                <tr>
+                                    <td>{{ forloop.counter }}</td>
+                                    <td><b></b>{{ each.changed_by }} </td>
+                                    <td>
+                                        <span>
+                                            <b>Changed on:</b> {{ each.created_at }} <br><br>
+                                        </span>
+                                        <span>
+                                            {% if each.removed_supervisor != "" %}
+                                                <span> <b>Removed Supervisors:</b> {{ each.removed_supervisor }} <br></span>
+                                            {% endif %}
+                                            {% if each.added_supervisor != "" %}
+                                                <span><b>Added Supervisor:</b> {{ each.added_supervisor }}<br></span>
+                                            {% endif %}
+                                        </span>
+                                        <span>
+                                            {% if each.added_executor != "" %}
+                                                <span><b>Added Executors:</b> {{ each.added_executor }}<br></span>
+                                            {% endif %}
+
+                                            {% if each.removed_executor != "" %}
+                                            <span><b>Removed Executors:</b> {{ each.removed_executor }}<br></span>
+                                            {% endif %}
+                                        </span>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </table>
+                    {% endif %}
+                    {% endwith %}
+                </div>
+            </div>
+
+
+
+            <a href="javascript:add_comment('{{ task.id }}')" class="btn btn-outline-info">
+                Add Comment
+            </a>
+            {% if request.user.profile.access_level < 2 %}
+                <a href="javascript:add_consultant_to_task('{{ task.id }}')" class="btn btn-outline-info">
+                    Add Consultant
+                </a>
+            {% endif %}
+
+            {% if request.user in task.executer_list %}
+                <a href="/task_management/executor_feedback/{{ task.id }}" class="btn btn-outline-info">
+                    Feedback
+                </a>
+            {% endif %}
+
+
+            {% if request.user == task.lead_executor  or request.user in task.supervisor_list%}
+                {% if task.actual_start_date == None %}
+                <a href="/task_management/add_actual_start_date/{{ task.id }}" class="btn btn-outline-info">
+                    Add Task Start Date
+                </a>
+                    {% endif %}
+            {% endif %}
+
+            {% if request.user in task.supervisor_list or request.user == task.lead_executor %}
+                {% if  task.actual_start_date != None and  task.actual_end_date == None %}
+                    <a href="/task_management/add_actual_end_date/{{ task.id }}" class="btn btn-outline-info">
+                        Add Task End Date
+                    </a>
+                {% endif %}
+            {% endif %}
+
+            {% if request.user in task.supervisor_list or request.user in task.executor_list %}
+            <a href="/task_management/add_task_percentage/{{ task.id }}" class="btn btn-outline-info">
+                Update Percentage
+            </a>
+            {% endif %}
+
+        {% else %}
+            <h2 style="text-align:center; color:red">No Pending Task</h2>
+
+        {% endif %}
+
+        <br>
+
+
+
+
+        <!-- table for comments -->
+        {% if comment_list %}
+            <div>
+                <h2>Comments</h2>
+
+                <table style="width:50%" class="table table-hover table-bordered">
+
+                    <tr class="table-danger">
+                        <th>User</th>
+                        <th>Comment</th>
+                        <th>Created Date</th>
+                    </tr>
+
+                    {% for each in comment_list %}
+                        <tr>
+                            <td>{{ each.user }}</td>
+                            <td>{{ each.comment }}</td>
+                            <td>{{ each.created_date }}</td>
+
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        {% endif %}
+
+        <br><br>
+
+
+        <!-- table for question_answer -->
+        {% if question_answer_list %}
+            <div>
+                <h2>My Questions & Answers</h2>
+
+                <table style="width:80%; word-wrap: break-word" class="table table-hover table-bordered">
+
+                    <tr class="table-danger">
+                        <th>Question</th>
+                        <th>Answer</th>
+                        <th>Answered By</th>
+                        <th>Answered Date</th>
+                        <th>Edit</th>
+                    </tr>
+
+                    {% for each in question_answer_list %}
+                        <tr class="table-sm">
+                            <td style="width: 30%">{{ each.task_question.que }}</td>
+                            <td style="word-wrap: break-word; width: 40%">{{ each.answer }}</td>
+                            <td>{{ each.answered_by }}</td>
+                            <td>{{ each.created_at }}</td>
+                            <td>
+                                {% if each.task_question.category == 'text' or each.task_question.category == 'TEXT' %}
+                                <a href="/task_management/edit_answer/{{ each.id }}">Edit Answer</a>
+                                {% endif %}
+                            </td>
+
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        {% endif %}
+
+    {% if request.user.profile.access_level <= 3 or user_type == 'supervisor' %}
+        {% if task_feed_back %}
+            <div>
+                <h2>Task Feed Backs</h2>
+
+                <table style="width:50%" class="table table-hover table-bordered">
+
+                    <tr>
+                        <td colspan="2">
+                            Executor Feedback
+                        </td>
+                    </tr>
+                    <tr class="table-active">
+                        <th>Feedback from</th>
+                        <th>Feedback Date</th>
+                    </tr>
+
+                    <tr>
+                        {% for ex_fb in task_feed_back.all_ex_fb %}
+
+                                <td>{{ ex_fb.executor.username }}
+                                    <a href="javascript:add_supervisor_feedback('{{ task.id }}','{{ ex_fb.id }}')" target="_top">(view)</a>
+                                </td>
+                                <td>{{ ex_fb.created_date }}</td>
+                        {% endfor %}
+                    </tr>
+
+                    <tr>
+                        {% for ex_fb in task_feed_back.all_sup_fb %}
+                            {% if ex_fb.approval_level == 0 %}
+                                <td>{{ ex_fb.executor.username }}
+                                    <a href="\task_manager\view_feedback\{{ ex_fb.id }}">View Feedback</a>
+                                </td>
+                                <td>{{ ex_fb.created_date }}</td>
+                            {% endif %}
+                        {% endfor %}
+                    </tr>
+                </table>
+
+            </div>
+        {% endif %}
+    {% endif %}
+        <br><br>
+
+    </div>
+
+
+
+{% endblock %}

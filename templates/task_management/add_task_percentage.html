@@ -1,0 +1,145 @@
+{% extends 'task_management/task_management_base.html' %}
+
+{% block open_task %}
+
+    <script src="/static/js/task_manager.js"></script>
+
+    <div style="padding-left: 20px;">
+        <div>
+            {% if message %}
+                <h3 style="text-align: center; color: green; margin-top: 2%">{{ message }}</h3>
+                <script>
+                window.opener.location.reload(true);
+                    setTimeout(function () {
+                        self.close();
+                    }, 1000);
+                </script>
+            {% endif %}
+        </div>
+
+        <div style="margin-top: 2%; margin-left: auto; margin-right: auto; max-width: fit-content">
+            <h4 style="color: #264b5d">Update Task Completion Status</h4><br>
+            {% if form %}
+                <form method="post" action="">
+                    {% csrf_token %}
+                    <table>
+                        {{ form.as_table }}
+                    </table>
+                    <br>
+                    <input style="margin-left: 40%" class="btn-info" type="submit" value="Update">
+                </form>
+
+            {% endif %}
+        </div>
+    <br>
+        <div>
+            <h2>Task Details</h2>
+
+            {% if task %}
+                <div class="outer-wrapper">
+                    <div class="table-wrapper">
+                        <table style="width:50%" class="table table-hover table-bordered table-sm">
+
+                            <tr>
+                                <th>Task ID</th>
+                                <td>{{ task.task_id }}
+                                    <br>
+                                    {% if task.division != request.user.profile.division %}
+                                        <a href="javascript:add_person('{{ task.id }}')" class="btn btn-outline-info">
+                                            Add Person from {{ request.user.profile.division.division_name }} Division
+                                        </a>
+                                        <br><br>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Supervisor</th>
+                                <td>
+                                    {% for each in task.supervisor_list %}
+                                        {% if task.division == each.profile.division %}
+                                            <b>*</b>
+                                        {% endif %}
+                                        {{ each.first_name }} {{ each.last_name }}({{ each.username }}) <br>
+                                    {% endfor %}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Executor</th>
+                                <td>
+                                    {% for each in task.executor_list %}
+                                        {% if task.division == each.profile.division %}
+                                            <b>*</b>
+                                        {% endif %}
+                                        {{ each.first_name }} {{ each.last_name }}({{ each.username }})
+                                        {% if task.lead_executor == each %}
+                                            <span style="font-size: smaller; color: dodgerblue">(Lead)</span>
+                                        {% endif %}
+                                        <br>
+                                    {% endfor %}
+                                </td>
+
+
+                            </tr>
+                            <tr>
+                                <th>System:</th>
+                                <td>
+                                    {{ task.system }}
+                                </td>
+
+                            </tr>
+                            <tr>
+                                <th>Facility</th>
+                                <td>{{ task.facility }}</td>
+                            </tr>
+                            <tr>
+                                <th>KKS</th>
+                                <td>{{ task.relevant_kks_codes }}</td>
+                            </tr>
+
+                            <tr>
+                                <th>Task Created by</th>
+                                <td>{{ task.task_created_by }}</td>
+                            </tr>
+                            <tr>
+                                <th>Title</th>
+                                <td>{{ task.title }}</td>
+                            </tr>
+                            <tr>
+                                <th>Description</th>
+                                <td>{{ task.description }}</td>
+                            </tr>
+                            <tr>
+                                <th>Planned start date</th>
+                                <td>{{ task.planned_start_date }}</td>
+                            </tr>
+                            <tr>
+                                <th>Planned end date</th>
+                                <td>{{ task.planned_end_date }}</td>
+                            </tr>
+                            <tr>
+                                <th>Actual start date</th>
+                                <td>{{ task.actual_start_date }}</td>
+                            </tr>
+                            <tr>
+                                <th>Actual end date</th>
+                                <td>{{ task.actual_end_date }}</td>
+                            </tr>
+                            <tr>
+                                <th>Active Status</th>
+                                <td>{{ task.is_active }}</td>
+                            </tr>
+                            <tr>
+                                <th>Task Completed (%)</th>
+                                <td>{{ task.percent_completed }}</td>
+                            </tr>
+
+
+                        </table>
+                    </div>
+                </div>
+
+            {% endif %}
+        </div>
+    </div>
+
+{% endblock %}

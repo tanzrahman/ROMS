@@ -1,0 +1,120 @@
+{% extends 'task_management/task_management_base.html' %}
+{% block task_list %}
+    <div style="width: 90%; margin-left: 2%">
+        <div>
+            <table class="table table-hover table-bordered small" style="margin-top: 1%">
+                <tr>
+                    <th>Task Details</th>
+                    <td>
+                    <span> <b>Milestone ID:</b> {{ feedback.task.milestone_id }} <br>
+                            <b>Title:</b> {{ feedback.task.title }}
+                    </span>
+
+                        <br>
+                        <span>
+                        <b>Supervisors:</b>
+                            {% for each in feedback.task.supervisor_list %}
+                                {% if each.profile.division == feedback.task.division %}<b>*</b> {% endif %} {{ each }},
+                            {% endfor %}
+                    </span>
+                        <br>
+                        <span>
+                        <b>Executors</b>
+                            {% for each in feedback.task.executor_list %}
+                                {% if each.profile.division == feedback.task.division %}<b>*</b> {% endif %} {{ each }},
+                            {% endfor %}
+                    </span>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="border">
+            <h5>Executor Feedbacks</h5>
+            <table class="table table-hover table-bordered small" style="margin-top: 1%">
+
+                {% for each_feedback in exec_feedbacks %}
+
+                    {% with parent_count=forloop.counter %}
+                        {% if parent_count == 1 %}
+                            <tr style="text-align: center">
+                                {% for qa in each_feedback %}
+                                    <td {% if forloop.counter0 == 0 %} style="width: 20%" {% endif %}>
+                                        {% if forloop.counter0 == 0 %}
+                                            <b>Questions</b>
+                                        {% else %}
+                                            <b>Feedback From: </b>{{ qa.0.answered_by }}
+                                            {% if request.user.is_staff %}
+                                                <span><a href="/feedback/send_msg/{{ feedback.id }}?ex_fb={{ qa.1 }}">(Click to send msg)</a>
+                                            </span>
+                                            {% endif %}
+                                        {% endif %}
+                                    </td>
+                                {% endfor %}
+                            </tr>
+                        {% else %}
+                            <tr style="text-align: center">
+                                {% for qa,fb in each_feedback %}
+                                    <td>
+                                        {% if forloop.counter0 == 0 %}
+                                            <b>{{ qa }}</b>
+                                        {% else %}
+                                            <span {% if qa.task_question.priority == 10 %}
+                                                style="font-size: 1.1em" {% endif %}>
+                                        {{ qa.answer }}
+                                    </span>
+                                        {% endif %}
+                                    </td>
+                                {% endfor %}
+                            </tr>
+                        {% endif %}
+                    {% endwith %}
+                {% endfor %}
+
+            </table>
+        </div>
+
+
+        <div class="border">
+            <h5>Supervisor Feedbacks</h5>
+            <table class="table table-hover table-bordered small" style="margin-top: 1%">
+
+                {% for each_feedback,fb_str in sup_feedbacks %}
+
+                    {% with parent_count=forloop.counter %}
+                        {% if parent_count == 1 %}
+                            <tr style="text-align: center">
+                                {% for qa in each_feedback %}
+                                    <td {% if forloop.counter0 == 0 %} style="width: 20%" {% endif %}>
+                                        {% if forloop.counter0 == 0 %}
+                                            <b>Questions</b>
+                                        {% else %}
+                                            {#                                        <b>Feedback From: </b>{{ qa.answered_by }} for <i>{{ each_feedback.executor_feedback.executor }}</i>#}
+                                            {{ fb_str|safe }}
+                                        {% endif %}
+                                    </td>
+                                {% endfor %}
+                            </tr>
+                        {% endif %}
+
+                        <tr style="text-align: center">
+                            {% for qa in each_feedback %}
+                                <td>
+                                    {% if forloop.counter0 == 0 %}
+                                        <b>{{ qa }}</b>
+                                    {% else %}
+                                        <span {% if qa.task_question.priority == 4 %}
+                                            style="font-size: 1.1em" {% endif %}>
+                                        {{ qa.answer }}
+                                    </span>
+                                    {% endif %}
+                                </td>
+                            {% endfor %}
+                        </tr>
+                    {% endwith %}
+                {% endfor %}
+
+            </table>
+        </div>
+    </div>
+{% endblock %}

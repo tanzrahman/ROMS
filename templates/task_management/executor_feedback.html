@@ -1,0 +1,227 @@
+{% extends 'task_management/task_management_base.html' %}
+
+{% block open_task %}
+
+    <script src="/static/js/task_manager.js"></script>
+    <script src="/static/js/executor_qa_handler.js"></script>
+
+    <div class="outer-wrapper" style="width: 90%; margin-left: 5%">
+        {% if message %}
+            <h3 style="color:red"><b>{{ message }}</b></h3>
+        {% endif %}
+        <div class="table-wrapper" style="width: 100%; border: 1px solid grey">
+            <h5><b>Details of the assigned task</b></h5>
+            <table class="table table-sm" style="width: 85%; font-size: .9em; border-collapse: collapse; row-gap: 0">
+                <tr>
+                    <th>Title</th>
+                    <td colspan="4" style="font-weight: bold">{{ task.title }}</td>
+                </tr>
+
+                <tr>
+                    <th>Milestone ID</th>
+                    <td style="font-weight: bold">{{ task.milestone_id }}</td>
+                    <th>Supervisor</th>
+                    <td>
+                        {% for each in task.supervisor_list %}
+                            {% if task.division == each.profile.division %}
+                                <b>*</b>
+                            {% endif %}
+                            {{ each.first_name }} {{ each.last_name }} <br>
+                        {% endfor %}
+                    </td>
+                </tr>
+
+                <tr>
+                    <th>Planned Start Date</th>
+                    <td>{{ task.planned_start_date }}</td>
+                    <th>Planned End Date</th>
+                    <td>{{ task.planned_end_date }}</td>
+                </tr>
+
+            </table>
+        </div>
+
+
+        <div class="table-wrapper" style="width: 100%; border: 1px solid grey">
+
+            {% if success %}
+                <h3 style="color: darkgreen">Your feedback have successfully updated</h3>
+            {% else %}
+                <div>
+            <span><b>Feedback Questions</b>
+                <span style="font-size: .8em">(When you complete answering all the question <b>Submit</b> button will active)</span>
+            </span>
+                </div>
+                <form action="" method="post">
+                    {% csrf_token %}
+                    <formset>
+                        <table style="width:100%" class="table  table-sm table-bordered">
+
+                            <tr style="text-align: left; width: 100%">
+                                <td style="width: 50%">
+                                    <span>
+                                        <b> Have you collected the relevant document of the assigned task? </b>
+                                    </span>
+                                    <span style="float:right; padding-right: 15%">
+                                        <select name="answer_1" id="answer_1" onchange="verify_ans_choice(this.id)">
+                                        <option value="No">No</option>
+                                        <option value="Yes">Yes</option>
+                                    </select>
+                                    </span>
+                                </td>
+
+                                <td style="width: 50%;">
+                                    <span>
+                                        <b> Have you studied the document? </b>
+                                    </span>
+                                    <span style="float: right ; padding-right: 15%">
+                                        <select name="answer_2" id="answer_2" disabled=""
+                                                onchange="verify_ans_choice(this.id)">
+                                        <option value="No">No</option>
+                                        <option value="Yes">Yes</option>
+                                    </select>
+                                    </span>
+                                </td>
+                            </tr>
+
+                            <tr style="text-align: left; width: 100%">
+                                <td style="width: 50%">
+                                    <span>
+                                        <b> What is the name of the system/structure/equipment?</b>
+                                    </span>
+                                    <span style="float: right; padding-right: 2%">
+                                        <input type="text" name="answer_3" id="answer_3" disabled required>
+                                    </span>
+                                </td>
+
+                                <td style="width: 50%;">
+                                    <span>
+                                        <b> Have you discussed with supervisor at least 30 minutes or more?</b>
+                                    </span>
+                                    <span style="float: right; padding-right: 5%">
+                                        <input type="number" name="answer_4" id="answer_4" disabled
+                                           placeholder="mention time in minutes"  required >
+                                    </span>
+                                </td>
+                            </tr>
+
+                            <tr style="text-align: left; width: 100%">
+
+                                <td style="width: 50%">
+                                    <span>
+                                        <b>How many stages of milestone for the task?</b>
+                                    </span>
+                                    <span style="float: right; padding-right: 2%">
+                                        <input type="number" name="answer_5" id="answer_5" disabled required>
+                                    </span>
+                                </td>
+
+                                <td style="width: 50%">
+                                    <span>
+                                        <b>Is there more than one version of the document?</b>
+                                    </span>
+                                    <span style="float: right; padding-right: 11%">
+                                        <select name="answer_6" id="answer_6" disabled=""
+                                            onchange="verify_choice_visible_next(this.id)">
+                                        <option value="">Click to Select</option>
+                                        <option value="No">No</option>
+                                        <option value="Yes">Yes</option>
+                                    </select>
+                                    </span>
+                                </td>
+                            </tr>
+
+                            <tr style="text-align: left; width: 100%" id="q9">
+
+                                <td style="width: 50%">
+                                    <span>
+                                        <b> What is the working version of the document?</b>
+                                    </span>
+                                    <span style="float: right; padding-right: 2%">
+                                        <input type="number" name="answer_9" id="answer_9" disabled required>
+                                    </span>
+                                </td>
+
+                                <td style="width: 50%;" id="q8" hidden>
+                                        <span>
+                                            <b> Have you discussed with your supervisor about the change?</b>
+                                        </span>
+                                    <span style="float: right; padding-right: 15%">
+                                        <select name="answer_8" id="answer_8" disabled required>
+                                            <option value="No">No</option>
+                                            <option value="Yes">Yes</option>
+                                        </select>
+                                    </span>
+                                </td>
+                            </tr>
+
+                            <tr style="text-align: left; width: 100%" >
+
+                                <td style="width: 50%">
+                                    <span>
+                                        <b> What are the success parameters of the work? (min. 200 characters)</b>
+                                    </span>
+                                    <span >
+                                        <textarea type="text" name="answer_10" id="answer_10" disabled style="width: 100%"></textarea>
+                                    </span>
+                                </td>
+
+                                <td style="width: 50%" hidden id="q7">
+                                    <span>
+                                        <b> What are the key differences between zero version and last version? (min. 200 characters)</b>
+                                    </span>
+                                    <span>
+                                        <textarea type="number" name="answer_7" id="answer_7" disabled required style="width: 100%"></textarea>
+                                    </span>
+                                </td>
+                            </tr>
+
+
+                            <tr style="text-align: left; width: 100%">
+
+                                <td style="width: 50%"><b> Which document you have to sign to declare the completion of
+                                    the work?
+                                </b></td>
+                                <td style="width: 50%;">
+                                    <input type="text" name="answer_11" id="answer_11" disabled>
+                                </td>
+                            </tr>
+
+                            <tr style="text-align: left; width: 100%">
+
+                                <td style="width: 50%"><b> Which Normative documents you have to follow during the
+                                    execution of the work?
+                                </b></td>
+                                <td style="width: 50%;">
+                                    <input type="text" name="answer_12" id="answer_12" disabled>
+                                </td>
+                            </tr>
+
+                            <tr style="text-align: left; width: 100%">
+
+                                <td style="width: 50%"><b> As an executor how confident you are to complete the task
+                                    after studying the document?
+                                </b></td>
+                                <td style="width: 50%;">
+                                    <input type="number" name="answer_13" id="answer_13" disabled
+                                           onchange="verify_all_and_enable_submit(this.id)">
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td colspan="2" style="text-align: right">
+                                    <input type="submit" name="Submit Feedback" class="btn btn-success" disabled
+                                           id="submit_btn">
+                                </td>
+                            </tr>
+                        </table>
+                    </formset>
+                </form>
+            {% endif %}
+        </div>
+        <br>
+
+    </div>
+
+
+{% endblock %}

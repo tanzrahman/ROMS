@@ -1,0 +1,6 @@
+psycopg2
+Django
+pytz
+cryptography
+requests
+six

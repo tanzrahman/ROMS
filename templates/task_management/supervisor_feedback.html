@@ -1,0 +1,280 @@
+{% extends 'task_management/task_management_base.html' %}
+
+{% block open_task %}
+
+    <script src="/static/js/task_manager.js"></script>
+    <script src="/static/js/supervisor_qa_handler.js"></script>
+
+    <div class="outer-wrapper" style="width: 90%; margin-left: 5%">
+        {% if message %}
+            <h3 style="color:red"><b>{{ message }}</b></h3>
+        {% endif %}
+        <div class="table-wrapper" style="width: 100%; border: 1px solid grey">
+            <h5><b>Details of the assigned task</b></h5>
+            <table class="table table-responsive-sm"
+                   style="width: 100%; font-size: .9em; border-collapse: collapse; row-gap: 0">
+                <tr>
+                    <td colspan="2">
+                        <span>
+                            <span><b>Milestone ID</b></span>
+                            <span>{{ task.milestone_id }}</span>
+                        </span>
+                        <span style="margin-left: 5%">
+                            <span><b>Title</b></span>
+                            <span>{{ task.title }}</span>
+                        </span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span>
+                            <span><b>Planned Start Date</b></span>
+                            <span>{{ task.planned_start_date }}</span>
+                            <br>
+                            <span><b>Planned End Date</b></span>
+                            <span>{{ task.planned_end_date }}</span>
+                        </span>
+                    </td>
+                    <td>
+                         <span>
+                            <span><b>Supervisor:</b></span>
+                            <span style="word-break: break-word; overflow-wrap: break-word">
+                                {% for each in task.supervisor_list %}
+                                    {% if task.division == each.profile.division %}
+                                        <b>*</b>
+                                    {% endif %}
+                                    <span>{{ each.first_name }} {{ each.last_name }}</span>
+                                {% endfor %}
+                            </span>
+                        </span>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div>
+            {% if exec_qa %}
+                <div id="exec_feedback" class="table-wrapper" style="border: 1px solid grey; width: 100%">
+                    <h6>Feedback from:{{ executor }}</h6>
+                    <table class="table table-sm py-sm-0" style="width: 100%; font-size: small; row-gap: 0">
+                        <tr>
+                            <td style="width: 25%">
+                                    <span>
+                                        <span><b>{{ exec_qa.0.task_question.que }}</b></span>
+                                        <span style="overflow-wrap: break-word; margin-left: 5%">{{ exec_qa.0.answer }}</span>
+                                    </span>
+                            </td>
+                            <td style="width: 25%">
+                                    <span>
+                                        <span><b>{{ exec_qa.1.task_question.que }}</b></span>
+                                        <span style="overflow-wrap: break-word; margin-left: 5%">{{ exec_qa.1.answer }}</span>
+                                    </span>
+                            </td>
+                            <td style="width: 25%">
+                                    <span>
+                                        <span><b>{{ exec_qa.2.task_question.que }}</b></span>
+                                        <span style="overflow-wrap: break-word; margin-left: 5%">{{ exec_qa.2.answer }}</span>
+                                    </span>
+                            </td>
+                            <td style="width: 25%">
+                                    <span>
+                                        <span><b>{{ exec_qa.3.task_question.que }}</b></span>
+                                        <span style="overflow-wrap: break-word; margin-left: 5%">{{ exec_qa.3.answer }}</span>
+                                    </span>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td style="width: 25%">
+                                    <span>
+                                        <span><b>{{ exec_qa.4.task_question.que }}</b></span>
+                                        <span style="overflow-wrap: break-word; margin-left: 5%">{{ exec_qa.4.answer }}</span>
+                                    </span>
+                            </td>
+                            <td style="width: 25%">
+                                    <span>
+                                        <span><b>{{ exec_qa.5.task_question.que }}</b></span>
+                                        <span style="overflow-wrap: break-word; margin-left: 5%">{{ exec_qa.5.answer }}</span>
+                                    </span>
+                            </td>
+                            <td style="width: 25%">
+                                    <span>
+                                        <span><b>{{ exec_qa.6.task_question.que }}</b></span>
+                                        <span style="overflow-wrap: break-word; margin-left: 5%">{{ exec_qa.6.answer }}</span>
+                                    </span>
+                            </td>
+                            <td style="width: 25%">
+                                    <span>
+                                        <span><b>{{ exec_qa.8.task_question.que }}</b></span>
+                                        <span style="overflow-wrap: break-word; margin-left: 5%">{{ exec_qa.8.answer }}</span>
+                                    </span>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td style="width: 25%">
+                                    <span>
+                                        <span><b>{{ exec_qa.9.task_question.que }}</b></span>
+                                        <span style="overflow-wrap: break-word; margin-left: 5%">{{ exec_qa.9.answer }}</span>
+                                    </span>
+                            </td>
+                            <td style="width: 25%">
+                                <span>
+                                    <span><b>{{ exec_qa.10.task_question.que }}</b></span>
+                                    <span style="overflow-wrap: break-word; margin-left: 5%">{{ exec_qa.10.answer }}</span>
+                                </span>
+
+                            </td>
+
+                            {% if exec_qa.count > 11 %}
+                                <td style="width: 25%">
+                                    <span>
+                                        <span><b>{{ exec_qa.11.task_question.que }}</b></span>
+                                        <span style="overflow-wrap: break-word; margin-left: 5%">{{ exec_qa.11.answer }}</span>
+                                    </span>
+                                </td>
+                                <td style="width: 25%">
+                                    <span>
+                                        <span><b>{{ exec_qa.11.task_question.que }}</b></span>
+                                        <span style="overflow-wrap: break-word; margin-left: 5%">{{ exec_qa.11.answer }}</span>
+                                    </span>
+                                </td>
+                                <td style="width: 25%">
+                                    <span>
+                                        <span><b>{{ exec_qa.13.task_question.que }}</b></span>
+                                        <span style="overflow-wrap: break-word; margin-left: 5%">{{ exec_qa.13.answer }}</span>
+                                    </span>
+                                </td>
+                            {% endif %}
+
+                        </tr>
+
+                        <tr>
+                            <td style="width: 50%" colspan="2">
+                                    <span>
+                                        <span><b>{{ exec_qa.7.task_question.que }}</b></span>
+                                        <span style="overflow-wrap: break-word; margin-left: 5%">{{ exec_qa.7.answer }}</span>
+                                    </span>
+                            </td>
+                            <td style="width: 50%" colspan="2">
+                                <span>
+                                    <span><b>{{ exec_qa.12.task_question.que }}</b></span>
+                                    <span style="overflow-wrap: break-word; margin-left: 5%">{{ exec_qa.12.answer }}</span>
+                                </span>
+
+                            </td>
+                        </tr>
+
+                    </table>
+                </div>
+            {% endif %}
+        </div>
+
+
+        <div class="table-wrapper" style="width: 100%; border: 1px solid grey">
+
+            {% if success %}
+                <h3 style="color: darkgreen">Your feedback have successfully updated</h3>
+            {% else %}
+                <div>
+            <span><b>Feedback Questions</b>
+                <span style="font-size: .8em">(When you complete answering all the question <b>Submit</b> button will activate)</span>
+            </span>
+                </div>
+                <form action="" method="post" id="sup_fb">
+                    {% csrf_token %}
+                    <formset>
+                        <table style="width:100%" class="table  table-sm table-bordered">
+
+                            <tr style="text-align: left; width: 100%">
+                                <td style="width: 50%">
+                                    <span>
+                                        <b> Have you described at least 30 minutes with executor with opening the documents? </b>
+                                    </span>
+                                    <span style="float:right; padding-right: 15%">
+                                        <select name="answer_1" id="answer_1" onchange="verify_ans_choice(this.id)">
+                                        <option value="No">No</option>
+                                        <option value="Yes">Yes</option>
+                                    </select>
+                                    </span>
+                                </td>
+
+                                <td style="width: 50%;">
+                                    <span>
+                                        <b> Are there more than one version of the document? </b>
+                                    </span>
+                                    <span style="float: right ; padding-right: 15%">
+                                        <select name="answer_2" id="answer_2" disabled=""
+                                                onchange="verify_choice_visible_next(this.id)">
+                                        <option value="No">No</option>
+                                        <option value="Yes">Yes</option>
+                                    </select>
+                                    </span>
+                                </td>
+                            </tr>
+
+                            <tr style="text-align: left; width: 100%">
+                                <td style="width: 50%;">
+                                    <span>
+                                        <b> Does the success criteria given by executor match with the actual success criteria of the test? </b>
+                                    </span>
+                                    <span style="float: right ; padding-right: 15%">
+                                        <select name="answer_3" id="answer_3" disabled="">
+                                        <option value="No">No</option>
+                                        <option value="Yes">Yes</option>
+                                    </select>
+                                    </span>
+                                </td>
+                                <td style="width: 50%" id="q4">
+                                    <span>
+                                        <b> What are the key differences between zero version and last version? (min 200 characters) </b>
+                                    </span>
+                                    <span>
+                                        <textarea type="number" name="answer_4" id="answer_4" disabled required
+                                                  style="width: 100%"></textarea>
+                                    </span>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td style="width: 50%;">
+                                    <span>
+                                        <b> Does Normative document given by executor match? </b>
+                                    </span>
+                                    <span style="float: right ; padding-right: 15%">
+                                        <select name="answer_5" id="answer_5" disabled>
+                                        <option value="No">No</option>
+                                        <option value="Yes">Yes</option>
+                                    </select>
+                                    </span>
+                                </td>
+                                <td style="width: 50%">
+                                    <span>
+                                        <b> What is your assessment regarding the confidence level mentioned by the executor? (min. 50 character) </b>
+                                    </span>
+                                    <span>
+                                        <textarea type="number" name="answer_6" id="answer_6" disabled required
+                                                  style="width: 100%"></textarea>
+                                    </span>
+                                </td>
+
+
+                            </tr>
+
+                            <tr>
+                                <td colspan="2" style="text-align: right">
+                                    <input type="button" value="Submit Feedback" class="btn btn-success"
+                                           onclick="verify_all_and_enable_submit()"
+                                           id="submit_btn">
+                                </td>
+                            </tr>
+                        </table>
+                    </formset>
+                </form>
+            {% endif %}
+        </div>
+        <br>
+
+    </div>
+
+
+{% endblock %}

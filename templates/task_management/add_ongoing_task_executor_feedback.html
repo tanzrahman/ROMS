@@ -1,0 +1,126 @@
+{% extends 'task_management/task_management_base.html' %}
+
+{% block add_answer %}
+    <script src="/static/js/SiteScripts/crypto-js/sha1.js"></script>
+    <script src="/static/js/SiteScripts/crypto-js/crypto-js.js"></script>
+    <script src="/static/js/SiteScripts/crypto-govt js/lib-typedarrays-min.js"></script>
+    <script src="/static/js/SiteScripts/crypto-js/aes.js"></script>
+    <script src="/static/js/SiteScripts/FileHandler.js"></script>
+
+    <div style="padding-left: 20px">
+        <div class="outer-wrapper">
+            <div class="table-wrapper" style="border: 1px solid grey; width: 90%">
+                <h5><b>Details of the assigned task</b></h5>
+                <table class="table table-bordered table-responsive-sm" style="width: 100%; font-size: small">
+                    <tr>
+                        <th>Milestone ID</th>
+                        <td>{{ task.milestone_id }}</td>
+                    </tr>
+                    <tr>
+                        <th>Title</th>
+                        <td>{{ task.title }}</td>
+                    </tr>
+                    <tr>
+                        <th>Supervisor</th>
+                        <td>
+                            {% for each in task.supervisor_list %}
+                                {% if task.division == each.profile.division %}
+                                    <b>*</b>
+                                {% endif %}
+                                {{ each.first_name }} {{ each.last_name }} <br>
+                            {% endfor %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Planned Start Date</th>
+                        <td>{{ task.planned_start_date }}</td>
+                    </tr>
+                    <tr>
+                        <th>Planned End Date</th>
+                        <td>{{ task.planned_end_date }}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <div>
+            <h5> Answer the following Question relevant to the task</h5>
+            <p style="font-size: .7em">When you complete answering all the question <b>Submit</b> button will
+                appear.<br>
+                Then please click the submit button, otherwise your feedback will not be forwarded to higher level
+            </p>
+        </div>
+
+        <div class="table-wrapper" style="border: 1px solid grey; width: 100%">
+            {% if fb_complete %}
+                <h3 style="color: green">Feedback Completed!</h3>
+            {% else %}
+                <h5><b>Question/Answers</b></h5>
+                <div>
+                    {% if formset %}
+                        <form action="" method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <table class="table table-bordered table-responsive-sm"
+                                   style="row-gap: 0; width: 70%; font-size: smaller">
+                                <tr>
+                                    <th style="width: 50%">Question</th>
+                                    <th style="width: 50%">Answer</th>
+                                </tr>
+                                <formset>
+                                    {{ formset.management_form }}
+                                    {% for qa_form in formset.forms %}
+                                        <tr style="vertical-align: middle">
+                                            {% for qa_field in qa_form %}
+
+                                                {% if qa_field.is_hidden %}
+                                                    {{ qa_field }}
+                                                {% else %}
+
+                                                    {% if forloop.counter == 1 %}
+                                                        <td>{{ qa_form.instance.task_question.que }}</td>
+                                                    {% endif %}
+
+                                                    <td>
+                                                        {{ qa_field }}
+                                                        {% if qa_form.instance.task_question.category == 'FILE' %}
+                                                            <input id="{{ qa_field.auto_id }}_file" onchange="getFileInfo('{{ qa_field.auto_id }}')"
+                                                                   name="{{ qa_field.auto_id }}_file", type="file">
+                                                            {% if qa_field.initial != None %}
+                                                                <a href="/feedback/viewfile/{{ qa_field.initial }}"
+                                                                   target="_blank">View File</a>
+                                                            {% endif %}
+                                                        {% endif %}
+                                                    </td>
+
+                                                {% endif %}
+                                            {% endfor %}
+                                        </tr>
+                                    {% endfor %}
+                                </formset>
+                                <tr style="text-align: center">
+                                    <td>
+                                        {% if final_submission %}
+                                            <input type="button" class="btn btn-success" value="Final Submission">
+                                        {% endif %}
+                                    </td>
+
+                                    <td>
+                                        <input type="submit" class="btn btn-info" value="Save">
+                                    </td>
+                                </tr>
+                            </table>
+
+                        </form>
+                    {% endif %}
+                </div>
+            {% endif %}
+        </div>
+
+        <br>
+        {% if message %}
+            <h3 style="color:red"><b>{{ message }}</b></h3>
+        {% endif %}
+
+    </div>
+
+{% endblock %}

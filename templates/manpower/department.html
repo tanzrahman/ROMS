@@ -1,0 +1,64 @@
+{% extends 'manpower/manpower_base.html' %}
+{% load static %}
+{% block content %}
+    <div>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav mr-auto">
+                    <li class="navbar-item">
+                        <a src="/static/npcbl.png"></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/manpower/department/create">Add Department</a>
+                    </li>
+
+                </ul>
+            </div>
+        </nav>
+
+
+
+        {% if department_list %}
+            <div style="margin-left: 10%; margin-top: 1%" >
+                <h2>List of Departments</h2>
+                <table class="table table-bordered table-sm" style="width: 20%">
+                    {% for each in department_list %}
+                        <tr style="text-align: center">
+                            <td>{{ forloop.counter }}.</td>
+                            <td><a href="edit/{{ each.dept_id }}">{{ each }} </a></td>
+                            <td>{{ each.dept_code }}</td>
+                            <td><a href="delete/{{ each.dept_id }}" class="btn btn-danger"> Delete </a></td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        {% endif %}
+
+
+
+        {% if form %}
+
+            <div style="margin-top: 1%; margin-left: 5%">
+                {% if success %}
+                    <h3> Successfully Update</h3>
+                {% endif %}
+                <form enctype="multipart/form-data" action="" method="post" id="dept_form">
+                    {% csrf_token %}
+                    <fieldset>
+                        <table class="table table-hover" style="border-collapse: separate; border-spacing: 0 15px">
+
+                            {{ form.as_table }}
+                            <tr>
+                                <td style="text-align:center">
+                                    <input class="btn  btn-outline-dark btn-light" type="submit" value="Save">
+                                </td>
+
+                            </tr>
+                        </table>
+                    </fieldset>
+                </form>
+            </div>
+        {% endif %}
+
+    </div>
+{% endblock %}

@@ -1,0 +1,51 @@
+{% extends 'manpower/user_base.html' %}
+{% load static %}
+{% block default %}
+    <script src="{% static 'js/selectize.js' %}"></script>
+    <link href="/static/css/selectize.css" rel="stylesheet"/>
+
+    {% if form %}
+
+        <div style="margin-top: 1%; margin-left: 5%; width: 60%">
+            {% if success %}
+                <h3> Successfully Update</h3>
+            {% endif %}
+            <form enctype="multipart/form-data" action="" method="post" id="dept_form">
+                {% csrf_token %}
+                <fieldset>
+                    <table class="table table-hover" style="border-collapse: separate; border-spacing: 0 15px">
+
+                        {{ form.as_table }}
+                        <tr>
+                            <td style="text-align:center">
+                                <input class="btn  btn-outline-dark btn-light" type="submit" value="Save">
+                            </td>
+
+                        </tr>
+                    </table>
+                </fieldset>
+            </form>
+        </div>
+        <script>
+            $(document).ready(function () {
+
+                $('#id_div_head').selectize({
+                    sortField: 'text',
+                    inputClass: 'no_fetch'
+                });
+                $('#id_department').selectize({
+                    sortField: 'text',
+                    inputClass: 'no_fetch'
+                });
+                $('#id_members').selectize({
+                    sortField: 'text',
+                    inputClass: 'no_fetch'
+                });
+                $('#id_lead').selectize({
+                    sortField: 'text',
+                    inputClass: 'no_fetch'
+                });
+            });
+        </script>
+    {% endif %}
+{% endblock %}

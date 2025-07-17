@@ -1,0 +1,71 @@
+{% extends 'task_management/task_management_base.html' %}
+{% load static %}
+{% block task_list %}
+    <div>
+        <script src="{% static 'js/SiteScripts/search_results.js' %}"></script>
+        <div style="width: 80%; margin-top: 2%; margin-left: 2%">
+            <table class="table table-hover table-bordered small">
+                <tr>
+                    <td colspan="8">
+                        <h5 style="text-align: center"> List of feedbacks from: {{ user }} as Executor</h5>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Sl No.</th>
+                    <th>Task</th>
+                    <th>Category</th>
+                    <th>Division</th>
+                    <th>Feedback Time</th>
+                    <th>Executor Feedback</th>
+                    <th>Supervisor Feedback</th>
+                    <th>Action</th>
+                </tr>
+                {% if feedback_list %}
+                    {% for each in feedback_list %}
+                        <tr>
+                            <td>
+                                {{ forloop.counter }}
+                            </td>
+                            <td>
+                                <span><b>MilestoneID:</b>{{ each.task.milestone_id }}</span>,
+                                <span><b>Program KKS:</b>{{ each.task.task_id }}</span><br>
+                                <span><b>Planned Start:</b>{{ each.task.planned_start_date }}</span>&nbsp;&nbsp;
+                                <span><b>Planned End:</b>{{ each.task.planned_end_date }}</span><br>
+                                <span><b>Title:</b> ({{ each.task.title }})</span>
+                            </td>
+                            <td>
+                                {{ each.task.task_category }}
+                            </td>
+                            <td>
+                                {{ each.task.division }}
+                            </td>
+                            <td>
+                                {{ each.created_at }}
+                            </td>
+                            <td>{{ each.executor_feedback.all.count }}</td>
+                            <td>{{ each.supervisor_feedback.all.count }}</td>
+                            <td><a href="/feedback/open/{{ each.id }}">View Feedback</a></td>
+                        </tr>
+                    {% endfor %}
+                {% endif %}
+            </table>
+            <div id="pagination_div">
+                {% if feedback_list.has_other_pages %}
+                    <ul class="paginator">
+
+                        <span>Page: </span>
+                        {% for i in feedback_list.paginator.page_range %}
+                            {% if feedback_list.number == i %}
+                                <span class="this-page">{{ i }} <span
+                                        class="sr-only">(current)</span></span>
+                            {% else %}
+                                <a href="javascript:next_page_report('{{ i }}')">{{ i }}</a>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+        </div>
+
+    </div>
+{% endblock %}

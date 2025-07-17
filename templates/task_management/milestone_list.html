@@ -1,0 +1,147 @@
+{% extends 'task_management/task_management_base.html' %}
+{% load static %}
+{% block milestone %}
+
+    <script src="{% static 'js/SiteScripts/search_results.js' %}"></script>
+
+    <div>
+
+        <div style="margin-left: 10%;">
+            <h4 style="margin-left: 15%; color: red">Milestone Summary</h4>
+            {% if summary %}
+                <table class="table table-bordered" style="width: 90%">
+                    <tr style="text-align: center">
+                        <th>Total Milestones</th>
+                        <th>Completed Milestones</th>
+                        <th>UnAssigned Milestones</th>
+                        <th>Assigned Milestones</th>
+                        <th>Starting This Month</th>
+                        <th>Milestones Not Yet Started</th>
+                    </tr>
+                    <tr style="text-align: center">
+                        <td> {{ summary.total }}</td>
+                        <td> {{ summary.completed }}</td>
+                        <td> {{ summary.unassigned }}</td>
+                        <td> {{ summary.assigned }}</td>
+                        <td> {{ summary.this_month }}</td>
+                        <td> {{ summary.not_started }}</td>
+
+                    </tr>
+                </table>
+            {% endif %}
+
+
+            {% if src_milestone %}
+                <h4 style="margin-left: 15%; color: red">Summary of Searched Result</h4>
+                <table class="table table-bordered" style="width: 90%">
+                    <tr style="text-align: center">
+                        <th>Total Milestones</th>
+                        <th>Completed Milestones</th>
+                        <th>UnAssigned Milestones</th>
+                        <th>Assigned Milestones</th>
+                    </tr>
+                    <tr style="text-align: center">
+                        <td> {{ src_milestone }}</td>
+                        <td> {{ src_completed_milestone }}</td>
+                        <td> {{ src_unAssigned }}</td>
+                        <td> {{ src_assigned }}</td>
+
+                    </tr>
+                </table>
+            {% endif %}
+
+        </div>
+        <div>
+            <div>
+                <h3 style="margin-left: 45%; color: red">Milestone List</h3>
+                <table class="table table-bordered">
+                    <thead style="text-align: center">
+                    <tr>
+                        <th>SL No.</th>
+                        <th>Milestone ID</th>
+                        <th>Division</th>
+                        <th>Status</th>
+                        <th>Task ID</th>
+                        <th>System</th>
+                        <th>Facility</th>
+                        <th>Title</th>
+                        <th>Start date</th>
+                        <th>End date</th>
+                        <th>Manpower Assigned</th>
+                    </tr>
+                    <tr>
+                        <form action="" method="get">
+                            <td style="text-align:center">
+                                <input class="btn  btn-outline-dark btn-light" type="submit" value="Search">
+                            </td>
+                            {% for field in form %}
+
+                                {% if field.name == 'start_date_from' or field.name == 'end_date_from' %}
+
+                                    {% if field.name == 'start_date_from' %}
+                                        <td>From:{{ field }} <br> To:{{ form.start_date_to }}</td>
+                                    {% endif %}
+
+                                    {% if field.name == 'end_date_from' %}
+                                        <td>From:{{ field }} <br> To:{{ form.end_date_to }}</td>
+                                    {% endif %}
+
+                                {% else %}
+                                    {% if 'date_to' not in field.name %}
+                                        <td {% if 'system' in field.name %} {% endif %}>
+                                            {{ field }}
+                                        </td>
+                                    {% endif %}
+                                {% endif %}
+                            {% endfor %}
+                        </form>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% if milestone_list %}
+                        {% for milestone in milestone_list %}
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td><a
+                                        href="/task_management/add_task?milestone_id={{ milestone.id }}"
+                                        target="_blank">{{ milestone.milestone_id }}</a></td>
+                                <td>{{ milestone.division }}</td>
+                                <td>{{ milestone.status }}</td>
+                                <td>{{ milestone.task_id }}</td>
+                                <td style="width: 5%">{{ milestone.system }}</td>
+                                <td>{{ milestone.facility }}</td>
+                                <td style="width: 30%">{{ milestone.title }}</td>
+                                <td>{{ milestone.start_date }}</td>
+                                <td>{{ milestone.end_date }}</td>
+                                <td>{{ milestone.is_assigned }}</td>
+                            </tr>
+                            </tbody>
+                        {% endfor %}
+                        </table>
+                        <div id="pagination_div">
+                            {% if milestone_list.has_other_pages %}
+                                <ul class="paginator">
+
+                                    <span>Page: </span>
+                                    {% for i in milestone_list.paginator.page_range %}
+                                        {% if milestone_list.number == i %}
+                                            <span class="this-page">{{ i }} <span
+                                                    class="sr-only">(current)</span></span>
+                                        {% else %}
+                                            <a href="javascript:next_page_report('{{ i }}')">{{ i }}</a>
+                                        {% endif %}
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </div>
+                        </div>
+                        </div>
+
+                    {% else %}
+                        <h5 style="text-align:center; color:red">No Result Found</h5>
+                    {% endif %}
+
+        <br> <br>
+    </div>
+
+{% endblock %}

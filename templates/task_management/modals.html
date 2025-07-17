@@ -1,0 +1,87 @@
+    <div id="add_executor" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add Multiple Executors</h5>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+
+                    <form class="form-group" action="" method="POST">
+
+                        {% csrf_token %}
+
+                        {{ form_add_executor.as_p }}
+
+                        <input name="add_executor" type="submit" class="btn btn-success" style="float:right"
+                               value="Add Executor">
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!--modal for add_comment-->
+    <div id="add_comment" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add Comment</h5>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+
+                    <form class="form-group" action="" method="POST">
+
+                        {% csrf_token %}
+
+                        {{ form_add_comment.as_p }}
+
+                        <input name="add_comment" type="submit" class="btn btn-success" style="float:right"
+                               value="Add Comment">
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!--modal for add_question_answer-->
+    <div id="add_question_answer" class="modal fade">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Answer to the following Questions</h5>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+
+                    <form class="form-group" action="" method="POST">
+
+                        {% csrf_token %}
+
+                        {{ form_question_answer.as_p }}
+
+                        <input name="add_question_answer" type="submit" class="btn btn-success" style="float:right"
+                               value="Add Answer">
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>

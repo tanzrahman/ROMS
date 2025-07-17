@@ -1,0 +1,78 @@
+{% extends 'consultant/consultant_base.html' %}
+
+{% block content %}
+    <div>
+        <script src="/static/js/jquery-3.5.1.min.js"></script>
+        <script src="/static/js/task_manager.js"></script>
+
+        <div style="margin-left: 5%; width: 80%; margin-top: 5%">
+            <table class="table table-hover table-bordered" style="margin-top: 1%">
+                <tr>
+                    <th style="vertical-align: middle">Task Details</th>
+                    <td>
+                        <span>  <b>Milestone ID:</b> {{ task.milestone_id }} <br>
+                                <b>Title:</b> {{ task.title }} <br>
+                                <b>Document:</b> {{ task.task_id }}
+                        </span>
+                        <br>
+
+                        <br>
+                        <span>
+                        <b>Supervisors:</b>
+                            {% for each in task.supervisor_list %}
+                                {% if each.profile.division == task.division %}<b>*</b> {% endif %} {{ each }},
+                            {% endfor %}
+                    </span>
+                        <br>
+                        <span>
+                        <b>Executors</b>
+                            {% for each in task.executor_list %}
+                                {% if each.profile.division == task.division %}<b>*</b> {% endif %} {{ each }},
+                            {% endfor %}
+                    </span>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <div>
+            {% if success %}
+                <h3 style="color: darkgreen; margin-left: 25%">Successfully Requested for Document</h3>
+                <meta http-equiv="refresh" content="1;url=/consultant/document_request/my_requests" />
+            {% endif %}
+
+            <div>
+                <form action="" method="post" id="document_request">
+                    {% csrf_token %}
+
+                    <fieldset>
+
+                        <div>
+                            <h3 style="text-align: center">Document Request</h3>
+
+                            <div class="outer-wrapper">
+                                <div style="width: 80%; margin-left: 5%">
+                                    <table class="table table-sm table-bordered" style="width: 70%; row-gap: 0px">
+
+                                        {% for field in form %}
+                                            <tr class="table-info table-sm" style="text-align: center; width: 40%">
+
+                                                <td><b> {{ field.label_tag }} </b></td>
+                                                <td> {{ field }} </td>
+                                            </tr>
+                                        {% endfor %}
+                                    </table>
+                                </div>
+                            </div>
+
+                            <input style="margin-left: 50%" class="btn btn-outline-info" type="submit" value="Submit">
+
+
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

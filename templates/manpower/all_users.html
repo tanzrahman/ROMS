@@ -1,0 +1,92 @@
+{% extends 'manpower/user_base.html' %}
+{% load static %}
+{% load %}
+{% block default %}
+
+
+    <script src="{% static 'js/SiteScripts/search_results.js' %}"></script>
+
+    <div style="padding:10px">
+        <div class="column" style="">
+            <table class="table table-sm table-bordered table-info" style="width: 30%; margin-left: auto; margin-right: auto">
+                <tr style="text-align: center">
+                    <th style="width:50%">Total Users</th>
+                    <th>{{ user_count }}</th>
+                </tr>
+            </table>
+        </div>
+        <form action="" method="get" id="user_search-form">
+            <table class="table table-bordered table-sm" style="text-align: center">
+                <tr class="table-success align-content-center">
+                    <th>Sl</th>
+                    <th>Name</th>
+                    <th>NPCBL Designation</th>
+                    <th>Division</th>
+                    <th>Shop/Department</th>
+                    <th>Sub Department</th>
+                    <th>Section</th>
+                    <th>Phone</th>
+                    <th>Email</th>
+                </tr>
+                <tr style="font-size: 0.9em">
+
+                    {% csrf_token %}
+                    <td style="text-align:center">
+                        <input class="btn  btn-outline-dark btn-light" type="submit" value="Search">
+                    </td>
+                    {% for field in form %}
+                        <td> {{ field }}</td>
+                    {% endfor %}
+
+                </tr>
+
+                {% for each in users %}
+                    <tr class="align-content-center">
+                        <td>{{ forloop.counter }}
+                            {% if request.user.is_staff %}
+                            <a href="/admin_site_control/manpower/profile/{{ each.profile.id }}/change/" target="_blank">(Edit)</a>
+                            {% endif %}
+                        </td>
+                        <td>{{ each.first_name }} {{ each.last_name }}
+                            {% if request.user.is_staff %}
+                                <a href="/group_sms/?user={{ each.id }}&receiver_division={{ each.profile.division.div_id }}&msg_body=Dear Mr {{ each.last_name }}," target="_blank">(Send Msg)</a>
+                            {% endif %}
+                            <br>
+                            <span>
+                                Tasks As Executor: {{ each.executors.all.count }} <br>
+                                Tasks As Supervisor: {{ each.supervisors.all.count }}
+                            </span>
+                        </td>
+                        <td>{{ each.profile.npcbl_designation }} </td>
+                        <td>{{ each.profile.division }}</td>
+                        <td>{{ each.profile.department }} </td>
+                        <td>{{ each.profile.subdepartment }} </td>
+                        <td>{{ each.profile.section }} </td>
+                        <td>{{ each.profile.phone }} </td>
+                        <td>{{ each.email }} </td>
+
+                    </tr>
+                {% endfor %}
+            </table>
+        </form>
+
+            <!-- for pagination-->
+        <div id="pagination_div">
+            {% if users.has_other_pages %}
+                <ul class="paginator">
+
+                    <span>Page: </span>
+                    {% for i in users.paginator.page_range %}
+                        {% if users.number == i %}
+                            <span class="this-page">{{ i }} <span
+                                    class="sr-only">(current)</span></span>
+                        {% else %}
+                            <a href="javascript:next_page_report('{{ i }}')">{{ i }}</a>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+
+    </div>
+{% endblock %}

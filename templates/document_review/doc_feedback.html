@@ -1,0 +1,79 @@
+{% extends 'document_review/doc_review_base.html' %}
+{% load consultant_templatetags %}
+{% load comments_templatetags %}
+{% block review %}
+
+    <script src="/static/js/task_manager.js"></script>
+
+    <div style="padding-left: 2%; width: 98%" class="row">
+
+        <div class="col-7" style="width: 80%">
+            <h2>Document Feedback</h2>
+            <h4>By: {{ form.instance.user }}</h4>
+            <h4 style="color: red">(You can save temporary feedback and modify later. Final Submission Button is at the
+                end
+                of the page)</h4>
+
+            {% if saved %}
+                <h3 style="color: darkgreen">
+                    {% if final_submission %}Final Submission Done, {% endif %}Successfully Saved Changes.
+                </h3>
+            {% endif %}
+
+            {% if form %}
+                <form method="post" action="" id="feedback_form">
+                    <input type="submit" value="Save Feedback">
+                    {% csrf_token %}
+                    <table class="table table-bordered table-sm" style="width: 100%">
+                        {% for each in form %}
+                            <tr>
+                                <td>
+                                    <span style="font-weight: bold">{{ forloop.counter }}. {{ each.label_tag }}</span>
+                                    <br>
+                                    {{ each }}
+                                    {% for error in each.errors %}
+                                        <p style="color: red">{{ error }}</p>
+                                    {% endfor %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                    <input type="hidden" value="0" id="final_submission" name="final_submission">
+                    <input type="button" value="Submit Final Feedback" onclick="javascript:final_submit_doc_review()">
+                </form>
+                <br><br>
+            {% endif %}
+            <script>
+                function final_submit_doc_review() {
+                    document.getElementById("final_submission").value = 1;
+                    document.getElementById("feedback_form").submit();
+                }
+            </script>
+        </div>
+
+        <div class="col-5">
+            {% with task.id|get_comments as task_comment_list %}
+                {% if task_comment_list %}
+                    <h3>Comments on this document</h3>
+
+                    <table style="width:100%" class="table table-hover table-bordered table-sm">
+
+                        <tr class="table-danger">
+                            <th>User</th>
+                            <th>Comment</th>
+                            <th>Created Date</th>
+                        </tr>
+
+                        {% for each in task_comment_list %}
+                            <tr>
+                                <td>{{ each.user }}</td>
+                                <td>{{ each.comment }}</td>
+                                <td>{{ each.created_date }}</td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                {% endif %}
+            {% endwith %}
+        </div>
+    </div>
+{% endblock %}

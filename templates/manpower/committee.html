@@ -1,0 +1,69 @@
+{% extends 'manpower/user_base.html' %}
+{% load static %}
+{% block default %}
+
+    {% if committee %}
+        <div style="width: 50%; margin-left: 20%; padding-top: 1%">
+            <table class="table table-bordered table-sm" style="text-align: center">
+
+                <tr class="align-content-center">
+                    <th>SL.No</th>
+                    <th>Division</th>
+                    <th>Department</th>
+                    <th>Name</th>
+                    <th>Members</th>
+                </tr>
+                {% for each in committee %}
+                    <tr class="align-content-center">
+                        <td style="vertical-align: middle">{{ forloop.counter }}</td>
+                        <td style="vertical-align: middle">{{ each.division }}</td>
+                        <td style="vertical-align: middle">{{ each.department }}</td>
+                        <td style="vertical-align: middle">{{ each.name }}</td>
+                        <td style="vertical-align: middle">
+                            {% for member in each.members.all %}
+                                {{ forloop.counter }}. {{ member.get_full_name }} ({{ member.username }}) {% if member == each.lead %}
+                                <b style="color: red">(Lead)</b>{% endif %}
+                                <br>
+                            {% endfor %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+    {% endif %}
+
+    {% if sar_committee %}
+        <div style="width: 80%; margin-left: 5%; padding-top: 1%">
+            <table class="table table-bordered table-sm" style="text-align: center">
+
+                <tr class="align-content-center">
+                    <th>SL.No</th>
+                    <th>Committee Name</th>
+                    <th>Review Section</th>
+                    <th>Review Section Title</th>
+                    <th>Members</th>
+                </tr>
+                {% for each in sar_committee %}
+                    <tr class="align-content-center">
+                        <td style="vertical-align: middle">{{ forloop.counter }}
+                            {% if request.user.is_staff %}
+                                <a href="/manpower/user/edit_sar_committeee/{{ each.id }}">(Edit)</a>
+                            {% endif %}
+                        </td>
+                        <td style="vertical-align: middle">{{ each.name }}</td>
+                        <td style="vertical-align: middle">{{ each.sar_section }}</td>
+                        <td style="vertical-align: middle">{{ each.sar_section_title }}</td>
+                        <td style="vertical-align: middle">
+                            {% for member in each.members.all %}
+                                {{ forloop.counter }}. {{ member.get_full_name }} ({{ member.username }}) {% if member == each.lead %}
+                                <b style="color: red">(Lead)</b>{% endif %}
+                                <br>
+                            {% endfor %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+    {% endif %}
+
+{% endblock %}

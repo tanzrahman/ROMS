@@ -1,0 +1,14 @@
+{% extends 'manpower/manpower_base.html' %}
+
+{% block user %}
+    <div>
+        <form enctype="multipart/form-data" action="" method="post">
+            {% csrf_token %}
+            <fieldset>
+                <input type="file" id="user_csv" name="user_csv">
+                <input type="submit" value="Submit">
+            </fieldset>
+        </form>
+    </div>
+
+{% endblock %}

@@ -1,0 +1,95 @@
+{% extends 'consultant/consultant_base.html' %}
+{% load static %}
+{% block content %}
+    <div>
+        <script src="{% static 'js/selectize.js' %}"></script>
+        <script src="/static/js/task_manager.js"></script>
+        <script src="/static/js/lecture_manager.js"></script>
+        <link href="/static/css/selectize.css" rel="stylesheet"/>
+
+        <div style="margin-left: 2%; margin-top: 2%">
+
+            <div>
+                <table class="table table-bordered" style="width: 60%">
+                    <tr>
+                        <th style="vertical-align: middle"> Discussion Details</th>
+                        <td>
+                            <span>
+                                <b>Title:</b> {{ lecture.lecture_name }}
+                            </span> <br>
+                            <span>
+                                <b>Category:</b> {{ lecture.lecture_category }}
+                            </span> <br>
+                            <span>
+                                <b>Discussion Schedule & Venue:</b>
+                                {{ lecture.schedule }} at {{ lecture.venue }}
+                            </span> <br>
+
+                            <span>
+                                <b>Lead Presenter:</b>
+                                {{ lecture.lead_presenter }}
+                            </span>
+
+                        </td>
+                    </tr>
+                    <tr>
+
+                    </tr>
+
+
+                </table>
+            </div>
+            <div>
+            {% if success %}
+                <h3 style="color: darkgreen">{{ success }} </h3>
+            {% endif %}
+            {% if redirect %}
+                <meta http-equiv="refresh" content="1;url={{ redirect }}" />
+            {% endif %}
+            {% if error %}
+                <h3 style="color: darkred">{{ error }} </h3>
+            {% endif %}
+            </div>
+
+            <form action="" method="post" id="conslt_lect_fb">
+                {% csrf_token %}
+                <fieldset>
+                    <table class="table table-responsive-sm table-bordered" style="width: 60%;">
+                        <col style="width: 40%">
+                        <col style="width: 60%">
+                        {% for each_field in form %}
+                            <tr>
+                                <th>
+                                    {{ each_field.label_tag }}
+                                </th>
+                                <td>
+                                    {{ each_field }}
+                                    {% for error in each_field.errors %}
+                                        <p style="color: red">{{ error }}</p>
+                                    {% endfor %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        <tr>
+                            <td colspan="2" style="text-align: center"><input type="submit" value="Submit"></td>
+                        </tr>
+                    </table>
+                </fieldset>
+            </form>
+        </div>
+        <div>
+            <script>
+                $(document).ready(function () {
+                    $('#id_qa3').selectize({
+                        sortField: 'text',
+                        inputClass: 'no_fetch'
+                    });
+                    $('#id_qa9').selectize({
+                        sortField: 'text',
+                        inputClass: 'no_fetch'
+                    });
+                });
+            </script>
+        </div>
+    </div>
+{% endblock %}

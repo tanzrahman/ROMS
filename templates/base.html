@@ -1,0 +1,169 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="user-scalable=yes, width=1920px, initial-scale=1.0, maximum-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="stylesheet" href="{% static 'css/static.css' %}">
+    <script src="/static/js/SiteScripts/jquery-3.5.1.js"></script>
+    <script src="/static/js/apexcharts/apexcharts.js"></script>
+    <link href="{% static 'css/bootstrap.css' %}" rel="stylesheet">
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/SiteScripts/jquery-3.5.1.js' %}"></script>
+    <title>Rooppur NPP Project Task Management System</title>
+
+    <style>
+        .navbar-nav .nav-item:hover .nav-link{
+            color: #fff;
+            background-color: green;
+        }
+
+        .active { background-color: black; }
+
+        .table-wrapper {
+            max-height: 100%;
+            overflow-y: scroll;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+
+<div id="page-content-wrapper">
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom py-sm-0">
+
+        <div class="collapse navbar-collapse">
+
+            <ul class="navbar-nav mr-auto">
+                <li class="navbar-item">
+                    <a src="/static/npcbl.png"></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/"><b>Rooppur Operational Management System</b></a>
+                </li>
+
+
+                {% if request.user.is_anonymous %}
+                <li class="nav-item">
+                    <a class="nav-link" href="/login">Login</a>
+                </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="/task_management"><b>Task Management</b></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/ts"><b>Technical Solution</b></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/manpower/user/all"><b>All Users</b></a>
+                    </li>
+                    {% if request.user.profile.access_level > 1 %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="/notifications/direct_messages"><b>Direct Messages to PD</b></a>
+                        </li>
+                    {% endif %}
+                {% endif %}
+
+                {% if request.user.is_superuser %}
+                    
+                    <li class="nav-item">
+                        <a class="nav-link" href="/manpower"><b>Manpower Management</b></a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="/system_log"><b>System Log</b></a>
+                    </li>
+
+                {% endif %}
+                
+                {% if request.user.is_staff %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="/group_sms"><b>Group SMS</b></a>
+                    </li>
+                {% endif %}
+            
+            </ul>
+        </div>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav ml-md-auto">
+            {% if not request.user.is_anonymous  %}
+                {% if request.user.profile.access_level < 20 %}
+                    <li class="nav-item">
+                            <a class="nav-link blink" target="_blank" href="/static/pms_manual.pdf">
+                                <span style="font-size: smaller">Download PMS Manual</span>
+                            </a>
+                    </li>
+                    {% endif %}
+                <li class="nav-item">
+                        <a class="nav-link" href="/notifications/show"><b>My Notifications</b></a>
+                </li>
+            {% endif %}
+                <div class="dropdown" style="float:left;">
+                    <li class="nav-item">
+                        {% if not request.user.is_anonymous %}
+                        <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" >
+                            {{ request.user }}
+                        </button>
+                            <div class="dropdown-menu" style="font-size: 14px">
+                                <a class="dropdown-item" href="/manpower/user/profile">User Details</a>
+                                <a class="dropdown-item" href="/manpower/user/change_password">Change Password</a>
+                            </div>
+                        {% endif %}
+                    </li>
+                </div>
+
+                <li class="nav-item">
+                    <a class="nav-link px-1 mx-1 py-3 my-n2" href="/logout">
+                        {% if not request.user.is_anonymous %}
+                            (logout)
+                        {% endif %}
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</div>
+
+<div style="height:100px;">
+    {% if not request.user.is_anonymous %}
+        {% block content %}
+
+        {% endblock %}
+
+    {% else %}
+
+        {% block userlogin %}
+
+        {% endblock %}
+
+        {% block signup %}
+
+        {% endblock %}
+
+        {% block homepage %}
+
+        {% endblock %}
+
+    {% endif %}
+
+
+</div>
+
+</body>
+
+<script type="text/javascript">
+   $('.nav-link').click(function() {
+        $(".active").removeClass("active");
+        $($(this).attr('href')).addClass("active");
+    });
+</script>
+</html>

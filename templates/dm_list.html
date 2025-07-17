@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    <link href="/css/selectize.css" rel="stylesheet"/>
+    <link href="/js/Tagging/jquery.tagger.css" rel="stylesheet"/>
+    <script src="/js/jquery-3.5.1.min.js"></script>
+    <script src="/js/selectize.js"></script>
+    <script src="/js/task_manager.js"></script>
+
+    <div  style="margin-top: 3%; margin-left: 10%; width: 80%">
+        <h3>My Messages to PD</h3>
+
+        {% if dm_list %}
+            <table class="table table-bordered table-sm" style="text-align: center; overflow-wrap: break-word">
+            <tr>
+                <th>Sl No.</th>
+                <th>Date & time</th>
+                <th>Message</th>
+                <th>Reference Message</th>
+
+            </tr>
+            {% for each in dm_list %}
+                <tr>
+                    <td style="width: 10%">{{ forloop.counter }}</td>
+                    <td style="width: 10%;">{{ each.created_at }}</td>
+                    <td style="width: 30%">{{ each.action_text }}</td>
+                    <td style="width: 30%">
+                        {% if each.instruction %}
+                        {{ each.instruction }} <br>
+                        <b>On: {{ each.instruction.send_time }}</b>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+            </table>
+        {% endif %}
+
+    </div>
+{% endblock %}

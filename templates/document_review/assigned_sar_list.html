@@ -1,0 +1,49 @@
+{% extends 'document_review/doc_review_base.html' %}
+{% load consultant_templatetags %}
+{% load static %}
+{% block review %}
+
+    <script src="/static/js/task_manager.js"></script>
+    <script src="{% static 'js/selectize.js' %}"></script>
+    <link href="/static/css/selectize.css" rel="stylesheet"/>
+
+
+    <div style="padding-left: 20px; margin-top: 1%">
+
+    <h5 style="text-align: center"><a href="/static/general_instruction_sar_review.pdf">Download Instruction for SAR Report</a> </h5>
+        <div class="col" style="margin-top: 2%; margin-left: 1%; width: 100%">
+            {% if sar_list %}
+                <h3 style="padding-left:30% "> List of Safety Analysis Review</h3>
+                <table class="table table-bordered table-responsive-sm" style="width: 95%; text-align: center">
+                    <tr>
+                        <th>Section assigned to Committee</th>
+                        <th>Sub-section Assigned to Review</th>
+                        <th>My Report</th>
+                    </tr>
+                    {% for each in sar_list %}
+                        <tr>
+                            <td style="width: 45%">
+                                Section: {{ each.committee.sar_section }}<br> Title: {{ each.committee.sar_section_title }} <br>
+                                {% if request.user == each.committee.lead %}
+                                    <a href="/task_management/document_review/delete_sar_reviewer/{{ each.id }}">(delete)</a>
+                                {% endif %}
+                            </td>
+                            <td style="width: 45%">Subsection: {{ each.assigned_section }}<br> Subsection Title: {{ each.assigned_section_title }}</td>
+                            <td style="width: 20%">
+                                {% if each.analysis_report_file %}
+                                    <a href="/feedback/viewfile/{{ each.analysis_report_file }}">Download Report</a> <br>
+                                    <a href="/task_management/document_review/upload_sar_individual_report/{{ each.id }}">Re-Upload Report</a>
+                                {% else %}
+                                    <a href="/task_management/document_review/upload_sar_individual_report/{{ each.id }}">Upload Report</a>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+
+            {% endif %}
+        </div>
+
+    </div>
+
+{% endblock %}

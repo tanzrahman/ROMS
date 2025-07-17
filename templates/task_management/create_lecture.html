@@ -1,0 +1,82 @@
+{% extends 'task_management/task_management_base.html' %}
+
+{% block document %}
+    <div>
+        <script src="/static/js/jquery-3.5.1.min.js"></script>
+        <script src="/static/js/task_manager.js"></script>
+        <link href="/static/css/selectize.css" rel="stylesheet"/>
+        <script src="/static/js/jquery-3.5.1.min.js"></script>
+        <script src="/static/js/task_manager.js"></script>
+        <script src="/static/js/selectize.js"></script>
+        <script src="/static/js/lecture_manager.js"></script>
+
+        <div class="row">
+            <div class="column" style="width: 60%; margin-left: 2%">
+                {% if success %}
+                    <h3 style="color: darkgreen; margin-left: 25%">Successfully Created Discussion Schedule</h3>
+                {% endif %}
+                <form action="" method="post" id="document_request">
+                    {% csrf_token %}
+
+                    <fieldset>
+
+                        <div>
+                            <h3 style="margin-left: 35%">Create Discussion Schedule</h3>
+
+                            <table class="table table-sm table-bordered" style="width: 100%; row-gap: 0px">
+
+                                {% for field in form %}
+                                    <tr class="table-info table-sm" style="text-align: center; width: 40%">
+
+                                        <td><b> {{ field.label_tag }} </b></td>
+                                        <td> {{ field }}
+                                            {% if field.name == 'task_filter' %}
+                                                <input type="button" onclick="filter_lecture_tasks_list()"
+                                                       value="Search">
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </table>
+
+                            <input style="margin-left: 45%" class="btn btn-outline-info" type="submit" value="Submit">
+
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+
+
+            <div class="column" id="dialog" style=" z-index: 10; float: left; display: none; padding-left: 2%">
+                <div>
+                    <input type="button" onclick="document.getElementById('dialog').style.display='none'"
+                           style="float: right" value="X"></input>
+                </div>
+                <div>
+                    <textarea id="details" style="font-size: 10pt;  white-space: pre-wrap;" rows="10" cols="60">
+                                    </textarea>
+                </div>
+            </div>
+
+        </div>
+        <script>
+            $(document).ready(function () {
+
+                $('#id_tasks').selectize({
+                    sortField: 'text',
+                    inputClass: 'fetch_task_title'
+                });
+
+                $('#id_other_presenter').selectize({
+                    sortField: 'text',
+                    inputClass: 'no_fetch'
+                });
+                $('#id_other_participants').selectize({
+                    sortField: 'text',
+                    inputClass: 'no_fetch'
+                });
+            });
+        </script>
+    </div>
+
+{% endblock %}

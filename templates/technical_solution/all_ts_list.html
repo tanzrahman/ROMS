@@ -1,0 +1,170 @@
+{% extends 'technical_solution/ts_base.html' %}
+{% load static %}
+{% load consultant_templatetags %}
+{% load comments_templatetags %}
+{% block ts_list %}
+
+    <script src="{% static 'js/SiteScripts/search_results.js' %}"></script>
+    <script src="{% static 'js/selectize.js' %}"></script>
+    <script src="{% static 'js/task_manager.js' %}"></script>
+    <link href="/static/css/selectize.css" rel="stylesheet"/>
+
+    <div style="padding-left: 2%">
+        <div class="row">
+            <div class="column" style="margin-left: 40%">
+                <table class="table table-sm table-bordered" style="width: 100%">
+                    <tr>
+                        <td colspan="4">
+                            <h4 style="text-align: center">Summary of Technical Solution</h4>
+                        </td>
+                    </tr>
+                    <tr style="text-align: center">
+                        <th>Total Technical Solutions</th>
+                        <th>{{ total_ts }}</th>
+                    </tr>
+                </table>
+            </div>
+
+        </div>
+
+        <div>
+
+            <div>
+                <div>
+                <form action="" method="get" id="task_search_form">
+                    <table class="table table-hover table-bordered table-sm" style="overflow-wrap: break-word; width: 100%">
+
+                        <tr class="table-success" style="text-align: center; font-size: 0.9em">
+                            <th>SL No.</th>
+                            <th>TS SL No.</th>
+                            <th>Doc Code</th>
+                            <th>Title</th>
+                            <th>ASE Ref Letter</th>
+                            <th>ASE Ref Letter Date</th>
+                            <th>Description</th>
+                            <th>Division</th>
+                            <th>Shop</th>
+                            <th>Facility KKS</th>
+                            <th>Relevant WD Code</th>
+                            <th>Reason for TS</th>
+                            <th>Modification Type</th>
+                            <th>Deadline For Temporary Solution</th>
+                            <th>TS File</th>
+                        </tr>
+                        <tr style="font-size: 0.8em">
+
+                            <td style="text-align:center">
+                                <input class="btn  btn-outline-dark btn-light" type="submit" value="Search">
+                            </td>
+                            <formset>
+                            {% for field in form %}
+
+                                {% if field.name == 'ase_ref_letter_date_from' or field.name == 'deadline_for_temporary_solution_from' %}
+
+                                    {% if field.name == 'ase_ref_letter_date_from' %}
+                                        <td>From:{{ field }} <br> To:{{ form.ase_ref_letter_date_to }}</td>
+                                    {% endif %}
+
+                                    {% if field.name == 'deadline_for_temporary_solution_from' %}
+                                        <td>From:{{ field }} <br> To:{{ form.deadline_for_temporary_solution_to }}</td>
+                                    {% endif %}
+
+                                {% else %}
+                                    {% if '_to' not in field.name %}
+                                        <td>
+                                            {{ field }}
+                                        </td>
+                                    {% endif %}
+                                {% endif %}
+                            {% endfor %}
+                            </formset>
+
+                        </tr>
+
+                        <tbody style="text-align: center; font-size: 0.8em">
+                        {% if ts_list %}
+                            {% for ts in ts_list %}
+                                <tr>
+                                    <td>{{ forloop.counter }}</td>
+                                    <td style="font-size: 0.9em">{{ ts.sr_no }}</td>
+                                    <td>{{ ts.ts_doc_code }}</td>
+                                    <td>{{ ts.title }}</td>
+                                    <td>{{ ts.ase_ref_letter }}</td>
+                                    <td>{{ ts.ase_ref_letter_date }}</td>
+                                    <td>{{ ts.description }}</td>
+                                    <td>{{ ts.division }}</td>
+                                    <td>{% for each in ts.shop_list %} {{ each.dept_name }} {%  endfor %}</td>
+                                    <td>{{ ts.facility_kks }}</td>
+
+                                    <td>{{ ts.relevant_wd_code }}</td>
+                                    <td>{{ ts.reason_for_ts }}</td>
+                                    <td>{{ ts.modification_type }}</td>
+                                    <td>{{ ts.deadline_for_temporary_solution }}</td>
+                                    <td>{{ ts.ts_file }}</td>
+                                </tr>
+                            {% endfor %}
+                        {% else %}
+                            <h2 style="text-align:center; color:red">No Result Found</h2>
+                        {% endif %}
+                        </tbody>
+                    </table>
+
+                    <!-- for pagination-->
+                    <div id="pagination_div">
+                        {% if ts_list.has_other_pages %}
+                            <ul class="paginator">
+
+                                <span>Page: </span>
+                                {% for i in ts_list.paginator.page_range %}
+                                    {% if ts_list.number == i %}
+                                        <span class="this-page">{{ i }} <span
+                                                class="sr-only">(current)</span></span>
+                                    {% else %}
+                                        <a href="javascript:next_page_report('{{ i }}')">{{ i }}</a>
+                                    {% endif %}
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </div>
+
+                </div>
+            </div>
+            <br> <br>
+        </div>
+
+        <script>
+            $(document).ready(function () {
+
+                $('#id_supervisor').selectize({
+                    sortField: 'text',
+                    inputClass: 'auto_fetch'
+                });
+                $('#id_task_executor').selectize({
+                    sortField: 'text',
+                    inputClass: 'auto_fetch'
+                });
+                $('#id_division').selectize({
+                    sortField: 'text',
+                    inputClass:'no_fetch'
+                });
+                $('#id_shop').selectize({
+                    sortField: 'text',
+                    inputClass:'no_fetch'
+                });
+                $('#id_system').selectize({
+                    sortField: 'text',
+                    inputClass:'no_fetch'
+                });
+                $('#id_subsystem').selectize({
+                    sortField: 'text',
+                    inputClass:'no_fetch'
+                });
+                $('#id_facility').selectize({
+                    sortField: 'text',
+                    inputClass:'no_fetch'
+                });
+            });
+        </script>
+
+    </div>
+{% endblock %}

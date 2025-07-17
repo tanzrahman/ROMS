@@ -1,0 +1,122 @@
+{% extends 'task_management/task_management_base.html' %}
+{% load static %}
+{% load feedback_templatetags %}
+{% load document_templatetags %}
+{% block document %}
+
+    <script src="{% static 'js/SiteScripts/search_results.js' %}"></script>
+    <script>
+
+        function printDiv() {
+            document.getElementById('search_field').hidden = true;
+            document.getElementById('btn_div').hidden = true;
+            var printContents = document.getElementById('print_div').innerHTML;
+            var originalContents = document.body.innerHTML;
+            document.body.innerHTML = printContents;
+            
+            window.print();
+            document.body.innerHTML = originalContents;
+            document.getElementById('search_field').hidden = false;
+            document.getElementById('btn_div').hidden = false;
+
+        }
+    </script>
+
+    <div id="btn_div">
+        <button onclick="javascript:printDiv()" class="btn btn-outline-primary" style="margin-left: 10%">Print Report</button>
+    </div>
+
+    <div style="padding:10px">
+        <div id="print_div">
+            <form action="" method="post" id="task_search_form">
+                <table class="table table-sm table-bordered table-sm"
+                       style="text-align: center; width:50%; margin-left: 10%">
+                    <tr class="table-success align-content-center">
+                        <th style="width: 5%">Sl</th>
+                        <th style="width: 20%">Username</th>
+                        <th style="width: 20%">Division</th>
+                        <th style="width: 10%">Task as Executor</th>
+                        <th style="width: 10%">Document Requests</th>
+                        <th style="width: 10%">Task as Supervisor</th>
+                        <th style="width: 10%">Executor Feedbacks</th>
+                        <th style="width: 10%">Feedbacks Completion</th>
+                    </tr>
+
+                    <tr style="font-size: 0.9em" id="search_field">
+
+                        {% csrf_token %}
+                        <td style="text-align:center">
+                            <input class="btn  btn-outline-dark btn-light" type="submit" value="Search">
+                        </td>
+                        <td></td>
+                        {% for field in form %}
+                            <formset>
+                                <td>{{ field }}</td>
+                            </formset>
+                        {% endfor %}
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+
+                    {% for uid,details in task_details.items %}
+                        <tr class="align-content-center">
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ details.0 }}</td>
+                            <td>{{ details.1 }}</td>
+                            <td><a href="/task_management/task_list?task_executor={{ uid }}"
+                                   target="_blank">{{ details.2 }}</a></td>
+                            <td>{{ uid|doc_request_count }}</td>
+
+                            <td>
+                                {% if details.3 %}
+                                    <a href="/task_management/task_list?supervisor={{ uid }}"
+                                       target="_blank">{{ details.3 }}</a>
+                                {% else %}
+                                    0
+                                {% endif %}
+                            </td>
+
+                            <td>
+                                {% if details.4 %}
+                                    <a href="/feedback/executor_specific_feedbacks/{{ uid }}"
+                                       target="_blank">{{ details.4 }}</a>
+                                {% else %}
+                                    0
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if details.4 %}
+                                    {{ details.2|feedback_percentage:details.4 }} %
+                                {% else %}
+                                    {{ details.2|feedback_percentage:0 }} %
+                                {% endif %}
+                            </td>
+
+                        </tr>
+                    {% endfor %}
+                </table>
+            </form>
+        </div>
+
+        <!-- for pagination-->
+        <div id="pagination_div">
+            {% if users.has_other_pages %}
+                <ul class="paginator">
+
+                    <span>Page: </span>
+                    {% for i in users.paginator.page_range %}
+                        {% if users.number == i %}
+                            <span class="this-page">{{ i }} <span
+                                    class="sr-only">(current)</span></span>
+                        {% else %}
+                            <a href="javascript:next_page_report('{{ i }}')">{{ i }}</a>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </div>
+
+    </div>
+{% endblock %}

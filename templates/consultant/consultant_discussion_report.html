@@ -1,0 +1,113 @@
+{% extends 'task_management/task_management_base.html' %}
+{% load consultant_templatetags %}
+{% block report %}
+    <div>
+        <script src="/static/js/jquery-3.5.1.min.js"></script>
+        <script src="/static/js/task_manager.js"></script>
+
+        <div style="width: 80%;">
+                <h4 style="margin-left: 40%">Consultant Discussion Summary</h4>
+                <table class="table table-sm table-hover table-bordered" style="width:20%; margin-left: 40%">
+                    <tr class="table-info" style="text-align: center">
+                        <th>Name</th>
+                        <th>Total Feedback</th>
+                        <th>Completed</th>
+                        <th>Total Discussion</th>
+                    </tr>
+                    {% for key, value in consultant_feedback_count.items %}
+                    <tr style="text-align: center">
+                        <td>{{ key }}</td>
+                        <td>{{ value.0 }}</td>
+                        <td>{{ value.1 }}</td>
+                        <td><a href="/report/consultant_discussion_report?consultant={{ key.id }}&filter=all">{{ value.2 }}</a> </td>
+                    </tr>
+                    {% endfor %}
+
+                </table>
+        </div>
+
+        <div style="margin-left: 5%; width: 90%;">
+            <h3>Consultant Discussion Report</h3>
+
+            <table class="table table-responsive-sm table-bordered">
+                <tr style="text-align: center">
+                    {% for field in form %}
+                        {% if "_to" not in field.name %}
+                            <td>
+                                {% if field.name == 'feedback_from' %}
+                                    Feedback Date
+                                {% else %}
+                                    {{ field.label }}
+                                {% endif %}
+                            </td>
+                        {% endif %}
+                    {% endfor %}
+                </tr>
+                <tr style="text-align: center">
+                    <form action="" method="get">
+                        {% for field in form %}
+
+                            {% if '_from' in field.name or '_to' in field.name %}
+                                {% if field.name == 'feedback_from' %}
+                                    <td>
+                                        From:{{ field }} <br> To:{{ form.feedback_to }}
+                                    </td>
+                                {% endif %}
+
+                            {% else %}
+                                {% if '_to' not in field.name %}
+                                    <td>
+                                        <span>{{ field }}</span>
+
+                                    </td>
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
+                        <td style="text-align:center">
+                            <input class="btn  btn-outline-dark btn-light" type="submit" value="Search">
+                        </td>
+                    </form>
+                </tr>
+                </tr>
+            </table>
+
+
+            <table class="table table-sm table-hover table-bordered">
+                <tr class="table-info" style="text-align: center">
+                    <th>Sl. No</th>
+                    <th>Consultant</th>
+                    <th>Lecture</th>
+                    <th>Division</th>
+                    <th>Category</th>
+                    <th>Discussion Schedule</th>
+                    <th>Feedback Time</th>
+                    <th>Feedback</th>
+                </tr>
+                {% for each in total_feedback %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ each.consultant }}</td>
+                    <td>
+                        <span><b>Title: </b>{{ each.lecture.lecture_name }}</span><br>
+                        <span><b>Description: </b>{{ each.lecture.lecture_description }}</span><br>
+                        <span><b>Lead Presenter: </b>{{ each.lecture.lead_presenter }}</span><br>
+                    </td>
+                    <td>{{ each.lecture.target_division }}</td>
+                    <td>{{ each.lecture.lecture_category }}</td>
+                    <td>{{ each.lecture.schedule }}</td>
+                    <td>{{ each.lecture|get_consultant_feedback_time:each.consultant }}</td>
+                    <td>
+                        {% if each.lecture|get_consultant_feedback:each.consultant %}
+                        <a href="/report/consultant_discussion_feedback/{{ each.lecture|get_consultant_feedback:each.consultant }}">View Feedback</a>
+                        {% else %}
+                            No Feedback Yet
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+
+            </table>
+        </div>
+    </div>
+
+{% endblock %}

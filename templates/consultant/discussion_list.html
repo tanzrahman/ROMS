@@ -1,0 +1,98 @@
+{% extends 'consultant/consultant_base.html' %}
+{% load document_templatetags %}
+{% load feedback_templatetags %}
+{% load consultant_templatetags %}
+{% block content %}
+    <div>
+        <script src="/static/js/jquery-3.5.1.min.js"></script>
+        <script src="/static/js/task_manager.js"></script>
+
+        <div>
+        <h5 style="text-align: center; font-weight: bold">Discussion Sessions </h5>
+
+            <div style="margin-left: 5%; margin-top: 3%">
+
+                <form action="" method="get">
+                    <table>
+                        <tr>
+                            <td>
+                                <input type="submit" value="Search">
+                            </td>
+
+                            {% for each_field in form %}
+                                <td>
+                                    {{ each_field.label_tag }}
+                                </td>
+                                <td>
+                                    {{ each_field }}
+                                </td>
+                            {% endfor %}
+                        </tr>
+                    </table>
+                </form>
+            </div>
+
+            <div style="margin-left: 5%">
+                <table class="table table-sm table-responsive-sm table-bordered" style="width: 90%; text-align: center; font-size: 0.9em">
+                    <tr>
+                        <th style="width: 5%">Sl No.</th>
+                        <th style="width: 5%">Division</th>
+                        <th style="width: 30%">Title</th>
+                        <th style="width: 10%">Category</th>
+                        <th style="width: 20%">Description</th>
+                        <th style="width: 10%">Venue</th>
+                        <th style="width: 10%">Schedule</th>
+                        <th style="width: 10%">Lead Presenter</th>
+                    </tr>
+
+                    {% for each in lectures %}
+                        <tr {% if each.id|is_discussion_participant:request.user %} style="background-color: rgba(180,238,229,0.63)" {% endif %}>
+                            <td>{{ forloop.counter }}
+                            </td>
+                            <td>{{ each.target_division }}</td>
+                            <td>
+                                <a href="/consultant/discussion/open/{{ each.id }}" target="_blank" style="font-size: smaller">{{ each.lecture_name }}</a> <br>
+                                {% if not each.id|is_discussion_participant:request.user %}
+                                    {% if not each.schedule|is_expired %}
+                                        <a href="/consultant/discussion/participate/{{ each.id }}" style="font-size: smaller">(click to participate)</a>
+                                    {% endif %}
+                                {% else %}
+
+
+                                    {% if each|feedback_required:request.user > 0 %}
+                                        <a href="/consultant/discussion/feedback/{{ each.id }}" style="font-size: smaller"
+                                        class="btn btn-outline-danger blink" target="_blank"> Give Feedback</a>
+                                    {% endif %}
+
+                                    {% if each|has_feedback:request.user %}
+                                        <a href="/consultant/discussion/view_feedback/{{ each.id }}" style="font-size: smaller"
+                                        class="btn btn-outline-info">View Feedback</a>
+                                    {% endif %}
+
+                                {% endif %}
+                            </td>
+                            <td>
+                                {{ each.lecture_category }}
+                            </td>
+                            <td>
+                                {{ each.lecture_description }}
+                            </td>
+
+                            <td>
+                                {{ each.venue }}
+                            </td>
+                            <td>
+                                {{ each.schedule }}
+                            </td>
+                            <td>
+                                {{ each.lead_presenter }}
+                            </td>
+                        </tr>
+                    {% endfor %}
+
+                </table>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

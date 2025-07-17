@@ -1,0 +1,195 @@
+{% extends 'task_management/task_management_base.html' %}
+{% load static %}
+{% load document_templatetags %}
+{% load feedback_templatetags %}
+{% load consultant_templatetags %}
+{% block assigned_task %}
+
+    <script src="{% static 'js/SiteScripts/search_results.js' %}"></script>
+    <script src="/static/js/task_manager.js"></script>
+
+    <div>
+        <table class="table table-hover table-bordered">
+
+            <tr style="text-align: center">
+                <th>Total Task as Supervisor</th>
+                <th>Total Task in this Month</th>
+            </tr>
+
+            <tr style="text-align: center">
+                <td>{{ total_assigned_task }}</td>
+                <td>{{ monthly_assigned }}</td>
+            </tr>
+        </table>
+
+    </div>
+
+    {%  if src_total_assigned_task > 0 %}
+    <div>
+
+        <h2 style="text-align: center; color: red">Searched Result</h2>
+        <table class="table table-hover table-bordered" style="width: 30%; margin-left:30%">
+
+            <tr style="text-align: center">
+                <th>Total Task as Supervisor</th>
+                <th>{{ src_total_assigned_task }}</th>
+            </tr>
+
+        </table>
+
+    </div>
+
+    {%  elif src_total_assigned_task == 0 %}
+        <h2 style="text-align: center; color: red">No Task</h2>
+
+    {%  else %}
+
+    {%  endif %}
+
+
+    <div>
+        {% if assigned_task %}
+         <div >
+             <div >
+                <table class="table table-hover table-bordered">
+
+                    <thead style="text-align: center">
+                    <tr class="table-success">
+                        <th>SL No.</th>
+                        <th>Milestone ID</th>
+                        <th>Task ID</th>
+                        <th>Title</th>
+                        <th>Supervisor</th>
+                        <th>Executor</th>
+                        <th>System</th>
+                        <th>Facility</th>
+                        <th>Planned start sate</th>
+                        <th>Planned end date</th>
+                        <th>Actual start date</th>
+                        <th>Actual end date</th>
+                    </tr>
+
+                    <tr>
+                        <form action="" method="get">
+                            <td style="text-align:center">
+                                <input class="btn  btn-outline-dark btn-light" type="submit" value="Search">
+                            </td>
+                            {% for field in form %}
+
+                                {% if field.name == 'planned_start_date_from' or field.name == 'planned_end_date_from' or field.name == 'actual_start_date_from' or field.name == 'actual_end_date_from' %}
+
+                                    {% if field.name == 'planned_start_date_from' %}
+                                        <td>From:{{ field }} <br> To:{{ form.planned_start_date_to }}</td>
+                                    {% endif %}
+
+                                    {% if field.name == 'planned_end_date_from' %}
+                                        <td>From:{{ field }} <br> To:{{ form.planned_end_date_to }}</td>
+                                    {% endif %}
+
+                                    {% if field.name == 'actual_start_date_from' %}
+                                        <td>From:{{ field }} <br> To:{{ form.actual_start_date_to }}</td>
+                                    {% endif %}
+
+                                    {% if field.name == 'actual_end_date_from' %}
+                                        <td>From:{{ field }} <br> To:{{ form.actual_end_date_to }}</td>
+                                    {% endif %}
+
+                                {% else %}
+                                    {% if 'date_to' not in field.name %}
+                                        <td {% if 'system' in field.name %} {% endif %}>
+                                            {{ field }}
+                                        </td>
+                                    {% endif %}
+                                {% endif %}
+                            {% endfor %}
+                        </form>
+                    </tr>
+
+                    </thead>
+
+                    {% for task in assigned_task %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                            <td><a href="/task_management/open_task/{{task.id}}" target="_blank">{{ task }}</a><br>
+                                {% if task|get_executor_feedback:task.division %}
+                                <a href="/task_management/supervisor_feedback/{{ task.id }}?exec_fb={{ task|get_executor_feedback:task.division }}"
+                                   class="btn btn-outline-danger blink" target="_blank">Feedback</a>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {{ task.task_id }}
+                                {% if task.id|has_no_document_request:request.user %}
+                                    <a href="/document_request/create_request/{{ task.id }}" class="btn btn-outline-info" target="_blank">Request Document</a><br><br>
+                                {% endif %}
+                                {% if task.id|get_document_request:request.user %}
+                                    <a href="/document_request/approve_request/{{ task.id }}/{{ task.id|get_document_request:request.user }}"
+                                   class="btn btn-info blink" target="_blank">Executor Doc Request</a><br><br>
+                                {% endif %}
+                                {% if task|can_ask_consultancy %}
+                                    <a href="/task_management/request_consultancy/{{ task.id }}"
+                                        class="btn btn-outline-primary" target="_blank">Consultancy Request</a>
+                                {% else %}
+                                        <br> <span style="font-size: smaller; color: #007bff">Requested for Consultancy</span>
+                                {% endif %}
+
+                                {% if task.id|task_consultant %}
+                                            <br>
+                                            <span style="font-size: small; color: #0f6674">Consultant: {{ task.id|task_consultant }}</span>
+                                {% endif %}
+                            </td>
+                        <td>{{ task.title }}</td>
+                        <td>{% for each in task.supervisor_list %} {{ each.first_name }} {{ each.last_name }} ({{ each.username }})<br> {% endfor %}</td>
+                        <td>{% for each in task.executor_list %}
+                            {{ each.first_name }} {{ each.last_name }}
+                            {% if task.lead_executor == each %}
+                                <span style="font-size: smaller; color: dodgerblue">(Lead)</span>
+                            {% endif %}
+                            {% if not task.lead_executor %}
+                                {% if request.user.profile.division == task.division and each.profile.division == task.division %}
+                                <a style="font-size: x-small" href="/task_management/lead_exec/{{ task.id }}?lexc={{ each.id }}" target="_blank">
+                                    Mark As Lead Exec</a>
+                                {% endif %}
+                            {% endif %}<br>
+                                ({{ each.username }})<br>
+                            {% endfor %}
+                        </td>
+
+                        <td>{{ task.system }}</td>
+
+                        <td>{{ task.facility }}</td>
+                        <td>{{ task.planned_start_date }}</td>
+                        <td>{{ task.planned_end_date }}</td>
+                        <td>{{ task.actual_start_date }}</td>
+                        <td>{{ task.actual_end_date }}</td>
+
+                    </tr>
+                    {% endfor %}
+                </table>
+
+             <div id="pagination_div">
+                            {% if assigned_task.has_other_pages %}
+                                <ul class="paginator">
+
+                                    <span>Page: </span>
+                                    {% for i in assigned_task.paginator.page_range %}
+                                        {% if assigned_task.number == i %}
+                                            <span class="this-page">{{ i }} <span
+                                                    class="sr-only">(current)</span></span>
+                                        {% else %}
+                                            <a href="javascript:next_page_report('{{ i }}')">{{ i }}</a>
+                                        {% endif %}
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                 </div>
+             </div>
+         </div>
+
+        {% else%}
+            <h2 style="text-align:center; color:red">No Assigned Task</h2>
+        {%endif%}
+
+        <br> <br>
+    </div>
+
+{% endblock %}

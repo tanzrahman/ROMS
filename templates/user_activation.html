@@ -1,0 +1,54 @@
+{% extends 'manpower/user_base.html' %}
+{% load static %}
+{% block activate_user %}
+
+    <div>
+        {% if result %}
+            {% if result == 'success' %}
+                <h3 style="color: green; margin-left: 30%">User Successfully Activated</h3>
+            {% else %}
+                <h3 style="color: red;margin-left: 30%">{{ result }}</h3>
+            {% endif %}
+        {% endif %}
+        <form enctype="multipart/form-data" action="" method="post" >
+            {% csrf_token %}
+            <fieldset>
+
+
+                <div id="info">
+                    <h3 align="center">Activate New User(s)</h3>
+
+                    <table class="table table-hover" style="border-collapse: separate; border-spacing: 0 15px" >
+
+                        {% for field in form %}
+                            <tr>
+                                <td>
+                                    {{ field.label_tag }}
+                                </td>
+                                <td>
+                                    {{ field }}
+                                    {% if field.help_text %}
+                                        <small style="color: grey">{{ field.help_text }}</small>
+                                    {% endif %}
+
+                                    {% for error in field.errors %}
+                                        <p style="color: red">{{ error }}</p>
+                                    {% endfor %}
+                                </td>
+
+                            </tr>
+
+
+                        {% endfor %}
+                        <tr>
+                            <td style="text-align:center" colspan="2">
+                                <input class="btn  btn-outline-dark btn-light" type="submit" value="Activate">
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+
+{% endblock %}

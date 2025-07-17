@@ -1,0 +1,78 @@
+{% extends 'manpower/user_base.html' %}
+
+{% block default %}
+    <link href="/static/css/static.css" rel="stylesheet">
+    <link href="/static/css/bootstrap.css" rel="stylesheet">
+    <script src="/static/js/bootstrap.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <script src="/static/js/SiteScripts/FileHandler.js"></script>
+    <script src="/static/js/SiteScripts/FormHandler.js"></script>
+    <script src="/static/js/SiteScripts/jquery-3.5.1.js"></script>
+    <script src="/static/js/SiteScripts/crypto-js/sha1.js"></script>
+    <script src="/static/js/SiteScripts/crypto-js/crypto-js.js"></script>
+    <script src="/static/js/SiteScripts/crypto-js/sha1.min.js"></script>
+    <script src="/static/js/SiteScripts/crypto-js/lib-typedarrays-min.js"></script>
+    <script src="/static/js/SiteScripts/crypto-js/aes.js"></script>
+
+    <style>
+        .navbar-nav .nav-item.active .nav-link,
+        .navbar-nav .nav-item:hover .nav-link{
+            color: #fff;
+            background-color: green;
+        }
+    </style>
+
+    <div>
+
+    {% if user %}
+        <h2 style="margin-left: 10%">User Details</h2>
+        <table class="table table-hover" style="border-collapse: separate; border-spacing: 0 15px; width: 25%; text-align: center">
+            <tr>
+                <td><label>Username</label></td>
+                <td>{{ user.username }}</td>
+            </tr>
+            <tr>
+                <td><label>Name</label></td>
+                <td>{{ user.first_name }} {{ user.last_name }}</td>
+            </tr>
+            <tr>
+                <td><label>Email</label></td>
+                <td>{{ user.email }}</td>
+            </tr>
+            <tr>
+                <td><label>Employee ID</label></td>
+                <td>{{ user.employee_id }}</td>
+            </tr>
+
+            <tr>
+                <td><label>Phone</label></td>
+                <td>{{ user.profile.phone }}</td>
+            </tr>
+
+            <tr>
+                <td><label>Supervisor Status</label></td>
+                <td>{{ user.profile.is_supervisor }}</td>
+            </tr>
+
+            <tr>
+                <td><label>Executor Status </label></td>
+                <td>{{ user.profile.is_executor }}</td>
+            </tr>
+
+            <tr>
+                <td><label>Signature</label></td>
+                <td>
+                    {% if not user.profile.signature %}
+                        You did not uploaded your signature,
+                        <a href="/manpower/user/upload_signature"> Click to upload Signature</a>
+                    {% else %}
+                        <img id="my_signature" height="100" width="200" src="/manpower/user/load_signature?hash={{user.profile.signature}}">
+                    {% endif %}
+                </td>
+            </tr>
+        </table>
+    {% endif %}
+    </div>
+
+{% endblock %}

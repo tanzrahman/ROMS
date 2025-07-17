@@ -1,0 +1,144 @@
+{% extends 'consultant/consultant_base.html' %}
+{% load document_templatetags %}
+{% load feedback_templatetags %}
+{% load consultant_templatetags %}
+{% load static %}
+
+{% block content %}
+
+    <div style="margin-left: 5%">
+            <h5 style="text-align: center; font-weight: bold">Summary of Monitored Task </h5>
+            <table class="table table-sm table-responsive-sm table-bordered" style="width: 90%; text-align: center; font-size: 0.9em">
+                    <tr class="table-info">
+                    <th>Division</th>
+                        {% for each in division_name %}
+                            <th>{{ each }}</th>
+                        {% endfor %}
+                    </tr>
+
+                <tr>
+                    <td><b>Total Task</b></td>
+                    {% for each in total_task %}
+                        <td><b>{{ each }}</b></td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <td><b>Total Monitored Task</b></td>
+                    {% for each in monitored_task %}
+                        <td><b>{{ each }}</b></td>
+                    {% endfor %}
+                </tr>
+            </table>
+    </div>
+
+    <div style="margin-left: 5%">
+        <h5 style="text-align: center; font-weight: bold">Summary of Participated Discussions </h5>
+        <table class="table table-sm table-responsive-sm table-bordered" style="width: 90%; text-align: center; font-size: 0.9em">
+                    <tr class="table-info">
+                    <th>Division</th>
+                        {% for each in division_name %}
+                            <th>{{ each }}</th>
+                        {% endfor %}
+                    </tr>
+
+                <tr>
+                    <td><b>Total Discussion</b></td>
+                    {% for each in total_discussion %}
+                        <td><b>{{ each }}</b></td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <td><b>Total Participated Discussion</b></td>
+                    {% for each in participated_discussion %}
+                        <td><b>{{ each }}</b></td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <td><b>Total Feedback Provided</b></td>
+                    {% for each in feedback %}
+                        <td><b>{{ each }}</b></td>
+                    {% endfor %}
+                </tr>
+        </table>
+    </div>
+
+    <div id="chart">
+    </div>
+
+        <script>
+                var options = {
+                  series: [{
+                  name: 'Total Task',
+                  data: [
+                      {% for each in total_task %}
+                      {{ each }},
+                      {% endfor %}
+                  ]
+                }, {
+                  name: 'Monitored Task',
+                  data: [
+                      {% for each in monitored_task %}
+                      {{ each }},
+                      {% endfor %}
+                  ]
+                }],
+                  chart: {
+                  type: 'bar',
+                  height: 350,
+                  stacked: true,
+                  toolbar: {
+                    show: true
+                  },
+                  zoom: {
+                    enabled: true
+                  }
+                },
+                responsive: [{
+                  breakpoint: 480,
+                  options: {
+                    legend: {
+                      position: 'bottom',
+                      offsetX: -10,
+                      offsetY: 0
+                    }
+                  }
+                }],
+                plotOptions: {
+                  bar: {
+                    horizontal: false,
+                    borderRadius: 5,
+                    borderRadiusApplication: 'end', // 'around', 'end'
+                    borderRadiusWhenStacked: 'last', // 'all', 'last'
+                    dataLabels: {
+                      total: {
+                        enabled: true,
+                        style: {
+                          fontSize: '10px',
+                          fontWeight: 500
+                        }
+                      }
+                    }
+                  },
+                },
+                xaxis: {
+                  categories: [
+                      {% for each in division_name %}
+                      {{ each }},
+                      {% endfor %}
+                  ],
+                },
+                legend: {
+                  position: 'right',
+                  offsetY: 40
+                },
+                fill: {
+                  opacity: 1
+                }
+                };
+
+                var chart = new ApexCharts(document.querySelector("#chart"), options);
+                chart.render();
+
+        </script>
+
+{% endblock %}

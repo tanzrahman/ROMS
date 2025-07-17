@@ -1,0 +1,121 @@
+{% extends 'task_management/task_management_base.html' %}
+
+{% block report %}
+    <div>
+        <script src="/static/js/jquery-3.5.1.min.js"></script>
+        <script src="/static/js/task_manager.js"></script>
+
+        <div style="margin-left: 5%; width: 80%;">
+            <h3>Consultant Discussion Report</h3>
+            <table class="table table-sm table-hover table-bordered">
+                <tr class="table-info" style="text-align: center">
+                    <th style=" vertical-align: middle;">Task details</th>
+                    <td>
+                        <span><b>Title: </b>{{ feedback.lecture.lecture_name }}</span><br>
+                        <span><b>Description: </b>{{ feedback.lecture.lecture_description }}</span><br>
+                        <span><b>Division: </b>{{ feedback.lecture.target_division }}</span><br>
+                        <span><b>Category: </b>{{ feedback.lecture.lecture_category }}</span><br>
+                        <span><b>Feedback Submitted at: </b>{{ feedback.created_at }}</span><br>
+                        <span><b>Lead Presenter: </b>{{ feedback.lecture.lead_presenter }}</span><br>
+                    </td>
+                </tr>
+
+                <tr style="text-align: center" class="table-info">
+                    <th style=" vertical-align: middle;">Consultant</th>
+                    <td>{{ feedback.consultant }}<br>
+                        {% if request.user.profile.access_level < 2 %}
+                            <span><a href="/group_sms/?user={{ feedback.consultant.id}}&msg_body=Dear Mr.{{ feedback.consultant.first_name }}, {{ feedback.lecture.lecture_name }}">(Click to send msg)</a>
+                            </span>
+                        {% endif %}
+                    </td>
+                </tr>
+
+                <!-- {% for field in form %}
+                <tr style="text-align: center">
+                    <th>field.label</th>
+                    <td>{{ feedback.field.name }}</td>
+                </tr>
+                {% endfor %} -->
+
+                <tr style="text-align: center">
+                    <th>How was the quality of lead presenter?</th>
+                    <td>{{ feedback.qa1 }}</td>
+                </tr>
+
+                <tr style="text-align: center">
+                    <th>How many saw programs/milestones they covered in the discussion?</th>
+                    <td>{{ feedback.qa2 }}</td>
+                </tr>
+                <tr style="text-align: center">
+                    <th>Did you interact with the participants? Mention at least 3 names who performed best according to you.</th>
+
+                    <td>{% for each in feedback.qa3.all %} {{ each }} <br> {% endfor %}</td>
+                </tr>
+                <tr style="text-align: center">
+                    <th>Do success criteria or listed parameters or completion criteria of presented SAW program/task are adequate?</th>
+                    <td>{{ feedback.qa4 }}</td>
+                </tr>
+                <tr style="text-align: center">
+                    <th>Which area of the task the specialist should concentrate most?</th>
+                    <td>{{ feedback.qa5 }}</td>
+                </tr>
+                <tr style="text-align: center">
+                    <th>In the success criteria which criteria is the most important where variation or deviation should not be allowed by the specialist?</th>
+                    <td>{{ feedback.qa6 }}</td>
+                </tr>
+                <tr style="text-align: center">
+                    <th>What are the key points to improve the discussions on delivered topic?</th>
+                    <td>{{ feedback.qa7 }}</td>
+                </tr>
+                <tr style="text-align: center">
+                    <th>Number of tests is sufficient or do you have any proposal for any additional test? If yes, please mention the name of the tests.</th>
+                    <td>{{ feedback.qa8 }}</td>
+                </tr>
+                <tr style="text-align: center">
+                    <th>Write 5 names of participants who need to improve.</th>
+                    <td>{% for each in feedback.qa9.all %} {{ each }} <br> {% endfor %}</td>
+                </tr>
+                <tr style="text-align: center">
+                    <th>Do you want to repeat the lecture?</th>
+                    <td>{{ feedback.qa10 }}</td>
+                </tr>
+
+            </table>
+        </div>
+
+        <a style="margin-left: 5%" href="javascript:consultant_discussion_add_comment('{{ feedback.id }}')" class="btn btn-outline-info">
+                Add Comment
+        </a>
+
+
+        <br><br>
+        <!-- table for comments -->
+        {% if comment_list %}
+            <div style="width: 80%;">
+                <h2>Comments</h2>
+
+                <table style="width:50%" class="table table-hover table-bordered">
+
+                    <tr class="table-danger">
+                        <th>User</th>
+                        <th>Comment</th>
+                        <th>Created Date</th>
+                    </tr>
+
+                    {% for each in comment_list %}
+                        <tr>
+                            <td>{{ each.user }}</td>
+                            <td>{{ each.comment }}</td>
+                            <td>{{ each.created_date }}</td>
+
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        {% endif %}
+
+        <br><br>
+
+    </div>
+
+{% endblock %}

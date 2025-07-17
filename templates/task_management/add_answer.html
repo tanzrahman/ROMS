@@ -1,0 +1,120 @@
+<html>
+<head>
+    <script src="/static/js/task_manager.js"></script>
+    <link href="/static/css/selectize.css" rel="stylesheet"/>
+    <script src="/static/js/task_manager.js"></script>
+    <script src="/static/js/selectize.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="/static/css/bootstrap.css">
+
+
+</head>
+<body>
+<div style="padding-left: 20px">
+
+
+    <div class="outer-wrapper">
+        <div class="table-wrapper" style="border: 1px solid grey; width: 90%">
+            <h5><b>Details of the assigned task</b></h5>
+            <table class="table table-bordered table-responsive-sm" style="width: 100%; font-size: small">
+                <tr>
+                    <th>Milestone ID</th>
+                    <td>{{ task.milestone_id }}</td>
+                </tr>
+                <tr>
+                    <th>Title</th>
+                    <td>{{ task.title }}</td>
+                </tr>
+                <tr>
+                    <th>Supervisor</th>
+                    <td>
+                        {% for each in task.supervisor_list %}
+                            {% if task.division == each.profile.division %}
+                                <b>*</b>
+                            {% endif %}
+                            {{ each.first_name }} {{ each.last_name }} <br>
+                        {% endfor %}
+                    </td>
+                </tr>
+                <tr>
+                    <th>Planned Start Date</th>
+                    <td>{{ task.planned_start_date }}</td>
+                </tr>
+                <tr>
+                    <th>Planned End Date</th>
+                    <td>{{ task.planned_end_date }}</td>
+                </tr>
+            </table>
+        </div>
+
+        {% if exec_feed_back %}
+            <div id="exec_feedback" class="table-wrapper" style="border: 1px solid grey; width: 90%">
+            <h6>Feedback from:{{ exec_feed_back.executor }}</h6>
+                <table class="table table-bordered table-responsive-sm" style="width: 100%; font-size: small">
+                    {% for each in exec_feed_back.all_answers %}
+                        <tr>
+                            <th>{{ each.task_question }}</th>
+                            <td style="overflow-wrap: anywhere">{{ each.answer }}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        {% endif %}
+
+        <div>
+            <h5> Answer the following Question relevant to the task</h5>
+            <p style="font-size: .7em">When you complete answering all the question <b>Submit</b> button will
+                appear.<br>
+                Then please click the submit button, otherwise your feedback will not be forwarded to higher level</p>
+        </div>
+
+        <div class="table-wrapper" style="border: 1px solid grey; width: 100%">
+            {% if fb_complete %}
+                <h3 style="color: green">Feedback Completed!</h3>
+            {% else %}
+                <h5><b>Question/Answers</b></h5>
+                {% if form %}
+                    <table class="table table-bordered table-responsive-sm" style="width: 90%; font-size: small">
+                        {% for each in qa_list %}
+                            <tr>
+                                <th>{{ each.task_question }}</th>
+                                <td style="overflow-wrap: anywhere">{{ each.answer }}</td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                    <form action="" method="post">
+                        {% csrf_token %}
+                        <formset>
+                            <table style="width:50%" class="table table-hover table-bordered table-success">
+                                {% for field in form %}
+                                    <tr class="table-info table-sm" style="text-align: center; width: 40%">
+
+                                        <td><b> {{ field.label_tag }} </b></td>
+                                        <td> {{ field }} </td>
+                                    </tr>
+                                {% endfor %}
+                            </table>
+
+                            {% if qa_complete %}
+                                <input value="1" name="commit" id="commit" hidden>
+                                <input type="submit" value="Submit" style="color: #0f6674">
+                            {% else %}
+                                <input type="submit" value="Next">
+                            {% endif %}
+                        </formset>
+                    </form>
+                {% endif %}
+                </div>
+                </div>
+                <br>
+                {% if message %}
+                    <h3 style="color:red"><b>{{ message }}</b></h3>
+                {% endif %}
+
+            {% endif %}
+
+</div>
+
+<body>
+
+</html>

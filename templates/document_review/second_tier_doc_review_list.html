@@ -1,0 +1,107 @@
+{% extends 'document_review/doc_review_base.html' %}
+{% load static %}
+{% load feedback_templatetags %}
+{% load document_templatetags %}
+{% load document_review_tags %}
+
+{% block review %}
+
+    <script src="{% static 'js/SiteScripts/search_results.js' %}"></script>
+    <script src="{% static 'js/task_manager.js' %}"></script>
+
+    <div>
+        <div style="margin-left: 30%; width: 30%; padding-top: 20px">
+            <table class="table table-bordered table-hover" style="text-align: center">
+                <tr>
+                    <th>Total Feedback</th>
+                    <th>{{ total_reviews }}</th>
+                </tr>
+            </table>
+        </div>
+
+        <div style="margin-left: 1%; margin-top: 3%; width: 98%">
+            <form action="" method="get">
+                <table class="table-success" style="width: 100%">
+                    <tr>
+                        <td>
+                            <input type="submit" value="Search" class="btn btn-info">
+                        </td>
+                        {% for each_field in form %}
+                            <td style="text-align: center;">
+                               {{ each_field.label_tag }}
+                            </td>
+                            <td style="width: 10%;">
+                                {{ each_field }}
+                            </td>
+                        {% endfor %}
+                    </tr>
+                </table>
+            </form>
+        </div>
+
+        {% if doc_list %}
+            <div class="container-fluid">
+                <h2 class="card-header">Second Tier Document Review Feedback List</h2>
+                <table class="table table-bordered table-hover table-sm" style="text-align: center">
+                    <tr>
+                        <th>Sl No</th>
+                        <th>Task</th>
+                        <th>Title</th>
+                        <th>Division</th>
+                        <th>Department/Shop</th>
+                        <th>Committee</th>
+                        <th>Assigned Date</th>
+                        <th>Deadline</th>
+                        <th>Status <br>(Committee Approvals)</th>
+                        <th>Division Head Recommendation</th>
+                        <th>Chief Engineer Recommendation</th>
+                        <th>Station Director Recommendation</th>
+                    </tr>
+                    {% for each in doc_list %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>
+                                <a href="/task_management/document_review/committee_open_review/{{ each.id}}">{{ each.task }}</a>
+                                <br>
+                                <a class="btn btn-outline-info" target="_blank" href="/task_management/document_review/download_committee_review/{{ each.id}}">Download as PDF</a>
+                            </td>
+                            <td>{{ each.task.title }}</td>
+                            <td>{{ each.task.division }}</td>
+                            <td>{{ each.task.dept_id }}</td>
+                            <td>{{ each.committee }}</td>
+                            <td>{{ each.assigned_date }}</td>
+                            <td>{{ each.committee_deadline }}</td>
+                            <td>{{ each.committee_approval.count }} / {{ each.committee.members.count }}  </td>
+                            <td>{{ each.division_head_approval.remarks|remarks_display_str }}</td>
+                            <td>{{ each.chief_eng_approval.remarks|remarks_display_str }}</td>
+                            <td>{{ each.sd_approval.remarks|remarks_display_str }}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+
+        {%  else %}
+            <h3>No Review pending</h3>
+
+        {% endif %}
+
+        <div id="pagination_div">
+             {% if doc_list.has_other_pages %}
+                 <ul class="paginator">
+
+                     <span>Page: </span>
+                     {% for i in doc_list.paginator.page_range %}
+                         {% if doc_list.number == i %}
+                             <span class="this-page">{{ i }}
+                                 <span class="sr-only">(current)</span></span>
+                         {% else %}
+                             <a href="javascript:next_page_report('{{ i }}')">{{ i }}</a>
+                         {% endif %}
+                     {% endfor %}
+                 </ul>
+             {% endif %}
+         </div>
+
+    </div>
+
+{% endblock %}

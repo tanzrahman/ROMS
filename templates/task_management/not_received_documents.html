@@ -1,0 +1,93 @@
+{% extends 'task_management/task_management_base.html' %}
+{% load static %}
+{% load document_templatetags %}
+{% load feedback_templatetags %}
+{% block document %}
+    <div>
+        <script src="/static/js/jquery-3.5.1.min.js"></script>
+        <script src="/static/js/task_manager.js"></script>
+        <script src="{% static 'js/SiteScripts/search_results.js' %}"></script>
+
+        <div>
+
+            <div style="margin-left: 5%">
+                <h5 style="padding-top:20px; text-align: center; font-weight: bold">Documents Not Received Yet</h5>
+
+                <div>
+                    <table class="table table-sm table-responsive-sm table-bordered" style="width: 30%; text-align: center; margin-left: auto; margin-right: auto; font-size: 0.9em">
+                        <tr>
+                            <th style="width:50%">Total Delivered Documents</th>
+                            <th>{{ not_received_doc_num }}</th>
+                        </tr>
+                    </table>
+                </div>
+
+                <br><br>
+                <table class="table table-sm table-responsive-sm table-bordered" style="width: 90%; text-align: left; font-size: 0.9em">
+                    <tr style="text-align: center">
+                        <th style="width: 5%">Sl No.</th>
+                        <th style="width: 20%">Task</th>
+                        <th style="width: 25%">Request Details</th>
+                        <th style="width: 25%">Approval Details</th>
+                        <th style="width: 25%">Action</th>
+
+                    </tr>
+
+                    {% for each in not_received_doc %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>
+                                <span>
+                                    Milestone ID: {{ each.task.milestone_id }}
+                                </span>
+                                <br>
+                                <span>
+                                    Task ID: {{ each.task.task_id }}
+                                </span>
+                            </td>
+                            <td>
+                                <b>Requested By: </b>{{ each.requested_by }}<br>
+                                <b>Date: </b>{{ each.requested_at }}<br><br>
+                                <b>Document(s): </b>{{ each.requested_documents }}<br><br>
+                                <b>Remarks: </b>{{ each.requester_remarks }}
+                            </td>
+                            <td>
+                                <b>Approved By: </b>{{ each.approved_by }} <br>
+                                <b>Date: </b>{{ each.approved_at }} <br><br>
+                                <b>Remarks: </b>{{ each.approver_remarks }}
+
+                            </td>
+                            <td style="text-align: center; vertical-align: middle">
+                                <span>
+                                    <a href="/document_request/provide_document/{{ each.task.id }}/{{ each.id }}"
+                                       target="_blank">Click</a> to update status
+                                </span>
+                            </td>
+
+                        </tr>
+                    {% endfor %}
+
+                </table>
+            </div>
+
+            <div id="pagination_div">
+                {% if not_received_doc.has_other_pages %}
+                    <ul class="paginator">
+
+                        <span>Page: </span>
+                        {% for i in not_received_doc.paginator.page_range %}
+                            {% if not_received_doc.number == i %}
+                                <span class="this-page">{{ i }} <span
+                                        class="sr-only">(current)</span></span>
+                            {% else %}
+                                <a href="javascript:next_page_report('{{ i }}')">{{ i }}</a>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+
+        </div>
+    </div>
+
+{% endblock %}

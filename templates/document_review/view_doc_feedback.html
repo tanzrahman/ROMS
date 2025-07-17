@@ -1,0 +1,74 @@
+{% extends 'document_review/doc_review_base.html' %}
+{% load consultant_templatetags %}
+
+{% block review %}
+
+    <script src="/static/js/task_manager.js"></script>
+
+    <div style="padding-left: 20px">
+
+        <h2>Feedback Info</h2>
+        {% if form %}
+            <div>
+                <div>
+                    <table class="table table-bordered" style="width: 45%">
+                        <tr>
+                            <td><b>Responsible Division:</b> {{ feedback.task.division }}</td>
+                        </tr>
+                        <tr>
+                            <td><b>Review By:</b> {{ feedback.user }}</td>
+                        </tr>
+                        <tr>
+                            <td><b>Feedback Created Date:</b> {{ feedback.created_at }}</td>
+                        </tr>
+                        <tr>
+                            <td><b>Feedback Last Modified:</b> {{ feedback.modified_at }}</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <b>Final Submission Done:</b>
+                                {% if feedback.approval_level == 2 %}
+                                    Yes
+                                {% else %}
+                                    No
+                                {% endif %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span><b>Document Code:</b>{{ task }}</span><br>
+                                <span><b>Title: </b>{{ task.title }}</span>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div style="padding-bottom:1% ">
+                    {% if request.user in committee_rev.committee.members.all %}
+                        <a href="/task_management/document_review/recommend/{{committee_rev.id}}?category={{ committee_rev.category }}" class="btn btn-info">Recommend Document for Approve or Review</a>
+                        <a href="/task_management/document_review/review_comment/{{committee_rev.id}}?category={{ committee_rev.category }}" class="btn btn-info">Add Document Review Comments</a>
+                    {% endif %}
+                </div>
+                <div>
+                    <h2>Feedback Details</h2>
+                    <table class="table table-bordered" style="max-width: 80%">
+                        {% for each in form %}
+                            <tr>
+                                <td>
+                                    <span style="font-weight: bold">Question-{{ forloop.counter }}: {{ each.label }}</span>
+                                    <br>
+                                    <span>
+                                        <b>Answer: </b>
+                                        {{ each.initial|linebreaksbr }}
+                                    </span>
+
+
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+                <br><br>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

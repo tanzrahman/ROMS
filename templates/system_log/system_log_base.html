@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    <script src="{% static 'js/apexcharts/apexcharts.min.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'js/apexcharts/apexcharts.css' %}">
+    <div>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav mr-auto">
+                    <li class="navbar-item">
+                        <a src="/static/npcbl.png"></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/system_log/login_log">Login Log</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/system_log/password_change_log">Change Password Log</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/system_log/file_log">File Log</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/system_log/task_log">Task Log</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/system_log/failed_login_log">Failed Login Log</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/system_log/deactivated_user_log">Deactivated User List</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+
+    {% block login_log %}
+
+    {% endblock %}
+
+    {% block password_change_log %}
+
+    {% endblock %}
+
+    {% block file_log %}
+
+    {% endblock %}
+
+    {% block task_log %}
+
+    {% endblock %}
+
+    {% block failed_login_log %}
+
+    {% endblock %}
+
+    {% block deactivated_user_log %}
+
+    {% endblock %}
+
+    {% block user_log_details %}
+
+    {% endblock %}
+
+    {% block document_approval_log %}
+
+    {% endblock %}
+
+    {% block default %}
+
+    {% endblock %}
+
+{% endblock %}

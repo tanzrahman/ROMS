@@ -1,0 +1,143 @@
+{% extends 'consultant/consultant_base.html' %}
+{% load static %}
+{% block content %}
+    <div>
+        <script src="{% static 'js/selectize.js' %}"></script>
+        <script src="/static/js/task_manager.js"></script>
+        <script src="/static/js/lecture_manager.js"></script>
+        <link href="/static/css/selectize.css" rel="stylesheet"/>
+        <div style="margin-left: 2%; margin-top: 2%">
+
+            <div>
+                <table class="table table-bordered" style="width: 70%">
+                    <tr>
+                        <th style="vertical-align: middle"> Discussion Details</th>
+                        <td>
+                            <span>
+                                <b>Title:</b> {{ lecture.lecture_name }}
+                            </span> <br>
+                            <span>
+                                <b>Category:</b> {{ lecture.lecture_category }}
+                            </span> <br>
+                            <span>
+                                <b>Discussion Schedule & Venue:</b>
+                                {{ lecture.schedule }} at {{ lecture.venue }}
+                            </span> <br>
+
+                            <span>
+                                <b>Lead Presenter:</b>
+                                {{ lecture.lead_presenter }}
+                            </span>
+
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <div>
+                {% if feedback %}
+                    <table class="table table-responsive-sm table-bordered" style="width: 70%;">
+                        <col style="width: 40%">
+                        <col style="width: 60%">
+                        <tr>
+                            <th>How was the quality of lead presenter?</th>
+                            <td>{{ feedback.qa1 }}</td>
+                        </tr>
+
+                        <tr>
+                            <th>How many saw programs/milestones they covered in the discussion?</th>
+                            <td>{{ feedback.qa2 }}</td>
+                        </tr>
+
+                        <tr>
+                            <th>Did you interact with the participants? Mention at least 3 names who performed best
+                                according to you
+                            </th>
+                            <td>
+                                {% for each in feedback.qa3.all %}
+                                    <span>{{ each }},</span>
+                                {% endfor %}
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <th>Do success criteria or listed parameters or completion criteria of presented SAW
+                                program/task are adequate?
+                            </th>
+                            <td>{{ feedback.qa4 }}</td>
+                        </tr>
+
+                        <tr>
+                            <th>Which area of the task the specialist should concentrate most?</th>
+                            <td>{{ feedback.qa5 }}</td>
+                        </tr>
+
+                        <tr>
+                            <th>In the success criteria which criteria is the most important where variation or
+                                deviation should not be allowed by the specialist?
+                            </th>
+                            <td>{{ feedback.qa6 }}</td>
+                        </tr>
+
+                        <tr>
+                            <th>What are the key points to improve the discussions on delivered topic?</th>
+                            <td>{{ feedback.qa7 }}</td>
+                        </tr>
+
+                        <tr>
+                            <th>Number of tests is sufficient or do you have any proposal for any additional test? If
+                                yes, please mention the name of the tests.
+                            </th>
+                            <td>{{ feedback.qa8 }}</td>
+                        </tr>
+
+                        <tr>
+                            <th>Write 5 names of participants who need to improve.
+                            </th>
+                            <td>{% for each in feedback.qa9.all %}
+                                <span>{{ each }},</span>
+                            {% endfor %}</td>
+                        </tr>
+
+                        <tr>
+                            <th>Do you want to repeat the lecture?
+                            </th>
+                            <td>{{ feedback.qa10 }}</td>
+                        </tr>
+
+                    </table>
+                {% endif %}
+            </div>
+            <a class="btn btn-outline-secondary" href="/consultant/discussion/edit_feedback/{{ feedback.id }}">Edit Your Feedback</a>
+        </div>
+
+        <br><br>
+
+        <!-- table for comments -->
+        {% if comment_list %}
+            <div style="margin-left: 5%; width: 80%;">
+                <h2>Comments</h2>
+
+                <table style="width:50%" class="table table-hover table-bordered">
+
+                    <tr class="table-danger">
+                        <th>User</th>
+                        <th>Comment</th>
+                        <th>Created Date</th>
+                    </tr>
+
+                    {% for each in comment_list %}
+                        <tr>
+                            <td>{{ each.user }}</td>
+                            <td>{{ each.comment }}</td>
+                            <td>{{ each.created_date }}</td>
+
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        {% endif %}
+
+        <br><br>
+    </div>
+{% endblock %}

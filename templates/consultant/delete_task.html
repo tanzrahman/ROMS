@@ -1,0 +1,156 @@
+{% extends 'consultant/consultant_base.html' %}
+{% load consultant_templatetags %}
+
+{% block content %}
+
+    <script src="/static/js/task_manager.js"></script>
+    <script src="/static/js/consultant_manager.js"></script>
+
+    <div style="padding-left: 20px">
+        {% if success %}
+            <h3> {{ success }}</h3>
+            <meta http-equiv="refresh" content="1;url=/consultant/monitored_task_list" />
+        {% else %}
+        <div>
+            <h3 style="font-weight: bold; color: red">Are you sure to remove the task from your monitoring List?</h3>
+            <form action="" method="post">
+                {% csrf_token %}
+                <input type="submit" value="Delete" class="btn btn-outline-danger">
+            </form>
+        <br><br>
+        </div>
+        {% endif %}
+        <h2>Task Details</h2>
+
+        {% if task %}
+            <div class="outer-wrapper">
+                <div class="table-wrapper">
+                    <table style="width:50%" class="table table-hover table-bordered table-sm">
+
+                        <tr>
+                            <th>Task ID</th>
+                            <td>{{ task.task_id }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Supervisor</th>
+                            <td>
+                                {% for each in task.supervisor_list %}
+                                    {% if task.division == each.profile.division %}
+                                        <b>*</b>
+                                    {% endif %}
+                                    {{ each.first_name }} {{ each.last_name }}({{ each.username }}) <br>
+                                {% endfor %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Executor</th>
+                            <td>
+                                {% for each in task.executor_list %}
+                                    {% if task.division == each.profile.division %}
+                                        <b>*</b>
+                                    {% endif %}
+                                    {{ each.first_name }} {{ each.last_name }}({{ each.username }})
+                                    {% if task.lead_executor == each %}
+                                        <span style="font-size: smaller; color: dodgerblue">(Lead)</span>
+                                    {% endif %}
+                                    <br>
+                                {% endfor %}
+                            </td>
+
+
+                        </tr>
+                        <tr>
+                            <th>System:</th>
+                            <td>
+                                {{ task.system }}
+                            <td>
+
+                        </tr>
+                        <tr>
+                            <th>Facility</th>
+                            <td>{{ task.facility }}</td>
+                        </tr>
+                        <tr>
+                            <th>KKS</th>
+                            <td>{{ task.relevant_kks_codes }}</td>
+                        </tr>
+
+                        <tr>
+                            <th>Task Created by</th>
+                            <td>{{ task.task_created_by }}</td>
+                        </tr>
+                        <tr>
+                            <th>Title</th>
+                            <td>{{ task.title }}</td>
+                        </tr>
+                        <tr>
+                            <th>Description</th>
+                            <td>{{ task.description }}</td>
+                        </tr>
+                        <tr>
+                            <th>Planned start date</th>
+                            <td>{{ task.planned_start_date }}</td>
+                        </tr>
+                        <tr>
+                            <th>Planned end date</th>
+                            <td>{{ task.planned_end_date }}</td>
+                        </tr>
+                        <tr>
+                            <th>Actual start date</th>
+                            <td>{{ task.actual_start_date }}</td>
+                        </tr>
+                        <tr>
+                            <th>Actual end date</th>
+                            <td>{{ task.actual_end_date }}</td>
+                        </tr>
+                        <tr>
+                            <th>Active Status</th>
+                            <td>{{ task.is_active }}</td>
+                        </tr>
+
+
+                    </table>
+                </div>
+            </div>
+
+        {% endif %}
+
+        <br>
+
+
+
+
+        <!-- table for comments -->
+        {% if comment_list %}
+            <div>
+                <h2>Comments</h2>
+
+                <table style="width:50%" class="table table-hover table-bordered">
+
+                    <tr class="table-danger">
+                        <th>User</th>
+                        <th>Comment</th>
+                        <th>Created Date</th>
+                    </tr>
+
+                    {% for each in comment_list %}
+                        <tr>
+                            <td>{{ each.user }}</td>
+                            <td>{{ each.comment }}</td>
+                            <td>{{ each.created_date }}</td>
+
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        {% endif %}
+
+        <br><br>
+
+
+    </div>
+
+
+
+{% endblock %}

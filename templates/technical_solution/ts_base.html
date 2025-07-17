@@ -1,0 +1,119 @@
+{% extends 'base.html' %}
+{% load notice_tags %}
+{% block content %}
+
+    <style>
+        .dropbtn {
+          color: white;
+          font-size: 16px;
+          border: none;
+        }
+        .dropbtn-b {
+          color: grey;
+          font-size: 16px;
+          border: 1px solid black;
+        }
+
+        .dropdown {
+          position: relative;
+          display: inline-block;
+        }
+        .dropdown-content {
+          display: none;
+          position: absolute;
+          background-color: #f1f1f1;
+          min-width: 160px;
+          box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+          z-index: 1;
+        }
+
+        .dropdown-content a {
+          color: black;
+          padding: 12px 16px;
+          text-decoration: none;
+          display: block;
+        }
+
+        .dropdown-content a:hover {background-color: #ddd;}
+
+        .dropdown:hover .dropdown-content {display: block;}
+
+        .dropdown:hover .dropbtn {background-color: #3e8e41;}
+
+        .dropdown:hover .dropbtn-b {background-color: #990041;}
+
+    </style>
+
+    <div>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom py-sm-0">
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav mr-auto">
+                    {% if request.user.profile.access_level <= 4 %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="/ts/ts_list">Technical Solution List</a>
+                        </li>
+                    {% endif %}
+
+                </ul>
+            </div>
+        </nav>
+    </div>
+
+
+    {% block ts_list %}
+
+    {% endblock %}
+
+    {% block chart %}
+
+        {% if total_milestone > 0 %}
+            <h2 style="text-align: center">Milestone Chart</h2>
+            <br>
+
+            <h4 style="text-align: center; color: red">Total Milestone of {{ division }}: {{ total_milestone }}</h4>
+
+            <form style="padding: 10px 30px;" action="" method='POST'>
+
+                {% csrf_token %}
+
+                {{ form.as_p }}
+
+                <input style="margin-left: 5%" type="submit" value="Search" class="btn btn-success">
+
+                <br><br>
+
+            </form>
+
+            <div id="chart" style="margin-left: 40%">
+            </div>
+
+        {% endif %}
+
+        <script>
+            var options = {
+                series: [{{ not_started }}, {{ completed }}, {{ performed }}],
+                chart: {
+                    width: 500,
+                    type: 'pie',
+                },
+                labels: ['Not Started Milestone', 'Completed Milestone', 'Performed Milestone'],
+                responsive: [{
+                    breakpoint: 480,
+                    options: {
+                        chart: {
+                            width: 200
+                        },
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }]
+            };
+
+            var chart = new ApexCharts(document.querySelector("#chart"), options);
+            chart.render();
+        </script>
+
+    {% endblock %}
+
+{% endblock %}

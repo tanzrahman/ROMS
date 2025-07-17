@@ -1,0 +1,305 @@
+{% extends 'base.html' %}
+{% load notice_tags %}
+{% block content %}
+
+    <style>
+        .dropbtn {
+          color: white;
+          font-size: 16px;
+          border: none;
+        }
+        .dropbtn-b {
+          color: grey;
+          font-size: 16px;
+          border: 1px solid black;
+        }
+
+        .dropdown {
+          position: relative;
+          display: inline-block;
+        }
+        .dropdown-content {
+          display: none;
+          position: absolute;
+          background-color: #f1f1f1;
+          min-width: 160px;
+          box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+          z-index: 1;
+        }
+
+        .dropdown-content a {
+          color: black;
+          padding: 12px 16px;
+          text-decoration: none;
+          display: block;
+        }
+
+        .dropdown-content a:hover {background-color: #ddd;}
+
+        .dropdown:hover .dropdown-content {display: block;}
+
+        .dropdown:hover .dropbtn {background-color: #3e8e41;}
+
+        .dropdown:hover .dropbtn-b {background-color: #990041;}
+
+    </style>
+
+
+    <div id="notice_div">
+    {% if show_notification %}
+        {% with now|get_notice as notice %}
+            {% if notice %}
+                <script>
+                    $(document).ready(function () {
+                        $("#notice_btn").click();
+                    });
+                </script>
+                <button type="button" id='notice_btn' hidden=true data-toggle="modal" data-target="#doc_level_1"></button>
+                <div id="doc_level_1" class="modal fade" role="dialog">
+                    <div class="modal-dialog" style="max-width: 50%">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 style="text-align: center" class="alert-danger">{{ notice.notice_header }}</h4>
+                                <button type="button" class="close" data-dismiss="modal">X</button>
+                            </div>
+
+                            <div class="modal-body" style="overflow-x: auto;">
+                                <h4 style="text-align: center">
+                                    {{ notice.notice|safe|linebreaksbr }}
+                                </h4>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                </div>
+            {% endif %}
+        {% endwith %}
+    {% endif %}
+    <div>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom py-sm-0">
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav mr-auto">
+{#                    <li class="nav-item">#}
+{#                        <a class="nav-link" href="/task_management/milestone_list">All Milestone List</a>#}
+{#                    </li>#}
+                    {% if request.user.profile.access_level <= 9 %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="/task_management/task_list">Task List</a>
+                        </li>
+                    {% endif %}
+
+                    {% if request.user.profile.access_level > 2 %}
+                        <li class="dropdown">
+                            <button class="dropbtn nav-link bg-light">My Tasks</button>
+                            <div class="dropdown-content">
+                                <a class="nav-link" href="/task_management/my_task">Tasks to Execute</a>
+                                <a class="nav-link" href="/task_management/assigned_task">Tasks to Supervise</a>
+                            </div>
+                        </li>
+                    {% endif %}
+                    {% if request.user.profile.access_level < 5 %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="/task_management/add_task">Add Task</a>
+                        </li>
+                    {% endif %}
+                    {% if request.user.profile.access_level <= 3  or perms.task_management.view_secondtierdocumentreview %}
+                        <ul class="dropdown" style="margin-left: -3%">
+                            <button class="dropbtn nav-link bg-light">View Document Reviews</button>
+                            <div class="dropdown-content">
+                                <li class="dropdown">
+                                    <button class="dropbtn nav-link bg-info small">Operational Document Reviews</button>
+                                    <div class="fa-medium small" style="padding-left: 5%">
+                                        <a class="nav-link" href="/task_management/document_review/list_review_report">First Tier Feedback</a>
+                                        <a class="nav-link" href="/task_management/document_review/second_tier_doc_review_list">Second Tier Feedback</a>
+                                    </div>
+                                </li>
+                                <li class="dropdown">
+                                    <button class="dropbtn nav-link bg-info small">Safety Analysis Report Review</button>
+                                    <div class="fa-medium small" style="padding-left: 5%">
+                                        {% if perms.task_management.change_safetyanalysisreportreview %}
+                                            <a class="nav-link" href="/task_management/document_review/view_sar_indv_report_list">View Individual Reports</a>
+                                            <a class="nav-link" href="/task_management/document_review/view_sar_comt_report_list">View Committee Reports</a>
+                                        {% endif %}
+                                    </div>
+                                </li>
+                            </div>
+                        </ul>
+                        {% endif %}
+
+                    <li class="dropdown">
+                        <button class="dropbtn nav-link bg-light">Discussion</button>
+                        <div class="dropdown-content">
+                            <a class="nav-link" href="/lecture/lecture_list">View Discussions</a>
+                            {% if request.user.profile.access_level < 4 or perms.task_management.add_lecture %}
+                                <a class="nav-link" href="/lecture/create">Create Discussion</a>
+                            {% endif %}
+                        </div>
+                    </li>
+
+                    {% if request.user.profile.access_level < 2 %}
+
+                        <li class="dropdown">
+                            <button class="dropbtn nav-link bg-light">Report</button>
+                            <div class="dropdown-content">
+                                <a href="/task_management/consultancy_requests">Consultancy Requests</a>
+                                <a href="/report/consultant_tasks_report">Consultant Task Report</a>
+                                <a href="/report/consultant_discussion_report">Consultant Discussion Report</a>
+                                <a href="/report/task_distribution">Task Distribution Report</a>
+                            </div>
+                        </li>
+
+                    {% endif %}
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="/task_management/task_comment">Task Comment</a>
+                    </li>
+
+                    <li class="dropdown">
+                        <button class="dropbtn nav-link bg-light">Document Request</button>
+                        <div class="dropdown-content">
+                            {% if request.user.profile.access_level < 5 %}
+                                <a class="nav-link" href="/document_request/pending_requests">Pending Document Requests to Approve</a>
+                            {% endif %}
+                            <a class="nav-link" href="/document_request/view_my_requests">My Document Requests</a>
+                        </div>
+                    </li>
+                    {% if request.user.profile.access_level > 2 %}
+                        {% if request.user.profile.division.division_name == 'Documentation' %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="/document_request/all_requests">Document Requests</a>
+                            </li>
+                        {% else %}
+                            <ul class="dropdown" >
+                            <button class="dropbtn nav-link bg-light" style="margin-left: -5%">Document Review <span class="badge badge-danger">(New)</span></button>
+                                <div class="dropdown-content">
+                                    <li class="dropdown">
+                                        <button class="dropbtn nav-link bg-info small">1.Operational Document Review</button>
+                                        <div class="fa-medium small">
+                                            <a class="nav-link" href="/task_management/document_review/list">First Tier Feedback</a>
+                                            <a class="nav-link" href="/task_management/document_review/second_tier_doc_review">Second Tier Feedback</a>
+                                        </div>
+                                    <li>
+
+                                    <li class="dropdown">
+                                        <button class="dropbtn nav-link bg-info small">2.Safety Analysis Report Review</button>
+                                        <div class="fa-medium small" style="padding-left: 1%">
+                                            {% if perms.task_management.add_safetyanalysisreportreview %}
+                                                <a class="nav-link" href="/task_management/document_review/assign_sar_reviewer">Assign Member to Review</a>
+                                                <a class="nav-link" href="/task_management/document_review/view_sar_reviews">View Member Feedback</a>
+                                                <a class="nav-link" href="/task_management/document_review/upload_committee_report">Upload Committee Report</a>
+                                            {% endif %}
+                                            <a class="nav-link" href="/task_management/document_review/my_sar_review">Tasks assigned to Me</a>
+                                        </div>
+                                    </li>
+
+                                </div>
+                            </ul>
+                        {% endif %}
+                    {% endif %}
+
+                </ul>
+            </div>
+        </nav>
+    </div>
+
+
+    {% block task_list %}
+
+    {% endblock %}
+
+    {% block assigned_task %}
+
+    {% endblock %}
+
+    {% block add_task %}
+
+    {% endblock %}
+
+    {% block open_task %}
+
+    {% endblock %}
+
+    {% block add_person %}
+    {% endblock %}
+
+    {% block add_comment %}
+    {% endblock %}
+
+    {% block add_answer %}
+    {% endblock %}
+
+    {% block add_activity %}
+    {% endblock %}
+
+    {% block milestone %}
+    {% endblock %}
+
+    {% block document %}
+    {% endblock %}
+
+    {% block report %}
+    {% endblock %}
+
+    {% block task_comment %}
+    {% endblock %}
+
+    {% block doc_review %}
+    {% endblock %}
+
+    {% block chart %}
+
+        {% if total_milestone > 0 %}
+            <h2 style="text-align: center">Milestone Chart</h2>
+            <br>
+
+            <h4 style="text-align: center; color: red">Total Milestone of {{ division }}: {{ total_milestone }}</h4>
+
+            <form style="padding: 10px 30px;" action="" method='POST'>
+
+                {% csrf_token %}
+
+                {{ form.as_p }}
+
+                <input style="margin-left: 5%" type="submit" value="Search" class="btn btn-success">
+
+                <br><br>
+
+            </form>
+
+            <div id="chart" style="margin-left: 40%">
+            </div>
+
+        {% endif %}
+
+        <script>
+            var options = {
+                series: [{{ not_started }}, {{ completed }}, {{ performed }}],
+                chart: {
+                    width: 500,
+                    type: 'pie',
+                },
+                labels: ['Not Started Milestone', 'Completed Milestone', 'Performed Milestone'],
+                responsive: [{
+                    breakpoint: 480,
+                    options: {
+                        chart: {
+                            width: 200
+                        },
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }]
+            };
+
+            var chart = new ApexCharts(document.querySelector("#chart"), options);
+            chart.render();
+        </script>
+
+    {% endblock %}
+
+{% endblock %}

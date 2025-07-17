@@ -1,0 +1,95 @@
+{% extends 'document_review/doc_review_base.html' %}
+{% load consultant_templatetags %}
+{% load document_review_tags %}
+{% load static %}
+{% load notice_tags %}
+{% block review %}
+
+    <script src="/static/js/task_manager.js"></script>
+    <script src="{% static 'js/selectize.js' %}"></script>
+    <script src="/static/js/jquery-3.5.1.min.js"></script>
+    <script src="/static/js/SiteScripts/crypto-js/sha1.js"></script>
+    <script src="/static/js/SiteScripts/crypto-js/crypto-js.js"></script>
+    <script src="/static/js/SiteScripts/crypto-js/aes.js"></script>
+    <script src="/static/js/SiteScripts/FileHandler.js"></script>
+    <link href="/static/css/selectize.css" rel="stylesheet"/>
+
+    <div id="notice_div">
+
+    <div style="padding-left: 20px; margin-top: 1%">
+        {% if success %}
+            <h3 style="color: darkgreen">
+                Successfully Uploaded SAR Committee Report
+                <meta http-equiv="refresh" content="2; url=/task_management/document_review/upload_committee_report" />
+            </h3>
+        {% endif %}
+
+        {% if form %}
+            <div class="col" style="margin-top: 2%; margin-left: 2%; width: 40%">
+                <h3 style="padding-left: 30%">Upload Complete Committee Report</h3>
+                <form method="post" action="" id="feedback_form" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <fieldset>
+                        <table class="table table-bordered">
+                            <tr>
+                                <td style="width: 40%">
+                                    {{ form }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <input type="text" id="sar_committee_report" name="sar_committee_report_hash" hidden="true">
+                                    Select Report:
+                                    <input type="file" id="sar_committee_report_file" name="sar_committee_report" accept=".doc, .docs, .docx"
+                                           onchange="getFileInfo(this.name)">
+                                </td>
+                            </tr>
+                        </table>
+                        <input type="submit" value="Upload">
+                    </fieldset>
+                </form>
+            </div>
+        {% endif %}
+
+        {% if sar_list %}
+            <div style="width: 80%; margin-left: 5%; padding-top: 1%">
+                <table class="table table-bordered table-sm" style="text-align: center">
+
+                    <tr class="align-content-center">
+                        <th>SL.No</th>
+                        <th>Review Section</th>
+                        <th>Report</th>
+                    </tr>
+                    {% for each in sar_list %}
+                        <tr class="align-content-center">
+                            <td style="vertical-align: middle">
+                                {{ forloop.counter }}
+                            </td>
+
+                            <td style="vertical-align: middle">
+                                <b>Section:</b>{{ each.sar_section }} <br>
+                                <b>Title:</b>{{ each.sar_section_title }}
+
+                            </td>
+                            <td style="vertical-align: middle">
+                                {% with each|get_sar_committ_report as committee_report %}
+                                    {% if committee_report %}
+                                        <a href="/feedback/viewfile/{{ committee_report.analysis_report_file }}">Download Report</a> <br>
+                                        {% if each.lead == request.user %}
+                                            <a href="{{ request.path }}/{{ each.id }}">Re-upload Report</a>
+                                        {% endif %}
+                                    {% else %}
+                                        {% if each.lead == request.user %}
+                                            <a href="{{ request.path }}/{{ each.id }}">Upload Report</a>
+                                        {% endif %}
+                                    {% endif %}
+                                {% endwith %}
+
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

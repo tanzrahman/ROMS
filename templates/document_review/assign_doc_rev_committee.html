@@ -1,0 +1,71 @@
+{% extends 'document_review/doc_review_base.html' %}
+{% load consultant_templatetags %}
+
+{% block review %}
+
+    <script src="/static/js/task_manager.js"></script>
+
+    <div style="padding-left: 20px">
+        {% if success %}
+            <h3 style="color: darkgreen">
+                Committee Assigned for evaluating the review
+                <meta http-equiv="refresh" content="0; url={{ referrer }}" />
+            </h3>
+        {% endif %}
+        {% if already_assigned %}
+            <h3 style="color: red">
+                Committee Already Assigned to review
+            </h3>
+        {% endif %}
+
+        {% if form %}
+            <div>
+                <div style="margin-top: 2%; margin-left: 2%; width: 50%">
+                    <form method="post" action="" id="feedback_form">
+                        {% csrf_token %}
+
+                        <table class="table table-bordered">
+                            <tr>
+                                <td>Document Title</td>
+                                <td>{{ doc_rev.task.title }}</td>
+                            </tr>
+
+                            <tr>
+                                <td>Division</td>
+                                <td>{{ doc_rev.task.division }}</td>
+                            </tr>
+
+                            <tr>
+                                <td>Department/Shop</td>
+                                <td>{{ doc_rev.task.dept_id }}</td>
+                            </tr>
+
+                            {% for each in form %}
+                                {% if not each.is_hidden %}
+                                <tr>
+                                    <td>
+                                        <span style="font-weight: bold">{{ each.label_tag }}</span> <br>
+                                    </td>
+                                    <td>
+                                        {{ each }}
+                                        {% for error in each.errors %}
+                                            <p style="color: red">{{ error }}</p>
+                                        {% endfor %}
+                                    </td>
+                                </tr>
+                                {% endif %}
+                            {% endfor %}
+                        </table>
+                        {% if redirect %}
+                            <input type="hidden" value="{{ redirect }}" hidden id="referrer" name="referrer">
+                        {% else %}
+                            <input type="hidden" value="/task_management/document_review/list_review_report" hidden id="referrer" name="referrer">
+                        {% endif %}
+                        <input type="submit" value="Assign Committee">
+                    </form>
+                </div>
+                <br><br>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

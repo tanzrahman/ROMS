@@ -1,0 +1,99 @@
+{% extends 'document_review/doc_review_base.html' %}
+{% load static %}
+{% load feedback_templatetags %}
+{% load document_templatetags %}
+
+{% block assigned_docs %}
+    <div id="doc_list">
+        {% if doc_list %}
+            <div>
+                <div>
+                    <table class="table-bordered" style="width: 120%;">
+                        <thead style="text-align: center">
+                        <tr class="table-success">
+                            <th>SL No.</th>
+                            <th>Milestone ID</th>
+                            <th>Task ID</th>
+                            <th style="width: 20%">Title</th>
+                            <th>Supervisor</th>
+                            <th>Executor</th>
+                            <th>System</th>
+                            <th>Facility</th>
+                            <th>Planned start date</th>
+                            <th>Planned end date</th>
+                            <th>Actual start date</th>
+                            <th>Actual end date</th>
+
+                        </tr>
+                        </thead>
+                        {% for task in doc_list %}
+                            <tr style="text-align: center">
+                                <td>{{ forloop.counter }}</td>
+                                <td>{{ task }}<br>
+
+                                    {% with task|get_executor_document_review:request.user as doc_review %}
+                                        {% if doc_review.0 == None %}
+                                            {% if request.user in task.executor_list or request.user in task.supervisor_list%}
+                                                <a href="/task_management/document_review/open/{{ task.id }}" class="btn btn-outline-danger" target="_blank">Give Document Review</a>
+                                            {% endif %}
+                                        {% else %}
+                                            {% if request.user == doc_review.0.user %}
+                                                <a href="/task_management/document_review/feedback/{{ task.id }}?doc_category={{ doc_review.1 }}"class="btn btn-outline-success" target="_blank">View My Review</a>
+                                            {% else %}
+                                                <a href="/task_management/document_review/open_review/{{ doc_review.0.id }}?category={{ doc_review.1 }}"class="btn btn-outline-info" target="_blank">View Existing Review</a>
+                                            {% endif %}
+                                        {% endif %}
+                                    {% endwith %}
+                                </td>
+                                <td>
+                                    <a href="/task_management/document_review/open/{{ task.id }}" class="page-link" target="_blank">{{ task.task_id }} </a>
+                                    {% if task.id|has_no_document_request:request.user %}
+                                        <a href="/document_request/create_request/{{ task.id }}"
+                                           class="btn btn-outline-info" target="_blank">Request Document</a>
+                                    {% endif %}
+                                </td>
+
+                                <td style="width: 20%">{{ task.title }}</td>
+
+                                <td>{% for each in task.supervisor_list %} {{ each.first_name }} {{ each.last_name }}
+                                    ({{ each.username }})<br> {% endfor %}</td>
+                                <td>{% for each in task.executor_list %} {{ each.first_name }} {{ each.last_name }}
+                                    ({{ each.username }})<br> {% endfor %}</td>
+
+                                <td>{{ task.system }}</td>
+
+                                <td>{{ task.facility }}</td>
+                                <td>{{ task.planned_start_date }}</td>
+                                <td>{{ task.planned_end_date }}</td>
+                                <td>
+                                    {{ task.actual_start_date }}
+                                </td>
+                                <td>{{ task.actual_end_date }}</td>
+
+                            </tr>
+                        {% endfor %}
+                    </table>
+
+                    <!-- for pagination-->
+                    <div id="pagination_div">
+                        {% if assigned_task.has_other_pages %}
+                            <ul class="paginator">
+
+                                <span>Page: </span>
+                                {% for i in assigned_task.paginator.page_range %}
+                                    {% if assigned_task.number == i %}
+                                        <span class="this-page">{{ i }}
+                                                <span class="sr-only">(current)</span></span>
+                                    {% else %}
+                                        <a href="javascript:next_page_report('{{ i }}')">{{ i }}</a>
+                                    {% endif %}
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </div>
+
+                </div>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

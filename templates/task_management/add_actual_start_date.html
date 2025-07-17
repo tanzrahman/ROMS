@@ -1,0 +1,83 @@
+{% extends 'task_management/task_management_base.html' %}
+{% block task_list %}
+    <div style="width: 90%; margin-left: 2%">
+        <div>
+            <table class="table table-hover table-bordered small" style="margin-top: 1%;">
+                <tr>
+                    <th>Task Details</th>
+                    <td>
+                    <span> <b>Milestone ID:</b> {{ task.milestone_id }} <br>
+                            <b>Title:</b> {{ task.title }}
+                    </span>
+                    <br>
+                    <span>
+                        <b>Supervisors:</b>
+                            {% for each in task.supervisor_list %}
+                                {% if each.profile.division == task.division %}<b>*</b> {% endif %} {{ each }},
+                            {% endfor %}
+                    </span>
+                    <br>
+                    <span>
+                        <b>Executors</b>
+                            {% for each in task.executor_list %}
+                                {% if each.profile.division == task.division %}<b>*</b> {% endif %}
+                                {% if each == task.lead_executor %}
+                                    {{ each }} <b style="color:dodgerblue">(Lead)</b>
+                                {% else %}
+                                    {{ each }}
+                                {% endif %}
+                            {% endfor %}
+                    </span>
+                    <br>
+                    <span>
+                        <b>Planned Start Date:</b> {{ task.planned_start_date }} <br>
+                        <b>Planned End Date:</b> {{ task.planned_end_date }} <br>
+                    </span>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <div style="margin-left: 30%">
+            <p style="color:red"><b>*Instructions*</b></p>
+            <ul>
+                <li><b>Read the task details carefully</b></li>
+                <li><b>Enter correct actual start date</b></li>
+                <li><b>After submitting the form, notification will be sent to higher authority and task relevant personnel</b></li>
+            </ul>
+        </div> <br>
+
+        <div>
+            <form action="" method="post" id="add_actual_start_date" style="margin-left: 30%">
+                {% csrf_token %}
+
+                <fieldset>
+                    <div>
+                        <h3 style="margin-left: 20%">Add Actual Start Date</h3>
+
+                        <div class="outer-wrapper">
+                            <div style="width: 80%; margin-left: 5%">
+                                <table class="table table-sm table-bordered" style="width: 70%; row-gap: 0px">
+
+                                    {% for field in form %}
+                                        <tr class="table-info table-sm" style="text-align: center; width: 40%">
+
+                                            <td><b> {{ field.label_tag }} </b></td>
+                                            <td> {{ field }} </td>
+                                        </tr>
+                                    {% endfor %}
+                                </table>
+                            </div>
+                        </div>
+
+                        <input style="margin-left: 30%" class="btn btn-outline-info" type="submit" value="Submit">
+                    </div>
+                </fieldset>
+            </form>
+            <br>
+            <h3 style="margin-left: 40%; color:green">{{ message }}</h3>
+        </div>
+
+    </div>
+
+{% endblock %}

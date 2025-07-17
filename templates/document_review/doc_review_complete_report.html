@@ -1,0 +1,258 @@
+<html>
+{% load document_review_tags %}
+{% load static %}
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <style>
+        @page details_page {
+            size: a4 portrait;
+            margin: 1cm;
+            @frame footer_frame {
+            /* Another static Frame */
+            -pdf-frame-content: footer_content;
+            left: 250pt;
+            width: 300pt;
+            top: 810pt;
+            height: 20pt;
+            }
+        }
+        @page comment_page {
+            size: a4 portrait;
+            margin: 1cm;
+            @frame footer_frame {
+            /* Another static Frame */
+            -pdf-frame-content: footer_content;
+            left: 250pt;
+            width: 300pt;
+            top: 810pt;
+            height: 20pt;
+            }
+        }
+        @page signature_page {
+            size: a4 portrait;
+            margin: 1cm;
+            @frame footer_frame {
+            /* Another static Frame */
+            -pdf-frame-content: footer_content;
+            left: 250pt;
+            width: 300pt;
+            top: 810pt;
+            height: 20pt;
+            }
+        }
+         @font-face {
+            font-family: Roboto;
+            src: url(static/fonts/Roboto-Regular.ttf);
+        }
+
+        @font-face {
+            font-family: Roboto;
+            src: url(static/fonts/Roboto-Bold.ttf);
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body style='font-family: "Roboto", "Lucida Grande", "DejaVu Sans", "Bitstream Vera Sans", Verdana, Arial, sans-serif "'>
+<div id="footer_content"> Page <pdf:pagenumber/>
+        of <pdf:pagecount/>
+</div>
+<div style='padding:5%;'>
+    <pdf:nexttemplate name="details_page"/>
+    <div>
+        <div>
+            <h2 style="text-align: center; font-size: 2em;">Rooppur NPP Document Review</h2>
+            <br><br>
+            <table class="table" style="width: 100%; text-align: center; font-size: 2em;">
+                <tr>
+                    <td>
+                        <span><b>Document Code: </b>{{ task }}</span><br>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span><b>Document Version: </b>{{ form.initial.version_of_doc|extract_version_info }}</span>
+                        <br><br>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span><b>Title: </b>{{ task.title }}</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td><b>Responsible Division:</b> {{ feedback.task.division }}</td>
+                </tr>
+                <tr>
+                    <td><b>Review By:</b> {{ feedback.user }}</td>
+                </tr>
+                <tr>
+                    <td><b>Review Date:</b> {{ feedback.modified_at|date }}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <pdf:nexttemplate name="details_page"/>
+    <pdf:nextpage/>
+    <div style="padding-bottom:1% ">
+        {% if form %}
+            <h2>Review Details</h2>
+            <table class="table table-bordered" style="width: 100% ">
+                {% for each in form %}
+                    <tr style="padding-top: 1%">
+                        <td>
+                            <span style="font-weight: bold">Question-{{ forloop.counter }}: {{ each.label }}</span>
+                            <br>
+                            <span>
+                                <b>Answer: </b>
+                                {{ each.initial|linebreaksbr }}
+                                <br>
+                                <br>
+                            </span>
+
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        {% endif %}
+    </div>
+    <br><br>
+</div>
+
+<div>
+    <div>
+        <pdf:nexttemplate name="comment_page"/>
+        <pdf:nextpage/>
+    </div>
+    <div style="padding-left: 5%">
+        <div>
+            <table style="width: 100%; font-size: 1em; text-align: left; border: 1px solid dimgrey";>
+                <tr>
+                    <td colspan="5">
+                        <h2>Committee Review Comments</h2>
+                    </td>
+                </tr>
+                <tr>
+                    <th>SL. No</th>
+                    <th>Section No</th>
+                    <th>Original Text</th>
+                    <th>Proposed Text</th>
+                    <th>Remarks</th>
+                </tr>
+                {% for each in committee_rev_cmnt %}
+                    <tr>
+                        <td style="width: 3%">{{ forloop.counter }}</td>
+                        <td style="width: 7%">{{ each.section_no }}</td>
+                        <td style="width: 35%; font-size: 1em">{{ each.original_text|linebreaks }}</td>
+                        <td style="width: 35%; font-size: 1em">{{ each.proposed_text|linebreaks }}</td>
+                        <td style="width: 20%; font-size: 1em">{{ each.remarks|linebreaks }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+    <br>
+</div>
+
+<div>
+    <div>
+        <pdf:nexttemplate name="signature_page"/>
+        <pdf:nextpage/>
+    </div>
+    <div style="width: 90%">
+        {% if committee_rev.committee_approval %}
+            <table style="width: 40%; border: 1px solid grey; text-align: center; vertical-align: top">
+                <tr>
+                    <td colspan="3">
+                        <h3>Document Recommendation for Approval</h3>
+                    </td>
+                </tr>
+                <tr style="text-align: left">
+                    <td colspan="3">
+                        <span><b>Document Code: </b>{{ task }}</span><br>
+                        <span><b>Document Version: </b>{{ form.initial.version_of_doc|extract_version_info }}</span><br>
+                        <span><b>Title: </b>{{ task.title }}</span>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Recommendation By</th>
+                    <th>Recommendation</th>
+                    <th>Signature</th>
+                </tr>
+                {% for each in committee_rev.committee_approval.all %}
+                    <tr>
+                        <td>
+                            {{ each.signed_by.get_full_name }}
+                            <br>
+                            {{ each.signed_by }}
+                        </td>
+                        <td>{{ each.remarks|remarks_display_str }}</td>
+                        <td style="margin-top:5%">
+                            <img id="signature" height="40" width="100" src="http://{{ host }}/manpower/user/embedd_signature?hash={{ each.sign_hash }}">
+                            <br>
+                            {{ each.signed_on }}
+                        </td>
+                    </tr>
+                {% endfor %}
+
+                <tr>
+                    <td>
+                        {{ committee_rev.division_head_approval.signed_by.get_full_name }}
+                        <br>
+                        Head of Division
+                    </td>
+                    <td>
+                        {{ committee_rev.division_head_approval.remarks|remarks_display_str }}
+                    </td>
+                    <td style="margin-top:5%">
+                        {% if committee_rev.division_head_approval.sign_hash %}
+                            <img id="signature" height="40" width="100"
+                                 src="http://{{ host }}/manpower/user/embedd_signature?hash={{ committee_rev.division_head_approval.sign_hash }}">
+                            <br>
+                            {{ committee_rev.division_head_approval.signed_on }}
+                        {% endif %}
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        {{ committee_rev.chief_eng_approval.signed_by.get_full_name }}
+                        <br>
+                        Chief Engineer
+                    </td>
+                    <td>
+                        {{ committee_rev.chief_eng_approval.remarks|remarks_display_str }}
+                    </td>
+                    <td style="margin-top:5%">
+                        {% if committee_rev.chief_eng_approval.sign_hash %}
+                            <img id="signature" height="40" width="100"
+                                 src="http://{{ host }}/manpower/user/embedd_signature?hash={{ committee_rev.chief_eng_approval.sign_hash }}">
+                            <br>
+                            {{ committee_rev.chief_eng_approval.signed_on }}
+                        {% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        {{ committee_rev.sd_approval.signed_by.get_full_name }}
+                        <br>
+                        Station Director
+                    </td>
+                    <td>
+                        {{ committee_rev.sd_approval.remarks|remarks_display_str }}
+                    </td>
+                    <td style="margin-top:5%">
+                        {% if committee_rev.sd_approval.sign_hash %}
+                            <img id="signature" height="40" width="100"
+                                 src="http://{{ host }}/manpower/user/embedd_signature?hash={{ committee_rev.sd_approval.sign_hash }}">
+                            <br>
+                            {{ committee_rev.sd_approval.signed_on }}
+                        {% endif %}
+                    </td>
+                </tr>
+            </table>
+        {% endif %}
+    </div>
+</div>
+</body>
+</html>

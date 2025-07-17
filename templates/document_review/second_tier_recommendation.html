@@ -1,0 +1,68 @@
+{% extends 'document_review/doc_review_base.html' %}
+{% load consultant_templatetags %}
+
+{% block review %}
+
+    <script src="/static/js/task_manager.js"></script>
+
+    <div style="padding: 5%">
+
+        {% if success %}
+            <div>
+                <h3 style="color: darkgreen">
+                    Successfully Recommended to Higher Authority.
+                </h3>
+            </div>
+        {% endif %}
+
+        <div>
+            <h4 style="color:cornflowerblue">Document Review Committee Recommendation</h4>
+            <div style="width: 50%">
+                <table class="table table-bordered">
+                    <tr>
+                        <td>
+                            Document:
+                        </td>
+                        <td>
+                            {{ task }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Title:</td>
+                        <td>{{ task.title }}</td>
+                    </tr>
+                    <tr>
+                        <td>Division:</td>
+                        <td>{{ task.division }}</td>
+                    </tr>
+                    <tr>
+                        <td>Shop/Department</td>
+                        <td>{{ task.dept_id }}</td>
+                    </tr>
+                    <tr>
+                        <td>Initial Review By</td>
+                        <td>{{ feedback.user }}</td>
+                    </tr>
+                </table>
+            </div>
+            <div>
+                {% if not success %}
+                    {% if form %}
+                        <form action="" method="POST">
+                            {% csrf_token %}
+                            {{ form }}
+                            <br>
+                            {% if request.user.profile.signature == "" or not request.user.profile.signature %}
+                                <span style="color:red">You have to upload your signature first to digitally sign & recommend</span>
+                                <a href="/manpower/user/upload_signature" target="_blank">Click here to upload
+                                    signature</a>
+                            {% else %}
+                                <input type="submit" name="submit" value="Recommend  & Sign Digitally">
+                            {% endif %}
+                        </form>
+                    {% endif %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

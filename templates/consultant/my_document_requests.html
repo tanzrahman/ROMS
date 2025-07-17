@@ -1,0 +1,61 @@
+{% extends 'consultant/consultant_base.html' %}
+{% load document_templatetags %}
+{% load feedback_templatetags %}
+{% block content %}
+    <div>
+        <script src="/static/js/jquery-3.5.1.min.js"></script>
+        <script src="/static/js/task_manager.js"></script>
+
+        <div>
+
+            <div style="margin-left: 5%">
+                <h5 style="text-align: center; font-weight: bold">My Document Requests</h5>
+                <table class="table table-sm table-responsive-sm table-bordered" style="width: 90%; text-align: center; font-size: 0.9em">
+                    <tr>
+                        <th style="width: 5%">Sl No.</th>
+                        <th style="width: 20%">Task</th>
+                        <th style="width: 45%">Documents & Remarks</th>
+                        <th style="width: 10%">Request Date</th>
+                        <th style="width: 10%">Approval Date</th>
+                        <th style="width: 10%">Status</th>
+                    </tr>
+
+                    {% for each in my_requests %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>
+                                <span>
+                                    Milestone ID: {{ each.task.milestone_id }}
+                                </span>
+                                <br>
+                                <span>
+                                    Task ID: {{ each.task.task_id }}
+                                </span>
+                            </td>
+                            <td>
+                                <span>
+                                    <b>Requested Documents:</b> {{ each.requested_documents }}
+                                </span> <br>
+                                <span>
+                                   <b>My Remarks:</b> {{ each.requester_remarks }}
+                                </span>
+                            </td>
+
+                            <td>
+                                {{ each.requested_at }}
+                            </td>
+                            <td>
+                                {{ each.approved_at }}
+                            </td>
+                            <td>
+                                {{ each.id|get_doc_request_status }}
+                            </td>
+                        </tr>
+                    {% endfor %}
+
+                </table>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

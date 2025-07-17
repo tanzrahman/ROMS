@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block homepage %}
+
+<style>
+
+    /* animated welcome text */
+
+    /* clear background */
+    h1 {
+      text-align: center;
+      padding: 16px;
+      margin: 0;
+    }
+
+    /* crops animations that exceeds one line area */
+    .line {
+      width: 100%;
+      height: 20rem;
+      overflow: hidden;
+      padding: 0;
+      margin-bottom: 16px;
+    }
+
+
+    /* lineup class and keyframes */
+    .lineUp {
+      animation: 2s anim-lineUp ease-out infinite;
+    }
+    @keyframes anim-lineUp {
+      0% {
+        opacity: 0;
+        transform: translateY(80%);
+      }
+      20% {
+        opacity: 0;
+      }
+      50% {
+        opacity: 1;
+        transform: translateY(0%);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0%);
+      }
+    }
+
+</style>
+
+<body style="background-color: #f5f4ef">
+    <div class="align-content-center">
+
+        {% if loggedinas %}
+            <h1  align="center" style="vertical-align: middle">
+                Rooppur </br>
+                Operational Management System </br>
+            </h1>
+
+        {% else %}
+
+        <!-- animated welcome text -->
+
+            <div class="line" >
+                <h1 class='lineUp'>
+                    Welcome to<br>
+                    Rooppur Operational Management System<br>
+                </h1>
+                <br> <br>
+
+            </div>
+
+            <h4 align= "center">Please <a href="/login"><b>Login</b> </a>  to continue...</h4>
+
+
+
+
+        {% endif %}
+
+        </br></br></br>
+
+    </div>
+
+    
+</body>
+
+{% endblock %}
+
+

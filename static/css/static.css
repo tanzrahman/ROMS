@@ -1,0 +1,47 @@
+
+.page-header-custom{
+    position: sticky;
+    height: 10%;
+    top:0%;
+    border:1px solid black;
+    background-image: linear-gradient(to bottom right, lightblue, lightblue);
+    background-color: lightblue;
+    padding: 2% 1% 1% 4%;
+}
+
+.time{
+    position: absolute;
+    right: 20px;
+    top:   10px;
+}
+
+
+
+/* Style page content */
+.main {
+    margin-left: 160px; /* Same as the width of the sidebar */
+    padding: 0px 10px;
+    background-color: #F2F1EF
+}
+
+/* On smaller screens, where height is less than 450px, change the style of the sidebar (less padding and a smaller font size) */
+@media screen and (max-height: 450px) {
+    .sidenav {padding-top: 15px;}
+    .sidenav a {font-size: 18px;}
+}
+
+
+.required::after {
+    content: '  *';
+    color: red;
+}
+
+.blink {
+ animation: blink 1s step-start infinite;
+}
+@keyframes blink {
+ 50% {
+  opacity: 0;
+ }
+
+}

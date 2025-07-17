@@ -1,0 +1,42 @@
+{% extends 'consultant/consultant_base.html' %}
+
+{% block content %}
+
+    <script src="/static/js/task_manager.js"></script>
+
+    <div style="padding-left: 20px">
+        {% if success %}
+            <h2>Successfully Added Comment</h2>
+            <script>
+                setTimeout(function()
+                {
+                    self.close();
+                },2000);
+            </script>
+        {% endif %}
+        <h2>Task Comment</h2>
+
+        {% if form %}
+            <form action="" method="post">
+                {% csrf_token %}
+                <table>
+                    {% for each_field in form %}
+                        <tr>
+                            <td>{{ each_field.label_tag }}</td>
+                            <td>{{ each_field }}</td>
+                        </tr>
+                    {% endfor %}
+                    <tr>
+                        <td>
+                            <input  type="submit" value="Submit">
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        {% endif %}
+
+    </div>
+
+
+
+{% endblock %}
