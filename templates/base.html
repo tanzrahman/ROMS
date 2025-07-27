@@ -14,7 +14,7 @@
     <script src="{% static 'js/bootstrap.min.js' %}"></script>
     <script src="{% static 'js/bootstrap.min.js' %}"></script>
     <script src="{% static 'js/SiteScripts/jquery-3.5.1.js' %}"></script>
-    <title>Rooppur NPP Project Task Management System</title>
+    <title>Rooppur Operational Management System</title>
 
     <style>
         .navbar-nav .nav-item:hover .nav-link{
@@ -38,7 +38,7 @@
 
 <div id="page-content-wrapper">
 
-    <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom py-sm-0">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark border-bottom py-sm-0">
 
         <div class="collapse navbar-collapse">
 
@@ -59,15 +59,15 @@
                     <li class="nav-item">
                         <a class="nav-link" href="/task_management"><b>Task Management</b></a>
                     </li>
-                    <li class="nav-item">
+                    <!-- <li class="nav-item">
                         <a class="nav-link" href="/ts"><b>Technical Solution</b></a>
-                    </li>
+                    </li> -->
                     <li class="nav-item">
                         <a class="nav-link" href="/manpower/user/all"><b>All Users</b></a>
                     </li>
                     {% if request.user.profile.access_level > 1 %}
                         <li class="nav-item">
-                            <a class="nav-link" href="/notifications/direct_messages"><b>Direct Messages to PD</b></a>
+                            <a class="nav-link" href="/notifications/direct_messages"><b>Direct Messages to MD</b></a>
                         </li>
                     {% endif %}
                 {% endif %}
@@ -97,11 +97,11 @@
             <ul class="navbar-nav ml-md-auto">
             {% if not request.user.is_anonymous  %}
                 {% if request.user.profile.access_level < 20 %}
-                    <li class="nav-item">
+                    <!-- <li class="nav-item">
                             <a class="nav-link blink" target="_blank" href="/static/pms_manual.pdf">
                                 <span style="font-size: smaller">Download PMS Manual</span>
                             </a>
-                    </li>
+                    </li> -->
                     {% endif %}
                 <li class="nav-item">
                         <a class="nav-link" href="/notifications/show"><b>My Notifications</b></a>

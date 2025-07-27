@@ -5,52 +5,106 @@
 {% block userlogin %}
 
         <style>
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background-image: url("{% static 'loginPage.jpg' %}");
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-size: cover;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+    }
 
-            img {
-                display: inline-block;
-                margin: 0 20px;
-            }
+    .page-container {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+        text-align: center;
+    }
 
-            .loginDiv
-            {
-                position: absolute;
-                top: 55%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-                background-color: #fff;
-            }
+    .logo-row {
+        margin-bottom: 20px;
+    }
 
-            .loginDiv a:link, a:visited
-            {
-                 background-color:#26734d;
-                 color: #FFF;
-                 padding: 5px 10px;
-                 text-align: center;
-                 text-decoration: none;
-                 display: inline-block;
-                 float: left;
-                 border-style: solid;
-                 border-color: black;
+    .logo-row img {
+        width: 60px;
+        height: auto;
+        margin: 0 10px;
+    }
 
+    h1 {
+        font-size: 40px;
+        color: #fff;
+        text-shadow: 3px 3px 6px rgba(0,0,0,0.8);
+        margin-bottom: 30px;
+    }
 
-                 border-width: 2px;
-            }
+    .loginDiv {
+        background-color: #fff;
+        padding: 25px 30px;
+        border-radius: 10px;
+        max-width: 400px;
+        width: 100%;
+        box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.3);
+        text-align: left;
+    }
 
-            .loginDiv a:hover, a:active
-            {
-                 background-color: #FFF;
-                 color: #000;
-            }
+    .loginDiv a:link, .loginDiv a:visited {
+        background-color: #26734d;
+        color: #FFF;
+        padding: 6px 12px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        border: 2px solid black;
+        margin-top: 10px;
+    }
 
-            body
-            {
-                background-image: url("{% static 'loginPage.jpg' %}");
-                background-repeat: no-repeat;
-                background-attachment: fixed;
-                background-size: cover;
-            }
+    .loginDiv a:hover, .loginDiv a:active {
+        background-color: #FFF;
+        color: #000;
+    }
 
-        </style>
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    .submit-row input[type="submit"] {
+        width: 100%;
+        padding: 10px;
+        background-color: #26734d;
+        color: white;
+        border: none;
+        border-radius: 5px;
+    }
+
+    .submit-row input[type="submit"]:hover {
+        background-color: #1e5a3d;
+    }
+
+    .info-note {
+        font-size: 12px;
+        margin-top: 10px;
+        display: block;
+        color: #333;
+    }
+
+    @media (max-width: 480px) {
+        h1 {
+            font-size: 28px;
+        }
+
+        .loginDiv {
+            padding: 20px;
+        }
+    }
+</style>
+
 
     <link rel="stylesheet" type="text/css" href="/static/admin/css/login.css"/>
     <link rel="stylesheet" type="text/css" href="/static/admin/css/responsive.css"/>
@@ -60,69 +114,57 @@
 
     <body>
 
-    <br><br><br>
-    <div style= "text-align: center">
-        <img src= "{% static '\ministry.png' %}" alt= "govt. logo" width=5% height= 10%>
-        <img src= "{% static '\npcbl.png' %}" alt= "npcbl logo" width=5% height= 10%>
-    </div>
+    <div class="page-container">
 
-    <div>
+        <div class="logo-row">
+            <img src="{% static '\ministry.png' %}" alt="govt. logo">
+            <img src="{% static '\npcbl.png' %}" alt="npcbl logo">
+        </div>
 
-        <div class = "loginDiv">
+        <h1>
+            Rooppur Operational Management System<br>(ROMS)
+        </h1>
+
+        <div class="loginDiv">
 
             {% if error %}
-            <input hidden="true" id="error_code" value="{{error}}}">
+                <input hidden="true" id="error_code" value="{{error}}">
             {% endif %}
 
-            <form style= "padding: 10px 30px;" action="" method="post">
-                    {% csrf_token %}
+            <form action="" method="post">
+                {% csrf_token %}
 
-                    <div class="form-group">
+                <div class="form-group">
+                    <label for="id_username">Username:</label>
+                    <input type="text" class="form-control" name="username"
+                        autofocus maxlength="254" required id="id_username"/>
+                </div>
 
-                        <label for="id_username">Username:</label> <input type="text" class="form-control" name="username"
-                                                                                           autofocus maxlength="254"
-                                                                                           required id="id_username"/>
-                    </div>
-                    <div class="form-group">
-
-                        <label for="id_password">Password:</label> <input type="password" class="form-control"
-                                                                                           name="password"
-                                                                                           required id="id_password"/>
-                        <input type="hidden" name="next" value="/"/>
-                    </div>
-
+                <div class="form-group">
+                    <label for="id_password">Password:</label>
+                    <input type="password" class="form-control" name="password"
+                        required id="id_password"/>
+                    <input type="hidden" name="next" value="/"/>
+                </div>
 
                 <div class="submit-row">
-                    <label>&nbsp;</label><input type="submit" value="Log in"
-                                                style= "margin-left: 35%; margin-bottom: 5%; background-color: #26734d;" class="btn btn-success" />
+                    <input type="submit" value="Log in" class="btn btn-success" />
                 </div>
+
             </form>
 
-            <label style="margin-left: 15%; font-size: 12px"><i><b>If you don't have any account, please contact your Division Head</b></i></label>
+            <span class="info-note"><i><b>If you don't have any account, please contact your Division Head</b></i></span>
 
-        </div>
-
-        <div>
-            <h1 style="
-              text-align: center;
-              font-size: 60px;
-              font-weight: bold;
-              color: rgba(255, 255, 255, 255); /* white text, 90% opacity */
-              text-shadow: 4px 4px 4px rgba(0,0,0,0.8);
-            ">
-               Rooppur Operational Management System<br>(ROMS)
-            </h1>
         </div>
 
     </div>
 
-    </body>
     <script>
-            $(document).ready(function(){
-              if(document.getElementById("error_code")){
+        $(document).ready(function(){
+            if(document.getElementById("error_code")){
                 alert("Username & Password Wrong!");
-              }
-            });
+            }
+        });
     </script>
 
 </body>

@@ -87,24 +87,24 @@
 {#                        <a class="nav-link" href="/task_management/milestone_list">All Milestone List</a>#}
 {#                    </li>#}
                     {% if request.user.profile.access_level <= 9 %}
-                        <li class="nav-item">
+                       <!-- <li class="nav-item">
                             <a class="nav-link" href="/task_management/task_list">Task List</a>
-                        </li>
+                        </li> -->
                     {% endif %}
 
                     {% if request.user.profile.access_level > 2 %}
-                        <li class="dropdown">
+                       <!-- <li class="dropdown">
                             <button class="dropbtn nav-link bg-light">My Tasks</button>
                             <div class="dropdown-content">
                                 <a class="nav-link" href="/task_management/my_task">Tasks to Execute</a>
                                 <a class="nav-link" href="/task_management/assigned_task">Tasks to Supervise</a>
                             </div>
-                        </li>
+                        </li> -->
                     {% endif %}
                     {% if request.user.profile.access_level < 5 %}
-                        <li class="nav-item">
+                       <!-- <li class="nav-item">
                             <a class="nav-link" href="/task_management/add_task">Add Task</a>
-                        </li>
+                        </li> -->
                     {% endif %}
                     {% if request.user.profile.access_level <= 3  or perms.task_management.view_secondtierdocumentreview %}
                         <ul class="dropdown" style="margin-left: -3%">
@@ -130,7 +130,7 @@
                         </ul>
                         {% endif %}
 
-                    <li class="dropdown">
+                   <!-- <li class="dropdown">
                         <button class="dropbtn nav-link bg-light">Discussion</button>
                         <div class="dropdown-content">
                             <a class="nav-link" href="/lecture/lecture_list">View Discussions</a>
@@ -138,11 +138,11 @@
                                 <a class="nav-link" href="/lecture/create">Create Discussion</a>
                             {% endif %}
                         </div>
-                    </li>
+                    </li> -->
 
                     {% if request.user.profile.access_level < 2 %}
 
-                        <li class="dropdown">
+                       <!-- <li class="dropdown">
                             <button class="dropbtn nav-link bg-light">Report</button>
                             <div class="dropdown-content">
                                 <a href="/task_management/consultancy_requests">Consultancy Requests</a>
@@ -150,15 +150,15 @@
                                 <a href="/report/consultant_discussion_report">Consultant Discussion Report</a>
                                 <a href="/report/task_distribution">Task Distribution Report</a>
                             </div>
-                        </li>
+                        </li> -->
 
                     {% endif %}
 
-                    <li class="nav-item">
+                 <!--   <li class="nav-item">
                         <a class="nav-link" href="/task_management/task_comment">Task Comment</a>
-                    </li>
+                    </li> -->
 
-                    <li class="dropdown">
+                  <!--  <li class="dropdown">
                         <button class="dropbtn nav-link bg-light">Document Request</button>
                         <div class="dropdown-content">
                             {% if request.user.profile.access_level < 5 %}
@@ -166,12 +166,12 @@
                             {% endif %}
                             <a class="nav-link" href="/document_request/view_my_requests">My Document Requests</a>
                         </div>
-                    </li>
+                    </li> -->
                     {% if request.user.profile.access_level > 2 %}
                         {% if request.user.profile.division.division_name == 'Documentation' %}
-                            <li class="nav-item">
+                         <!--   <li class="nav-item">
                                 <a class="nav-link" href="/document_request/all_requests">Document Requests</a>
-                            </li>
+                            </li> -->
                         {% else %}
                             <ul class="dropdown" >
                             <button class="dropbtn nav-link bg-light" style="margin-left: -5%">Document Review <span class="badge badge-danger">(New)</span></button>
