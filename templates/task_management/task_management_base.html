@@ -102,9 +102,9 @@
                         </li> -->
                     {% endif %}
                     {% if request.user.profile.access_level < 5 %}
-                       <!-- <li class="nav-item">
+                       <li class="nav-item">
                             <a class="nav-link" href="/task_management/add_task">Add Task</a>
-                        </li> -->
+                       </li>
                     {% endif %}
                     {% if request.user.profile.access_level <= 3  or perms.task_management.view_secondtierdocumentreview %}
                         <ul class="dropdown" style="margin-left: -3%">
@@ -158,7 +158,7 @@
                         <a class="nav-link" href="/task_management/task_comment">Task Comment</a>
                     </li> -->
 
-                  <!--  <li class="dropdown">
+                    <li class="dropdown">
                         <button class="dropbtn nav-link bg-light">Document Request</button>
                         <div class="dropdown-content">
                             {% if request.user.profile.access_level < 5 %}
@@ -166,12 +166,12 @@
                             {% endif %}
                             <a class="nav-link" href="/document_request/view_my_requests">My Document Requests</a>
                         </div>
-                    </li> -->
+                    </li>
                     {% if request.user.profile.access_level > 2 %}
                         {% if request.user.profile.division.division_name == 'Documentation' %}
-                         <!--   <li class="nav-item">
+                            <li class="nav-item">
                                 <a class="nav-link" href="/document_request/all_requests">Document Requests</a>
-                            </li> -->
+                            </li>
                         {% else %}
                             <ul class="dropdown" >
                             <button class="dropbtn nav-link bg-light" style="margin-left: -5%">Document Review <span class="badge badge-danger">(New)</span></button>
