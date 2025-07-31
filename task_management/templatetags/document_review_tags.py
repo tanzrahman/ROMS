@@ -36,7 +36,7 @@ def is_chief_eng(user):
 
 @register.filter(name='is_sd')
 def is_sd(user):
-    if(user.username == 'pd@rooppurnpp.gov.bd'):
+    if(user.username == 'md@npcbl.gov.bd'):
         return True
 
 @register.filter(name='extract_version_info')
