@@ -33,14 +33,14 @@ def send_notification(task_id):
     if(task.milestone_id == ""):
         taskID = task.task_id
 
-    msg_body = "You are assigned to {} as Supervisor. Feedback must by login ROMS (https://123.49.52.82:9081) using PMS credentials in 3 days. Activity is under surveillance. -Rooppur Operational Management System (ROMS), NPCBL".format(taskID)
+    msg_body = "You are assigned to {} as Supervisor. Feedback must by login ROMS (https://123.49.52.82:9081) using PMS credentials in 2 days. Activity is under surveillance. -Rooppur Operational Management System (ROMS), NPCBL".format(taskID)
     for supervisor in supervisors:
         print("sending msg to supervisor, ",supervisor.first_name)
         notify = threading.Thread(target=mail_and_send_sms,args=(msg_body,supervisor))
         notify.start()
         sleep(1)
 
-    msg_body = "You are assigned to {} as Executor. Feedback must by login ROMS (https://123.49.52.82:9081) using PMS credentials in 3 days. Activity is under surveillance. -Rooppur Operational Management System (ROMS), NPCBL".format(taskID)
+    msg_body = "You are assigned to {} as Executor. Feedback must by login ROMS (https://123.49.52.82:9081) using PMS credentials in 2 days. Activity is under surveillance. -Rooppur Operational Management System (ROMS), NPCBL".format(taskID)
     for executor in executors:
         print("sending msg to executor, ",executor.first_name)
         notify = threading.Thread(target=mail_and_send_sms, args=(msg_body, executor))
