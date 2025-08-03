@@ -554,7 +554,7 @@ def committee_recomendation(request,id):
                         else:
                             return HttpResponse("Alert! You are not allowed to recommend!")
                     if (recommend_by == 'sd'):
-                        if(request.user.username == 'pd@rooppurnpp.gov.bd'):
+                        if(request.user.username == 'md@npcbl.gov.bd'):
                             committe_rev.sd_approval = approval
                         else:
                             return HttpResponse("Alert! You are not allowed to recommend!")

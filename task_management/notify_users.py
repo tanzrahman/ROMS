@@ -33,14 +33,16 @@ def send_notification(task_id):
     if(task.milestone_id == ""):
         taskID = task.task_id
 
-    msg_body = "You are assigned to {} as Supervisor. Feedback must by login ROMS in 3 days. Activity is under surveillance. -ROMS, NPCBL".format(taskID)
+    msg_body = "You are assigned to {} as Supervisor. Feedback must by login ROMS (https://123.49.52.82:9081) using PMS credentials in 3 days. Activity is under surveillance. -Rooppur Operational Management System (ROMS), NPCBL".format(taskID)
+
     for supervisor in supervisors:
         print("sending msg to supervisor, ",supervisor.first_name)
         notify = threading.Thread(target=mail_and_send_sms,args=(msg_body,supervisor))
         notify.start()
         sleep(1)
 
-    msg_body = "You are assigned to {} as Executor. Feedback must by login ROMS in 3 days. Activity is under surveillance. -ROMS, NPCBL".format(taskID)
+    msg_body = "You are assigned to {} as Executor. Feedback must by login ROMS (https://123.49.52.82:9081) using PMS credentials in 3 days. Activity is under surveillance. -Rooppur Operational Management System (ROMS), NPCBL".format(taskID)
+
     for executor in executors:
         print("sending msg to executor, ",executor.first_name)
         notify = threading.Thread(target=mail_and_send_sms, args=(msg_body, executor))
@@ -59,14 +61,16 @@ def send_notification_non_departmental(task_id):
     if(task.milestone_id == ""):
         taskID = task.task_id
 
-    msg_body = "You are assigned to a new Task as supervisor. Task ID: {}\n\n Rooppur Operational Management System".format(taskID)
+    msg_body = "You are assigned to a new Task as supervisor. Task ID: {}\n\n Rooppur Operational Management System (ROMS)".format(taskID)
+
     for supervisor in supervisors:
         if(supervisor.profile.division!=task.division):
             notify = threading.Thread(target=mail_and_send_sms,args=(msg_body,supervisor))
             notify.start()
         sleep(1)
 
-    msg_body = "You are assigned to a new Task as Executor. Task ID: {}\n\n Rooppur Operational Management System".format(taskID)
+    msg_body = "You are assigned to a new Task as Executor. Task ID: {}\n\n Rooppur Operational Management System (ROMS)".format(taskID)
+
     for executor in executors:
         if (executor.profile.division != task.division):
             notify = threading.Thread(target=mail_and_send_sms, args=(msg_body, executor))
@@ -82,8 +86,10 @@ def send_reassign_notification(task_id,removed_sup,new_sup,removed_exc,new_added
         taskID = task.task_id
 
     user_type = 'Supervisor'
-    assigned_msg_body = "You are assigned to a new Task as {}. Task ID: {}\n\n Rooppur Operational Management System".format(user_type,taskID)
-    removed_msg_body = "You have been removed from a Task {}. Task ID: {}\n\n Rooppur Operational Management System".format(user_type,taskID)
+
+    assigned_msg_body = "You are assigned to a new Task as {}. Task ID: {}\n\n Rooppur Operational Management System (ROMS)".format(user_type,taskID)
+    removed_msg_body = "You have been removed from a Task {}. Task ID: {}\n\n Rooppur Operational Management System (ROMS)".format(user_type,taskID)
+
 
     for each in removed_sup:
         notify = threading.Thread(target=mail_and_send_sms, args=(removed_msg_body,each))
@@ -96,9 +102,11 @@ def send_reassign_notification(task_id,removed_sup,new_sup,removed_exc,new_added
     sleep(1)
 
     user_type = 'Executor'
-    assigned_msg_body = "You are assigned to a new Task as {}. Task ID: {}\n\n Rooppur Operational Management System".format(
+
+    assigned_msg_body = "You are assigned to a new Task as {}. Task ID: {}\n\n Rooppur Operational Management System (ROMS)".format(
         user_type, taskID)
-    removed_msg_body = "You have been removed from a Task {}. Task ID: {}\n\n Rooppur Operational Management System".format(user_type,
+    removed_msg_body = "You have been removed from a Task {}. Task ID: {}\n\n Rooppur Operational Management System (ROMS)".format(user_type,
+
                                                                                                               taskID)
     for each in removed_exc:
         notify = threading.Thread(target=mail_and_send_sms, args=(removed_msg_body,each))
