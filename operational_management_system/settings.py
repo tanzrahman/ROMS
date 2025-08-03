@@ -26,7 +26,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-oi#gpytb7_04j3mbrpd@rj(0d&4l-it(6upc4*xl9ue+#gej2n'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -161,3 +161,11 @@ EMAIL_SENDER = tokens.email_sender
 EMAIL_PASS = tokens.email_sender_pass
 EMAIL_HOST = tokens.email_server
 SMTP_PORT = 587
+
+# Since ROMS & PMS are running under same ip (123.49.52.82) so, browser will set single sessionID, single cokkie_name and single crsf token,
+# while logging into PMS, ROMS will automatically logout and vice versa. So we need to explicitly set SESSION_COOKIE_NAME AND CSRF_TOKEN for both apps,
+# to avoid this issue.
+
+SESSION_COOKIE_NAME = 'roms_sessionid'
+CSRF_COOKIE_NAME = 'roms_csrftoken'
+

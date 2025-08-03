@@ -1,6 +1,7 @@
 psycopg2
-Django
+Django==3.2.16
 pytz
 cryptography
 requests
 six
+xhtml2pdf
