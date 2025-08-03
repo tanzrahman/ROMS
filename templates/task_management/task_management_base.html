@@ -87,9 +87,9 @@
 {#                        <a class="nav-link" href="/task_management/milestone_list">All Milestone List</a>#}
 {#                    </li>#}
                     {% if request.user.profile.access_level <= 9 %}
-                       <!-- <li class="nav-item">
+                        <li class="nav-item">
                             <a class="nav-link" href="/task_management/task_list">Task List</a>
-                        </li> -->
+                        </li>
                     {% endif %}
 
                     {% if request.user.profile.access_level > 2 %}
