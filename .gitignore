@@ -134,3 +134,8 @@ migrations/
 /operational_management_system/ftp_settings.py
 /operational_management_system/settings.py
 /operational_management_system/tokens.py
+/operational_management_system/__pycache__
+/operational_management_system/manpower/__pycache__
+/operational_management_system/task_management/__pycache__
+/operational_management_system/task_management/templatetags/__pycache__
+/operational_management_system/operational_management_system/__pycache__
