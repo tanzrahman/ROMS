@@ -254,51 +254,44 @@
 
     {% block chart %}
 
-        {% if total_milestone > 0 %}
-            <h2 style="text-align: center">Milestone Chart</h2>
-            <br>
+        <h2 style="text-align: center">Document Review Chart</h2>
+        <br>
 
-            <h4 style="text-align: center; color: red">Total Milestone of {{ division }}: {{ total_milestone }}</h4>
+        <h4 style="text-align: center"><i>Total documents to be reviewed: {{ total_documents }}</i></h4>
+        <h5 style="text-align: center"><i>First tier review completed: {{ total_1st_tier_review_count }}</i></h5>
+        <h5 style="text-align: center"><i>Sent Document for committee approval: {{ total_2nd_tier_review_count }}</i></h5>
+        <br>
 
-            <form style="padding: 10px 30px;" action="" method='POST'>
-
-                {% csrf_token %}
-
-                {{ form.as_p }}
-
-                <input style="margin-left: 5%" type="submit" value="Search" class="btn btn-success">
-
-                <br><br>
-
-            </form>
-
-            <div id="chart" style="margin-left: 40%">
-            </div>
-
-        {% endif %}
+        <div id="chart" style="margin-left: 5%; width: 80%">
+        </div>
 
         <script>
-            var options = {
-                series: [{{ not_started }}, {{ completed }}, {{ performed }}],
+            const options = {
                 chart: {
-                    width: 500,
-                    type: 'pie',
+                    type: 'bar',
+                    height: 400
                 },
-                labels: ['Not Started Milestone', 'Completed Milestone', 'Performed Milestone'],
-                responsive: [{
-                    breakpoint: 480,
-                    options: {
-                        chart: {
-                            width: 200
-                        },
-                        legend: {
-                            position: 'bottom'
-                        }
+                series: {{ series|safe }},
+                xaxis: {
+                    categories: {{ categories|safe }}
+                },
+                plotOptions: {
+                    bar: {
+                        horizontal: false,
+                        columnWidth: '40%',
+                        endingShape: 'rounded'
                     }
-                }]
+                },
+                dataLabels: {
+                    enabled: false
+                },
+                tooltip: {
+                    shared: true,
+                    intersect: false
+                }
             };
 
-            var chart = new ApexCharts(document.querySelector("#chart"), options);
+            const chart = new ApexCharts(document.querySelector("#chart"), options);
             chart.render();
         </script>
 

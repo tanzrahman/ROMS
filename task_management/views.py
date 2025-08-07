@@ -20,6 +20,8 @@ from task_management.manage_tasks import *
 from task_management.qa_handler import add_question_answer,edit_answer,executor_feedback,supervisor_feedback, ongoing_executor_feedback
 from task_management.manage_tasks import add_task_consultant, consultant_task_feedback_add_comment, request_consultancy
 from time import sleep
+from django.db.models import Count
+
 # Create your views here.
 def homepage(request):
 
@@ -31,50 +33,57 @@ def homepage(request):
         return redirect('/consultant')
 
     context = {}
-    total_milestone = 0
+    total_documents = 0
 
-    if(request.method == 'POST'):
-        form = DivisionSelectionForm(request.POST)
-        if(form.is_valid()):
-            division = form.cleaned_data['division']
-            if(division == None):
-                division = 'All Divisions'
-            print(division)
+    division = 'All Divisions'
+    total_documents = Task.objects.filter(task_category='DocumentReview').count()
 
-            if(division != "All Divisions"):
+    op_doc = len(OperationalDocumentReview.objects.all())
+    regulation_doc = len(RegulationDocumentReview.objects.all())
+    fire_doc = len(FireAndEmergencyDocumentReview.objects.all())
+    other_doc = len(OthersDocumentReview.objects.all())
 
-                total_milestone = Milestone.objects.filter(division=division).count()
-                not_started = Milestone.objects.filter(division=division).filter(status='NotStarted').count()
+    total_1st_tier_review_count = op_doc + regulation_doc + fire_doc + other_doc
 
-                completed = Milestone.objects.filter(division=division).filter(status='Completed').count()
+    divisions = Division.objects.all()
+    total_doc_review = {}
+    first_tier_doc_review = {}
+    second_tier_doc_review = {}
 
-                performed = Milestone.objects.filter(division=division).filter(status='Performed').count()
+    for division in divisions:
+        total_doc_review.update({str(division): Task.objects.filter(division=division).filter(task_category='DocumentReview').count()})
 
-            else:
-                total_milestone = Milestone.objects.all().count()
-                not_started = Milestone.objects.filter(status='NotStarted').count()
+        first_tier_doc_review_count = len(OperationalDocumentReview.objects.filter(task__division=division)) + len(RegulationDocumentReview.objects.filter(task__division=division)) \
+                              + len(FireAndEmergencyDocumentReview.objects.filter(task__division=division)) + len(OthersDocumentReview.objects.filter(task__division=division))
 
-                completed = Milestone.objects.filter(status='Completed').count()
-                performed = Milestone.objects.filter(status='Performed').count()
+        first_tier_doc_review.update({str(division): first_tier_doc_review_count})
 
-    else:
-        division = 'All Divisions'
-        total_milestone = Milestone.objects.all().count()
-        not_started = Milestone.objects.filter(status='NotStarted').count()
+        second_tier_doc_review_count = len(SecondTierDocumentReview.objects.filter(task__division=division).annotate(count=Count('committee_approval')).order_by('-count'))
+        second_tier_doc_review.update({str(division): second_tier_doc_review_count})
 
-        completed = Milestone.objects.filter(status='Completed').count()
-        performed = Milestone.objects.filter(status='Performed').count()
+        total_2nd_tier_review_count = len(SecondTierDocumentReview.objects.all().annotate(count=Count('committee_approval')).order_by('-count'))
 
-    form = DivisionSelectionForm()
+    categories = [str(key) for key in first_tier_doc_review.keys()]  # both dicts have same keys in same order
+    print(categories)
+
+    # Extract values based on the same key order
+    total_doc = [total_doc_review[each] for each in categories]
+    first_tier_doc = [first_tier_doc_review[each] for each in categories]
+    second_tier_doc = [second_tier_doc_review[each] for each in categories]
+
+    series = [
+        #{'name': 'Total documents', 'data': total_doc},
+        {'name': '1st tier review', 'data': first_tier_doc},
+        {'name': '2nd tier review', 'data': second_tier_doc},
+    ]
 
     context = {
-                'total_milestone': total_milestone,
-                'not_started': not_started,
-                'completed': completed,
-                'performed': performed,
-                'form': form,
-                'division': division,
-                'show_notification':True
+                'total_1st_tier_review_count': total_1st_tier_review_count,
+                'total_2nd_tier_review_count': total_2nd_tier_review_count,
+                'total_documents': total_documents,
+                'show_notification': True,
+                'categories': categories,
+                'series': series,
                 }
 
     return render(request, 'task_management/task_management_base.html', context)
