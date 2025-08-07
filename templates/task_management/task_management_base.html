@@ -102,9 +102,11 @@
                         </li> -->
                     {% endif %}
                     {% if request.user.profile.access_level < 5 %}
+
                        <li class="nav-item">
                             <a class="nav-link" href="/task_management/add_task">Add Task</a>
                        </li>
+
                     {% endif %}
                     {% if request.user.profile.access_level <= 3  or perms.task_management.view_secondtierdocumentreview %}
                         <ul class="dropdown" style="margin-left: -3%">
@@ -142,7 +144,7 @@
 
                     {% if request.user.profile.access_level < 2 %}
 
-                       <!-- <li class="dropdown">
+                        <li class="dropdown">
                             <button class="dropbtn nav-link bg-light">Report</button>
                             <div class="dropdown-content">
                                 <a href="/task_management/consultancy_requests">Consultancy Requests</a>
@@ -150,7 +152,7 @@
                                 <a href="/report/consultant_discussion_report">Consultant Discussion Report</a>
                                 <a href="/report/task_distribution">Task Distribution Report</a>
                             </div>
-                        </li> -->
+                        </li>
 
                     {% endif %}
 

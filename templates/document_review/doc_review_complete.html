@@ -133,7 +133,7 @@
                         <td>{{ each.remarks|remarks_display_str }}</td>
                         <td style="margin-top:5%">
                             <img id="signature_{{ forloop.counter }}" height="40" width="100"
-                                 src="https://{{ host }}/manpower/user/embedd_signature?hash={{ each.sign_hash }}">
+                                 src="http://{{ host }}/manpower/user/embedd_signature?hash={{ each.sign_hash }}">
                             <br>
                             {{ each.signed_on }}
                         </td>
@@ -151,7 +151,7 @@
                     <td style="margin-top:5%">
                         {% if committee_rev.division_head_approval.sign_hash %}
                             <img id="signature" height="40" width="100"
-                                 src="https://{{ host }}/manpower/user/embedd_signature?hash={{ committee_rev.division_head_approval.sign_hash }}">
+                                 src="http://{{ host }}/manpower/user/embedd_signature?hash={{ committee_rev.division_head_approval.sign_hash }}">
                             <br>
                             {{ committee_rev.division_head_approval.signed_on }}
                         {% endif %}
@@ -170,7 +170,7 @@
                     <td style="margin-top:5%">
                         {% if committee_rev.chief_eng_approval.sign_hash %}
                             <img id="signature" height="40" width="100"
-                                 src="https://{{ host }}/manpower/user/embedd_signature?hash={{ committee_rev.chief_eng_approval.sign_hash }}">
+                                 src="http://{{ host }}/manpower/user/embedd_signature?hash={{ committee_rev.chief_eng_approval.sign_hash }}">
                             <br>
                             {{ committee_rev.chief_eng_approval.signed_on }}
                         {% endif %}
@@ -188,7 +188,7 @@
                     <td style="margin-top:5%">
                         {% if committee_rev.sd_approval.sign_hash %}
                             <img id="signature" height="40" width="100"
-                                 src="https://{{ host }}/manpower/user/embedd_signature?hash={{ committee_rev.sd_approval.sign_hash }}">
+                                 src="http://{{ host }}/manpower/user/embedd_signature?hash={{ committee_rev.sd_approval.sign_hash }}">
                             <br>
                             {{ committee_rev.sd_approval.signed_on }}
                         {% endif %}

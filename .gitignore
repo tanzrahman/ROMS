@@ -2,6 +2,8 @@
 __pycache__/
 *.py[cod]
 *$py.class
+*.pyc
+.idea/
 
 # C extensions
 *.so
@@ -138,4 +140,4 @@ migrations/
 /operational_management_system/manpower/__pycache__
 /operational_management_system/task_management/__pycache__
 /operational_management_system/task_management/templatetags/__pycache__
-/operational_management_system/operational_management_system/__pycache__
+/operational_management_system/operational_management_system/__pycache__-e "*.pyc\n__pycache__/\n.idea/\n*.log\n.env\nvenv/" 
