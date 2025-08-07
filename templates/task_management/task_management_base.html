@@ -253,17 +253,18 @@
     {% endblock %}
 
     {% block chart %}
+        {% if request.path == '/' %}
+            <h2 style="text-align: center">Document Review Chart</h2>
+            <br>
 
-        <h2 style="text-align: center">Document Review Chart</h2>
-        <br>
+            <h4 style="text-align: center"><i>Total documents to be reviewed: {{ total_documents }}</i></h4>
+            <h5 style="text-align: center"><i>First tier review completed: {{ total_1st_tier_review_count }}</i></h5>
+            <h5 style="text-align: center"><i>Sent Document for committee approval: {{ total_2nd_tier_review_count }}</i></h5>
+            <br>
 
-        <h4 style="text-align: center"><i>Total documents to be reviewed: {{ total_documents }}</i></h4>
-        <h5 style="text-align: center"><i>First tier review completed: {{ total_1st_tier_review_count }}</i></h5>
-        <h5 style="text-align: center"><i>Sent Document for committee approval: {{ total_2nd_tier_review_count }}</i></h5>
-        <br>
-
-        <div id="chart" style="margin-left: 5%; width: 80%">
-        </div>
+            <div id="chart" style="margin-left: 5%; width: 80%">
+            </div>
+        {% endif %}
 
         <script>
             const options = {
