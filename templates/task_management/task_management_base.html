@@ -172,7 +172,7 @@
                     {% if request.user.profile.access_level > 2 %}
                         {% if request.user.profile.division.division_name == 'Documentation' %}
                             <li class="nav-item">
-                                <a class="nav-link" href="/document_request/all_requests">Document Requests</a>
+                                <a class="nav-link" href="/document_request/all_requests">Document Requests to Deliver</a>
                             </li>
                         {% else %}
                             <ul class="dropdown" >

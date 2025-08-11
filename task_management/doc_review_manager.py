@@ -266,6 +266,30 @@ def show_doc_review_feedbacks(request,id):
     all_reviews = list(op_doc) + list(regulation_doc) + list(fire_doc) + list(other_doc)
     total_reviews = len(all_reviews)
 
+    # for download list as csv
+    if (request.GET.get('download')):
+        if (request.GET.get('download') == 'excel'):
+            print("Send CSV report")
+            response = HttpResponse(content_type='text/csv')
+            response['Content-Disposition'] = 'attachment; filename="1st_tier_list.csv"'
+            writer = csv.writer(response)
+            writer.writerow(
+                ["Document ID", "Title", "Final Submission", "Division", "Review By", "Feedback Date", "Last Updated"])
+            for each in all_reviews:
+                row = []
+                row.append(each.task)
+                row.append(each.task.title)
+                if (each.approval_level > 1):
+                    row.append("Yes")
+                else:
+                    row.append("No")
+                row.append(each.task.division)
+                row.append(each.user)
+                row.append(each.created_at)
+                row.append(each.modified_at)
+                writer.writerow(row)
+            return response
+
     paginator = Paginator(all_reviews, no_of_items)
 
     if(request.GET.get('page_no')):
@@ -363,6 +387,41 @@ def second_tier_doc_review_list(request, action=None, id=None):
         doc_list = SecondTierDocumentReview.objects.all().annotate(count=Count('committee_approval')).order_by('-count')
 
     total_reviews = len(doc_list)
+
+    # for download list as excel
+    if (request.GET.get('download')):
+        if (request.GET.get('download') == 'excel'):
+            print("Send CSV report")
+            response = HttpResponse(content_type='text/csv')
+            response['Content-Disposition'] = 'attachment; filename="committee_recommendation_list.csv"'
+            writer = csv.writer(response)
+            writer.writerow(
+                ["Task", "Title", "Division", "Department/Shop", "Committee", "Assigned Date", "Deadline",
+                 "Div Head Recommendation", "CE Recommendation", "SD Recommendation"])
+            for each in doc_list:
+                row = []
+                row.append(each.task)
+                row.append(each.task.title)
+                row.append(each.task.division)
+                row.append(each.task.dept_id)
+                row.append(each.committee)
+                row.append(each.assigned_date)
+                row.append(each.committee_deadline)
+                if(each.division_head_approval == None):
+                    row.append("")
+                else:
+                    row.append(each.division_head_approval.remarks)
+                if(each.chief_eng_approval == None):
+                    row.append("")
+                else:
+                    row.append(each.chief_eng_approval.remarks)
+                if(each.sd_approval == None):
+                    row.append("")
+                else:
+                    row.append(each.sd_approval.remarks)
+                writer.writerow(row)
+            return response
+
 
     paginator = Paginator(doc_list, no_of_items)
 
