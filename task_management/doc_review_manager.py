@@ -382,9 +382,9 @@ def second_tier_doc_review_list(request, action=None, id=None):
                         filter_list.append(Q(**{'sd_approval__isnull': value}))
 
     if (len(filter_list) > 0):
-        doc_list = SecondTierDocumentReview.objects.filter(assigned_date__gt='2023-07-31').filter(reduce(operator.and_, filter_list)).annotate(count=Count('committee_approval')).order_by('-count')
+        doc_list = SecondTierDocumentReview.objects.filter(assigned_date__gt='2025-07-31').filter(reduce(operator.and_, filter_list)).annotate(count=Count('committee_approval')).order_by('-count')
     else:
-        doc_list = SecondTierDocumentReview.objects.filter(assigned_date__gt='2023-07-31').annotate(count=Count('committee_approval')).order_by('-count')
+        doc_list = SecondTierDocumentReview.objects.filter(assigned_date__gt='2025-07-31').annotate(count=Count('committee_approval')).order_by('-count')
 
     total_reviews = len(doc_list)
 
