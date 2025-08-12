@@ -382,9 +382,9 @@ def second_tier_doc_review_list(request, action=None, id=None):
                         filter_list.append(Q(**{'sd_approval__isnull': value}))
 
     if (len(filter_list) > 0):
-        doc_list = SecondTierDocumentReview.objects.filter(assigned_date__gt='2025-07-31').filter(reduce(operator.and_, filter_list)).annotate(count=Count('committee_approval')).order_by('-count')
+        doc_list = SecondTierDocumentReview.objects.filter(assigned_date__gt='2023-07-31').filter(reduce(operator.and_, filter_list)).annotate(count=Count('committee_approval')).order_by('-count')
     else:
-        doc_list = SecondTierDocumentReview.objects.filter(assigned_date__gt='2025-07-31').annotate(count=Count('committee_approval')).order_by('-count')
+        doc_list = SecondTierDocumentReview.objects.filter(assigned_date__gt='2023-07-31').annotate(count=Count('committee_approval')).order_by('-count')
 
     total_reviews = len(doc_list)
 
@@ -608,7 +608,7 @@ def committee_recomendation(request,id):
                     if(recommend_by == 'div_head'):
                         committe_rev.division_head_approval = approval
                     if (recommend_by == 'chief_eng'):
-                        if(request.user.username == 'hasmat.ali782@rooppurnpp.gov.bd'):
+                        if(request.user.username == ''):
                             committe_rev.chief_eng_approval = approval
                         else:
                             return HttpResponse("Alert! You are not allowed to recommend!")
@@ -889,7 +889,7 @@ def change_document_recommendation(request, id):
 def second_tier_all_approve(request, id):
     user = request.user
     st_review = SecondTierDocumentReview.objects.filter(division_head_approval__isnull=False)
-    if(user.username == 'hasmat.ali782@rooppurnpp.gov.bd' or user.username == 'pd@rooppurnpp.gov.bd'):
+    if(user.username == 'tanziar.rahman523@rooppurnpp.gov.bd' or 'hasmat.ali782@rooppurnpp.gov.bd' or user.username == 'pd@rooppurnpp.gov.bd'):
         count = 1
         for each in st_review:
             if(each.committee_approval.count()<1):

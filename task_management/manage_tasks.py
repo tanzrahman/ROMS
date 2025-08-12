@@ -346,7 +346,7 @@ def task_list(request):
             'monthly_tasks':task_list.filter(planned_start_date__year=datetime.datetime.today().year, planned_start_date__month=datetime.datetime.today().month).count()
         }
     else:
-        task_list = Task.objects.filter(created_date__gt='2025-07-31').filter(percent_completed__lt=100)
+        task_list = Task.objects.filter(created_date__gt='2025-07-31')
 
     #get feedback report
     total_feedback = TaskFeedBack.objects.filter(task__in=task_list)
