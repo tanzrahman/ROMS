@@ -279,7 +279,7 @@ def task_list(request):
 
     no_of_items = 100
     search_form = AllTaskSearchForm(initial={'user':request.user})
-    total_tasks = Task.objects.filter(created_date__gt='2025-07-31').filter(percent_completed__lt=100).count()
+    total_tasks = Task.objects.filter(created_date__gt='2025-07-31').count()
     total_monthly_tasks = Task.objects.filter(created_date__gt='2025-07-31').filter(planned_start_date__year=datetime.datetime.today().year, planned_start_date__month=datetime.datetime.today().month).count()
 
     filters = []
