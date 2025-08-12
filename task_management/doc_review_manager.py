@@ -244,23 +244,23 @@ def show_doc_review_feedbacks(request,id):
                     filter_list.append(Q(**{each + "__in": search_form.cleaned_data[each]}))
 
     if (len(filter_list) > 0):
-        op_doc = OperationalDocumentReview.objects.filter(reduce(operator.and_, filter_list))
+        op_doc = OperationalDocumentReview.objects.filter(created_at__gt='2025-07-31').filter(reduce(operator.and_, filter_list))
         total_op_doc = len(op_doc)
-        regulation_doc = RegulationDocumentReview.objects.filter(reduce(operator.and_, filter_list))
+        regulation_doc = RegulationDocumentReview.objects.filter(created_at__gt='2025-07-31').filter(reduce(operator.and_, filter_list))
         total_reg_doc = len(regulation_doc)
-        fire_doc = FireAndEmergencyDocumentReview.objects.filter(reduce(operator.and_, filter_list))
+        fire_doc = FireAndEmergencyDocumentReview.objects.filter(created_at__gt='2025-07-31').filter(reduce(operator.and_, filter_list))
         total_fire_doc = len(fire_doc)
-        other_doc = OthersDocumentReview.objects.filter(reduce(operator.and_, filter_list))
+        other_doc = OthersDocumentReview.objects.filter(created_at__gt='2025-07-31').filter(reduce(operator.and_, filter_list))
         total_other_doc = len(other_doc)
 
     else:
-        op_doc = OperationalDocumentReview.objects.all()
+        op_doc = OperationalDocumentReview.objects.filter(created_at__gt='2025-07-31')
         total_op_doc = len(op_doc)
-        regulation_doc = RegulationDocumentReview.objects.all()
+        regulation_doc = RegulationDocumentReview.objects.filter(created_at__gt='2025-07-31')
         total_reg_doc = len(regulation_doc)
-        fire_doc = FireAndEmergencyDocumentReview.objects.all()
+        fire_doc = FireAndEmergencyDocumentReview.objects.filter(created_at__gt='2025-07-31')
         total_fire_doc = len(fire_doc)
-        other_doc = OthersDocumentReview.objects.all()
+        other_doc = OthersDocumentReview.objects.filter(created_at__gt='2025-07-31')
         total_other_doc = len(other_doc)
 
     all_reviews = list(op_doc) + list(regulation_doc) + list(fire_doc) + list(other_doc)
@@ -382,9 +382,9 @@ def second_tier_doc_review_list(request, action=None, id=None):
                         filter_list.append(Q(**{'sd_approval__isnull': value}))
 
     if (len(filter_list) > 0):
-        doc_list = SecondTierDocumentReview.objects.filter(reduce(operator.and_, filter_list)).annotate(count=Count('committee_approval')).order_by('-count')
+        doc_list = SecondTierDocumentReview.objects.filter(assigned_date__gt='2025-07-31').filter(reduce(operator.and_, filter_list)).annotate(count=Count('committee_approval')).order_by('-count')
     else:
-        doc_list = SecondTierDocumentReview.objects.all().annotate(count=Count('committee_approval')).order_by('-count')
+        doc_list = SecondTierDocumentReview.objects.filter(assigned_date__gt='2025-07-31').annotate(count=Count('committee_approval')).order_by('-count')
 
     total_reviews = len(doc_list)
 
@@ -447,8 +447,8 @@ def second_tier_doc_review_list(request, action=None, id=None):
 
 def second_tier_doc_review(request, action=None, id=None):
 
-    doc_list = SecondTierDocumentReview.objects.filter(committee__members=request.user)
-    doc_list_as_head = SecondTierDocumentReview.objects.filter(committee__div_head=request.user)
+    doc_list = SecondTierDocumentReview.objects.filter(assigned_date__gt='2025-07-31').filter(committee__members=request.user)
+    doc_list_as_head = SecondTierDocumentReview.objects.filter(assigned_date__gt='2025-07-31').filter(committee__div_head=request.user)
 
     total_reviews = len(doc_list)+len(doc_list_as_head)
 

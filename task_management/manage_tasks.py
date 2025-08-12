@@ -279,8 +279,8 @@ def task_list(request):
 
     no_of_items = 100
     search_form = AllTaskSearchForm(initial={'user':request.user})
-    total_tasks = Task.objects.filter(percent_completed__lt=100).count()
-    total_monthly_tasks = Task.objects.filter(planned_start_date__month=datetime.datetime.today().month).count()
+    total_tasks = Task.objects.filter(created_date__gt='2025-07-31').filter(percent_completed__lt=100).count()
+    total_monthly_tasks = Task.objects.filter(created_date__gt='2025-07-31').filter(planned_start_date__year=datetime.datetime.today().year, planned_start_date__month=datetime.datetime.today().month).count()
 
     filters = []
 
@@ -340,13 +340,13 @@ def task_list(request):
         filters.append(Q(**{'division':request.user.profile.division}))
 
     if (len(filters) > 0):
-        task_list = Task.objects.filter(reduce(operator.and_, filters))
+        task_list = Task.objects.filter(created_date__gt='2025-07-31').filter(reduce(operator.and_, filters))
         search_summary= {
             'total_tasks':task_list.count(),
-            'monthly_tasks':task_list.filter(planned_start_date__month=datetime.datetime.today().month).count()
+            'monthly_tasks':task_list.filter(planned_start_date__year=datetime.datetime.today().year, planned_start_date__month=datetime.datetime.today().month).count()
         }
     else:
-        task_list = Task.objects.filter(percent_completed__lt=100)
+        task_list = Task.objects.filter(created_date__gt='2025-07-31').filter(percent_completed__lt=100)
 
     #get feedback report
     total_feedback = TaskFeedBack.objects.filter(task__in=task_list)
@@ -418,8 +418,8 @@ def task_list(request):
         'feedback_summary': feedback_summary
     })
     if(request.user.profile.access_level<=4):
-        context.update({'user_can_reassign_task':True})
-    return render(request,'task_management/all_task_list.html', context)
+        context.update({'user_can_reassign_task': True})
+    return render(request, 'task_management/all_task_list.html', context)
 
 
 def started_task_list(request):

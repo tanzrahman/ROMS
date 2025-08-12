@@ -299,14 +299,14 @@ def my_task_list(request):
                 else:
                     filters.append(Q(**{each: search_form.cleaned_data[each]}))
 
-    assigned_task = Task.objects.filter(task_executor=request.user).order_by('planned_start_date')
+    assigned_task = Task.objects.filter(created_date__gt='2025-07-31').filter(task_executor=request.user).order_by('planned_start_date')
     total_assigned_task = assigned_task.count()
 
-    monthly_assigned = Task.objects.filter(task_executor=request.user).filter(planned_start_date__month=datetime.datetime.today().month).count()
+    monthly_assigned = Task.objects.filter(task_executor=request.user).filter(created_date__gt='2025-07-31').filter(planned_start_date__year=datetime.datetime.today().year, planned_start_date__month=datetime.datetime.today().month).count()
 
     src_total_assigned_task = 0
     if (len(filters) > 0):
-        assigned_task = Task.objects.filter(task_executor=request.user).filter(reduce(operator.and_, filters))
+        assigned_task = Task.objects.filter(created_date__gt='2025-07-31').filter(task_executor=request.user).filter(reduce(operator.and_, filters))
         src_total_assigned_task = assigned_task.count()
 
     assigned_task = assigned_task.exclude(task_category='DocumentReview')
@@ -383,15 +383,15 @@ def assigned_task(request):
                 else:
                     filters.append(Q(**{each: search_form.cleaned_data[each]}))
 
-    assigned_task = Task.objects.filter(supervisor=request.user).order_by('planned_start_date')
+    assigned_task = Task.objects.filter(created_date__gt='2025-07-31').filter(supervisor=request.user).order_by('planned_start_date')
     total_assigned_task = assigned_task.count()
 
-    monthly_assigned = Task.objects.filter(supervisor=request.user).filter(
-         planned_start_date__month=datetime.datetime.today().month).count()
+    monthly_assigned = Task.objects.filter(supervisor=request.user).filter(created_date__gt='2025-07-31').filter(
+         planned_start_date__year=datetime.datetime.today().year, planned_start_date__month=datetime.datetime.today().month).count()
 
     src_total_assigned_task = 0
     if (len(filters) > 0):
-        assigned_task = Task.objects.filter(supervisor=request.user).filter(reduce(operator.and_, filters))
+        assigned_task = Task.objects.filter(created_date__gt='2025-07-31').filter(supervisor=request.user).filter(reduce(operator.and_, filters))
         src_total_assigned_task = assigned_task.count()
 
     paginator = Paginator(assigned_task, no_of_items)
