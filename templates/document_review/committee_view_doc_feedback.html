@@ -55,11 +55,11 @@
                     {% endif %}
                     {% if request.user ==  committee_rev.committee.div_head%}
                         <a href="/task_management/document_review/recommend/{{ committee_rev.id }}?category={{ committee_rev.category }}&recommendation_by=div_head"
-                           class="btn btn-info">Recommend Document for Approve or Review</a>
+                           class="btn btn-info">Recommend Document for Approve or Review as Divisional Head</a>
                     {% endif %}
                     {% if request.user|is_chief_eng  %}
                         <a href="/task_management/document_review/recommend/{{ committee_rev.id }}?category={{ committee_rev.category }}&recommendation_by=chief_eng"
-                           class="btn btn-info">Recommend Document for Approve or Review</a>
+                           class="btn btn-info">Recommend Document for Approve or Review as Chief Superintendent</a>
                     {% endif %}
                     {% if request.user|is_sd  %}
                         <a href="/task_management/document_review/recommend/{{ committee_rev.id }}?category={{ committee_rev.category }}&recommendation_by=sd"
@@ -129,7 +129,7 @@
                     </tr>
 
                     <tr>
-                        <td>{{ committee_rev.chief_eng_approval.signed_by }} <br>(Chief Engineer)</td>
+                        <td>{{ committee_rev.chief_eng_approval.signed_by }} <br>(Chief Superintendent)</td>
                         <td>{{ committee_rev.chief_eng_approval.signed_on }}</td>
                         <td>
                             {{ committee_rev.chief_eng_approval.remarks|remarks_display_str }}

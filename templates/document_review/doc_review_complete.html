@@ -160,9 +160,9 @@
 
                 <tr>
                     <td>
-
+                        {{ committee_rev.chief_eng_approval.signed_by.get_full_name }}
                         <br>
-                        Chief Engineer
+                        Chief Superintendent
                     </td>
                     <td>
                         {{ committee_rev.chief_eng_approval.remarks|remarks_display_str }}
@@ -178,7 +178,7 @@
                 </tr>
                 <tr>
                     <td>
-                        Dr. Md. Zahedul Hassan
+                        {{ committee_rev.sd_approval.signed_by.get_full_name }}
                         <br>
                         Station Director
                     </td>

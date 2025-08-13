@@ -119,15 +119,15 @@
                                         <a class="nav-link" href="/task_management/document_review/second_tier_doc_review_list">Second Tier Feedback</a>
                                     </div>
                                 </li>
+                            {% if perms.task_management.change_safetyanalysisreportreview %}
                                 <li class="dropdown">
                                     <button class="dropbtn nav-link bg-info small">Safety Analysis Report Review</button>
                                     <div class="fa-medium small" style="padding-left: 5%">
-                                        {% if perms.task_management.change_safetyanalysisreportreview %}
                                             <a class="nav-link" href="/task_management/document_review/view_sar_indv_report_list">View Individual Reports</a>
                                             <a class="nav-link" href="/task_management/document_review/view_sar_comt_report_list">View Committee Reports</a>
-                                        {% endif %}
                                     </div>
                                 </li>
+                            {% endif %}
                             </div>
                         </ul>
                         {% endif %}

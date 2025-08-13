@@ -31,7 +31,7 @@ def get_sar_committee_report(committee):
 
 @register.filter(name='is_chief_eng')
 def is_chief_eng(user):
-    if(user.username == ''):
+    if(user.username == 'mushfika.ahmed538@rooppurnpp.gov.bd'):
         return True
 
 @register.filter(name='is_sd')

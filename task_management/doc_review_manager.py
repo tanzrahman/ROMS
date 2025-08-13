@@ -608,7 +608,7 @@ def committee_recomendation(request,id):
                     if(recommend_by == 'div_head'):
                         committe_rev.division_head_approval = approval
                     if (recommend_by == 'chief_eng'):
-                        if(request.user.username == ''):
+                        if(request.user.username == 'mushfika.ahmed538@rooppurnpp.gov.bd'):
                             committe_rev.chief_eng_approval = approval
                         else:
                             return HttpResponse("Alert! You are not allowed to recommend!")
