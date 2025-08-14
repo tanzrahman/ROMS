@@ -337,12 +337,12 @@ def provide_doc_request(request, task_id=None, doc_request_id=None):
 
 def send_mail_for_doc_request(doc_req):
     # TODO: implement email sending to Documentation division for document
-    msg_body = ("Document reqeust received from user: {} for documents {}, Remarks: {}. Please provide the documents to the mentioned email. -RNPP PMS").format(doc_req.requested_by,doc_req.requested_documents,doc_req.requester_remarks)
+    msg_body = ("Document reqeust received from user: {} for documents {}, Remarks: {}. Please provide the documents to the mentioned email. -ROMS").format(doc_req.requested_by,doc_req.requested_documents,doc_req.requester_remarks)
     subject = "Document Request"
 
     if(doc_req.requested_by.profile.division.division_name == 'Consultancy'):
         msg_body = (
-            "Document reqeust received from Consultant: {} for documents {}. Remarks: {}. \n\nPlease provide the documents in Printed Format. -RNPP PMS").format(
+            "Document reqeust received from Consultant: {} for documents {}. Remarks: {}. \n\nPlease provide the documents in Printed Format. -ROMS").format(
             doc_req.requested_by, doc_req.requested_documents, doc_req.requester_remarks)
         subject = "Printed Document Request from Consultant"
 

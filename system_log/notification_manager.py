@@ -22,7 +22,7 @@ def notification_handler(request,action=None,id=None):
 
 def show_all_notification(request, action=None, id=None):
 
-    if(request.user.username=='pd@rooppurnpp.gov.bd'):
+    if(request.user.username=='md@npcbl.gov.bd'):
         page_no = 1
 
         if (request.GET.get('page_no')):
@@ -42,7 +42,7 @@ def show_all_notification(request, action=None, id=None):
         except EmptyPage:
             dm_list = paginator.page(paginator.num_pages)
 
-        return render(request, 'dm_list_pd.html', {'dm_list': dm_list})
+        return render(request, 'dm_list_md.html', {'dm_list': dm_list})
 
     notifications = MailAndSMSLog.objects.filter(receiver=request.user).order_by('send_time')
     notification_list = []
@@ -80,4 +80,4 @@ def reply_notification(request,action=None,id=None):
             dm.created_at = datetime.datetime.now()
             dm.save()
             context.update({'success':True})
-    return render(request,'dm_to_pd.html',context)
+    return render(request, 'dm_to_md.html', context)
