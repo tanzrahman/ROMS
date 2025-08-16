@@ -80,7 +80,7 @@
         {% endwith %}
     {% endif %}
     <div>
-        <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom py-sm-0">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark border-bottom py-sm-0">
             <div class="collapse navbar-collapse">
                 <ul class="navbar-nav mr-auto">
 {#                    <li class="nav-item">#}
@@ -106,25 +106,24 @@
                        <li class="nav-item">
                             <a class="nav-link" href="/task_management/add_task">Add Task</a>
                        </li>
-
                     {% endif %}
                     {% if request.user.profile.access_level <= 3  or perms.task_management.view_secondtierdocumentreview %}
                         <ul class="dropdown" style="margin-left: -3%">
-                            <button class="dropbtn nav-link bg-light">View Document Reviews</button>
+                            <button class="dropbtn nav-link bg-dark">View Document Reviews</button>
                             <div class="dropdown-content">
                                 <li class="dropdown">
-                                    <button class="dropbtn nav-link bg-info small">Operational Document Reviews</button>
-                                    <div class="fa-medium small" style="padding-left: 5%">
-                                        <a class="nav-link" href="/task_management/document_review/list_review_report">First Tier Feedback</a>
-                                        <a class="nav-link" href="/task_management/document_review/second_tier_doc_review_list">Second Tier Feedback</a>
+                                    <button class="dropbtn bg-info small">Operational Document Reviews</button>
+                                    <div class="fa-medium small nav-link">
+                                        <a href="/task_management/document_review/list_review_report">First Tier Feedback</a>
+                                        <a href="/task_management/document_review/second_tier_doc_review_list">Second Tier Feedback</a>
                                     </div>
                                 </li>
                             {% if perms.task_management.change_safetyanalysisreportreview %}
                                 <li class="dropdown">
-                                    <button class="dropbtn nav-link bg-info small">Safety Analysis Report Review</button>
-                                    <div class="fa-medium small" style="padding-left: 5%">
-                                            <a class="nav-link" href="/task_management/document_review/view_sar_indv_report_list">View Individual Reports</a>
-                                            <a class="nav-link" href="/task_management/document_review/view_sar_comt_report_list">View Committee Reports</a>
+                                    <button class="dropbtn bg-info small">Safety Analysis Report Review</button>
+                                    <div class="fa-medium small nav-link">
+                                        <a href="/task_management/document_review/view_sar_indv_report_list">View Individual Reports</a>
+                                        <a href="/task_management/document_review/view_sar_comt_report_list">View Committee Reports</a>
                                     </div>
                                 </li>
                             {% endif %}
@@ -145,7 +144,7 @@
                     {% if request.user.profile.access_level < 2 %}
 
                         <li class="dropdown">
-                            <button class="dropbtn nav-link bg-light">Report</button>
+                            <button class="dropbtn nav-link bg-dark">Report</button>
                             <div class="dropdown-content">
                                 <a href="/task_management/consultancy_requests">Consultancy Requests</a>
                                 <a href="/report/consultant_tasks_report">Consultant Task Report</a>
@@ -161,12 +160,12 @@
                     </li> -->
 
                     <li class="dropdown">
-                        <button class="dropbtn nav-link bg-light">Document Request</button>
+                        <button class="dropbtn nav-link bg-dark">Document Request</button>
                         <div class="dropdown-content">
                             {% if request.user.profile.access_level < 5 %}
-                                <a class="nav-link" href="/document_request/pending_requests">Pending Document Requests to Approve</a>
+                                <a href="/document_request/pending_requests">Pending Document Requests to Approve</a>
                             {% endif %}
-                            <a class="nav-link" href="/document_request/view_my_requests">My Document Requests</a>
+                            <a href="/document_request/view_my_requests">My Document Requests</a>
                         </div>
                     </li>
                     {% if request.user.profile.access_level > 2 %}
@@ -176,25 +175,25 @@
                             </li>
                         {% else %}
                             <ul class="dropdown" >
-                            <button class="dropbtn nav-link bg-light" style="margin-left: -5%">Document Review <span class="badge badge-danger">(New)</span></button>
+                            <button class="dropbtn nav-link bg-dark" style="margin-left: -5%">Document Review</button>
                                 <div class="dropdown-content">
                                     <li class="dropdown">
-                                        <button class="dropbtn nav-link bg-info small">1.Operational Document Review</button>
+                                        <button class="dropbtn bg-info small">1.Operational Document Review</button>
                                         <div class="fa-medium small">
-                                            <a class="nav-link" href="/task_management/document_review/list">First Tier Feedback</a>
-                                            <a class="nav-link" href="/task_management/document_review/second_tier_doc_review">Second Tier Feedback</a>
+                                            <a href="/task_management/document_review/list">First Tier Feedback</a>
+                                            <a href="/task_management/document_review/second_tier_doc_review">Second Tier Feedback</a>
                                         </div>
                                     <li>
 
                                     <li class="dropdown">
-                                        <button class="dropbtn nav-link bg-info small">2.Safety Analysis Report Review</button>
+                                        <button class="dropbtn bg-info small">2.Safety Analysis Report Review</button>
                                         <div class="fa-medium small" style="padding-left: 1%">
                                             {% if perms.task_management.add_safetyanalysisreportreview %}
-                                                <a class="nav-link" href="/task_management/document_review/assign_sar_reviewer">Assign Member to Review</a>
-                                                <a class="nav-link" href="/task_management/document_review/view_sar_reviews">View Member Feedback</a>
-                                                <a class="nav-link" href="/task_management/document_review/upload_committee_report">Upload Committee Report</a>
+                                                <a href="/task_management/document_review/assign_sar_reviewer">Assign Member to Review</a>
+                                                <a href="/task_management/document_review/view_sar_reviews">View Member Feedback</a>
+                                                <a href="/task_management/document_review/upload_committee_report">Upload Committee Report</a>
                                             {% endif %}
-                                            <a class="nav-link" href="/task_management/document_review/my_sar_review">Tasks assigned to Me</a>
+                                            <a href="/task_management/document_review/my_sar_review">Tasks assigned to Me</a>
                                         </div>
                                     </li>
 

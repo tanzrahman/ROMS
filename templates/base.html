@@ -18,8 +18,8 @@
 
     <style>
         .navbar-nav .nav-item:hover .nav-link{
-            color: #fff;
-            background-color: green;
+            color: #000000;
+            background-color: #ffffff;
         }
 
         .active { background-color: black; }
@@ -38,7 +38,7 @@
 
 <div id="page-content-wrapper">
 
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark border-bottom py-sm-0">
+    <nav class="navbar navbar-expand-lg navbar-dark border-bottom py-sm-0" style="background-color: #52170B">
 
         <div class="collapse navbar-collapse">
 
@@ -110,24 +110,17 @@
                 <div class="dropdown" style="float:left;">
                     <li class="nav-item">
                         {% if not request.user.is_anonymous %}
-                        <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" >
+                        <button type="button" class="btn btn-outline-success dropdown-toggle" data-toggle="dropdown" >
                             {{ request.user }}
                         </button>
-                            <div class="dropdown-menu" style="font-size: 14px">
+                            <div class="dropdown-menu" style="font-size: 14px; text-align: center">
                                 <a class="dropdown-item" href="/manpower/user/profile">User Details</a>
                                 <a class="dropdown-item" href="/manpower/user/change_password">Change Password</a>
+                                <a class="dropdown-item" href="/logout">Logout</a>
                             </div>
                         {% endif %}
                     </li>
                 </div>
-
-                <li class="nav-item">
-                    <a class="nav-link px-1 mx-1 py-3 my-n2" href="/logout">
-                        {% if not request.user.is_anonymous %}
-                            (logout)
-                        {% endif %}
-                    </a>
-                </li>
             </ul>
         </div>
     </nav>

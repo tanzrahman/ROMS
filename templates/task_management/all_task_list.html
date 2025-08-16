@@ -9,18 +9,22 @@
     <script src="{% static 'js/task_manager.js' %}"></script>
     <link href="/static/css/selectize.css" rel="stylesheet"/>
 
-    <div style="padding-left: 2%">
+    <div style="padding-left: 2%; padding-top: 1%">
         <div class="row">
             <div class="column" style="margin-left: 2%">
                 <table class="table table-sm table-bordered" style="width: 100%">
-                    <tr>
+                    <tr class="table-success">
                         <td colspan="4">
                             <h4 style="text-align: center">Summary of All Tasks</h4>
                         </td>
                     </tr>
                     <tr style="text-align: center">
+                        <th>Total Completed Tasks</th>
+                        <th>{{ total_completed_tasks }}</th>
+                    </tr>
+                    <tr style="text-align: center">
                         <th>Total Incomplete Tasks</th>
-                        <th>{{ total_tasks }}</th>
+                        <th>{{ total_incomplete_tasks }}</th>
                     </tr>
                     <tr style="text-align: center">
                         <th>Tasks of Current Month</th>
@@ -31,14 +35,18 @@
             {% if search_summary %}
                 <div class="column" style="margin-left: 10%">
                     <table class="table table-sm table-bordered" style="width: 100%">
-                        <tr>
+                        <tr class="table-success">
                             <td colspan="4">
                                 <h4 style="text-align: center">Summary of Search Result</h4>
                             </td>
                         </tr>
                         <tr style="text-align: center">
-                            <th>Total Tasks</th>
-                            <th>{{ search_summary.total_tasks }}</th>
+                            <th>Total Completed Tasks</th>
+                            <th>{{ search_summary.total_completed_tasks }}</th>
+                        </tr>
+                        <tr style="text-align: center">
+                            <th>Total Incomplete Tasks</th>
+                            <th>{{ search_summary.total_incomplete_tasks }}</th>
                         </tr>
                         <tr style="text-align: center">
                             <th>Tasks of Current Month</th>
@@ -52,7 +60,7 @@
             {% if feedback_summary %}
                 <div class="column" style="margin-left: 10%">
                     <table class="table table-sm table-bordered" style="width: 100%">
-                        <tr>
+                        <tr class="table-success">
                             <td colspan="2">
                                 <h4 style="text-align: center">Task Feedback Summary</h4>
                             </td>
@@ -108,7 +116,7 @@
             <div>
                 <div>
                 <form action="" method="get" id="task_search_form">
-                    <table class="table table-hover table-bordered table-sm" style="overflow-wrap: break-word; width: 140%">
+                    <table class="table table-hover table-bordered table-sm" style="overflow-wrap: break-word; width: 100%">
 
                         <tr class="table-success" style="text-align: center; font-size: 0.9em">
                             <th>SL No.</th>
