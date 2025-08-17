@@ -90,7 +90,7 @@
         </div>
         {% endif %}
 
-        <div class="col-6">
+        <div class="col-6" style="padding: 1%">
             <h3>Review Recommendation of Committee Members</h3>
             {% if committee_rev.committee_approval %}
                 <table class="table table-sm table-bordered" style="width: 80%">
@@ -135,9 +135,6 @@
                             {{ committee_rev.chief_eng_approval.remarks|remarks_display_str }}
                             {% if request.user.is_staff %}
                                 <a href="/admin_site_control/manpower/approvalsignature/{{ committee_rev.chief_eng_approval.id }}/change/">Change</a>
-                            {% endif %}
-                            {% if request.user == committee_rev.chief_eng_approval.signed_by %}
-                                <a href="/task_management/document_review/change_document_recommendation/{{ committee_rev.chief_eng_approval.id }}?second_tier_id={{ committee_rev.id }}">Change</a>
                             {% endif %}
                         </td>
                     </tr>

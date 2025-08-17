@@ -24,55 +24,54 @@
     </style>
 
     <div>
+        {% if user %}
+            <h2 style="text-align: center">User Details</h2>
+            <table class="table table-hover table-bordered table-lg" style=" margin-left:25%; border-collapse: separate; border-spacing: 0 15px; width: 50%; text-align: center">
+                <tr>
+                    <th><label>Username</label></th>
+                    <td>{{ user.username }}</td>
+                </tr>
+                <tr>
+                    <th><label>Name</label></th>
+                    <td>{{ user.first_name }} {{ user.last_name }}</td>
+                </tr>
+                <tr>
+                    <th><label>Email</label></th>
+                    <td>{{ user.email }}</td>
+                </tr>
+                <tr>
+                    <th><label>Employee ID</label></th>
+                    <td>{{ user.employee_id }}</td>
+                </tr>
 
-    {% if user %}
-        <h2 style="margin-left: 10%">User Details</h2>
-        <table class="table table-hover" style="border-collapse: separate; border-spacing: 0 15px; width: 25%; text-align: center">
-            <tr>
-                <td><label>Username</label></td>
-                <td>{{ user.username }}</td>
-            </tr>
-            <tr>
-                <td><label>Name</label></td>
-                <td>{{ user.first_name }} {{ user.last_name }}</td>
-            </tr>
-            <tr>
-                <td><label>Email</label></td>
-                <td>{{ user.email }}</td>
-            </tr>
-            <tr>
-                <td><label>Employee ID</label></td>
-                <td>{{ user.employee_id }}</td>
-            </tr>
+                <tr>
+                    <th><label>Phone</label></th>
+                    <td>{{ user.profile.phone }}</td>
+                </tr>
 
-            <tr>
-                <td><label>Phone</label></td>
-                <td>{{ user.profile.phone }}</td>
-            </tr>
+                <tr>
+                    <th><label>Supervisor Status</label></th>
+                    <td>{{ user.profile.is_supervisor }}</td>
+                </tr>
 
-            <tr>
-                <td><label>Supervisor Status</label></td>
-                <td>{{ user.profile.is_supervisor }}</td>
-            </tr>
+                <tr>
+                    <th><label>Executor Status </label></th>
+                    <td>{{ user.profile.is_executor }}</td>
+                </tr>
 
-            <tr>
-                <td><label>Executor Status </label></td>
-                <td>{{ user.profile.is_executor }}</td>
-            </tr>
-
-            <tr>
-                <td><label>Signature</label></td>
-                <td>
-                    {% if not user.profile.signature %}
-                        You did not uploaded your signature,
-                        <a href="/manpower/user/upload_signature"> Click to upload Signature</a>
-                    {% else %}
-                        <img id="my_signature" height="100" width="200" src="/manpower/user/load_signature?hash={{user.profile.signature}}">
-                    {% endif %}
-                </td>
-            </tr>
-        </table>
-    {% endif %}
+                <tr>
+                    <th><label>Signature</label></th>
+                    <td>
+                        {% if not user.profile.signature %}
+                            You did not uploaded your signature,
+                            <a href="/manpower/user/upload_signature"> Click to upload Signature</a>
+                        {% else %}
+                            <img id="my_signature" height="100" width="200" src="/manpower/user/load_signature?hash={{user.profile.signature}}">
+                        {% endif %}
+                    </td>
+                </tr>
+            </table>
+        {% endif %}
     </div>
 
 {% endblock %}

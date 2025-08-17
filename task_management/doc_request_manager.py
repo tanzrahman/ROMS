@@ -48,7 +48,7 @@ def create_reqeust(request, task_id=None, doc_request_id=None):
     curr_day = datetime.date.today()
     todays_req = DocumentRequest.objects.filter(requested_by=request.user,requested_at__gte=curr_day)
     if(todays_req.count() >= 10):
-        return HttpResponse("You Cannot Request more than 5 documents a day")
+        return HttpResponse("You Cannot Request more than 10 documents a day")
 
     context = {'form': form, 'task': task}
     if (request.method == 'POST'):

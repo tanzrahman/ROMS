@@ -29,127 +29,154 @@
             overflow-y: scroll;
         }
 
+        body
+        {
+            display: flex;
+            flex-direction: column;
+            padding-bottom: 80px;
+        }
+
+        main
+        {
+            flex: 1; /* pushes footer down */
+            padding-bottom: 70px;
+        }
+
+        footer
+        {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1030; /* keep footer above everything */
+            height: 50px;  /* fixed height for padding calculation */
+        }
+
     </style>
 
 </head>
 
 <body>
 
+    <main>
+        <div id="page-content-wrapper">
+            <nav class="navbar navbar-expand-lg navbar-dark border-bottom py-sm-0" style="background-color: #52170B">
+                <div class="collapse navbar-collapse">
+                    <ul class="navbar-nav mr-auto">
+                        <li class="navbar-item">
+                            <a src="/static/npcbl.png"></a>
+                        </li>
 
-<div id="page-content-wrapper">
+                        <!-- <li class="nav-item">
+                            <a class="nav-link" href="/"><b>Rooppur Operational Management System</b></a>
+                        </li> -->
 
-    <nav class="navbar navbar-expand-lg navbar-dark border-bottom py-sm-0" style="background-color: #52170B">
-
-        <div class="collapse navbar-collapse">
-
-            <ul class="navbar-nav mr-auto">
-                <li class="navbar-item">
-                    <a src="/static/npcbl.png"></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/"><b>Rooppur Operational Management System</b></a>
-                </li>
-
-
-                {% if request.user.is_anonymous %}
-                <li class="nav-item">
-                    <a class="nav-link" href="/login">Login</a>
-                </li>
-                {% else %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="/task_management"><b>Document Management</b></a>
-                    </li>
-                    <!-- <li class="nav-item">
-                        <a class="nav-link" href="/ts"><b>Technical Solution</b></a>
-                    </li> -->
-                    <li class="nav-item">
-                        <a class="nav-link" href="/manpower/user/all"><b>All Users</b></a>
-                    </li>
-                    {% if request.user.profile.access_level > 1 %}
+                        {% if request.user.is_anonymous %}
                         <li class="nav-item">
-                            <a class="nav-link" href="/notifications/direct_messages"><b>Direct Messages to MD</b></a>
+                            <a class="nav-link" href="/login">Login</a>
+                        </li>
+                        {% else %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="/"><b>Document Management</b></a>
+                            </li>
+                            <!-- <li class="nav-item">
+                                <a class="nav-link" href="/ts"><b>Technical Solution</b></a>
+                            </li> -->
+                            <li class="nav-item">
+                                <a class="nav-link" href="/manpower/user/all"><b>All Users</b></a>
+                            </li>
+                            {% if request.user.profile.access_level > 1 %}
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/notifications/direct_messages"><b>Direct Messages to MD</b></a>
+                                </li>
+                            {% endif %}
+                        {% endif %}
+
+                        {% if request.user.is_superuser %}
+
+                            <li class="nav-item">
+                                <a class="nav-link" href="/manpower"><b>Manpower Management</b></a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link" href="/system_log"><b>System Log</b></a>
+                            </li>
+
+                        {% endif %}
+
+                        {% if request.user.is_staff %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="/group_sms"><b>Group SMS</b></a>
+                            </li>
+                        {% endif %}
+
+                    </ul>
+                </div>
+
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav ml-md-auto">
+                    {% if not request.user.is_anonymous  %}
+                        {% if request.user.profile.access_level < 20 %}
+                            <!-- <li class="nav-item">
+                                    <a class="nav-link blink" target="_blank" href="/static/pms_manual.pdf">
+                                        <span style="font-size: smaller">Download PMS Manual</span>
+                                    </a>
+                            </li> -->
+                            {% endif %}
+                        <li class="nav-item">
+                                <a class="nav-link" href="/notifications/show"><b>My Notifications</b></a>
                         </li>
                     {% endif %}
-                {% endif %}
-
-                {% if request.user.is_superuser %}
-                    
-                    <li class="nav-item">
-                        <a class="nav-link" href="/manpower"><b>Manpower Management</b></a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link" href="/system_log"><b>System Log</b></a>
-                    </li>
-
-                {% endif %}
-                
-                {% if request.user.is_staff %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="/group_sms"><b>Group SMS</b></a>
-                    </li>
-                {% endif %}
-            
-            </ul>
-        </div>
-
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav ml-md-auto">
-            {% if not request.user.is_anonymous  %}
-                {% if request.user.profile.access_level < 20 %}
-                    <!-- <li class="nav-item">
-                            <a class="nav-link blink" target="_blank" href="/static/pms_manual.pdf">
-                                <span style="font-size: smaller">Download PMS Manual</span>
-                            </a>
-                    </li> -->
-                    {% endif %}
-                <li class="nav-item">
-                        <a class="nav-link" href="/notifications/show"><b>My Notifications</b></a>
-                </li>
-            {% endif %}
-                <div class="dropdown" style="float:left;">
-                    <li class="nav-item">
-                        {% if not request.user.is_anonymous %}
-                        <button type="button" class="btn btn-outline-success dropdown-toggle" data-toggle="dropdown" >
-                            {{ request.user }}
-                        </button>
-                            <div class="dropdown-menu" style="font-size: 14px; text-align: center">
-                                <a class="dropdown-item" href="/manpower/user/profile">User Details</a>
-                                <a class="dropdown-item" href="/manpower/user/change_password">Change Password</a>
-                                <a class="dropdown-item" href="/logout">Logout</a>
-                            </div>
-                        {% endif %}
-                    </li>
+                        <div class="dropdown" style="float:left;">
+                            <li class="nav-item">
+                                {% if not request.user.is_anonymous %}
+                                <button type="button" class="btn btn-outline-success dropdown-toggle" data-toggle="dropdown" >
+                                    {{ request.user }}
+                                </button>
+                                    <div class="dropdown-menu" style="font-size: 14px; text-align: center;">
+                                        <a class="dropdown-item" href="/manpower/user/profile">User Details</a>
+                                        <a style="border-top: 2px solid #1b1e21" class="dropdown-item" href="/manpower/user/change_password">Change Password</a>
+                                        <a style="border-top: 2px solid #1b1e21" class="dropdown-item" href="/logout">Logout</a>
+                                    </div>
+                                {% endif %}
+                            </li>
+                        </div>
+                    </ul>
                 </div>
-            </ul>
+            </nav>
         </div>
-    </nav>
-</div>
 
-<div style="height:100px;">
-    {% if not request.user.is_anonymous %}
-        {% block content %}
+        <div style="height:100px;">
+            {% if not request.user.is_anonymous %}
+                {% block content %}
 
-        {% endblock %}
+                {% endblock %}
 
-    {% else %}
+            {% else %}
 
-        {% block userlogin %}
+                {% block userlogin %}
 
-        {% endblock %}
+                {% endblock %}
 
-        {% block signup %}
+                {% block signup %}
 
-        {% endblock %}
+                {% endblock %}
 
-        {% block homepage %}
+                {% block homepage %}
 
-        {% endblock %}
+                {% endblock %}
 
-    {% endif %}
+            {% endif %}
 
 
-</div>
+        </div>
+    </main>
+
+    <footer class="bg-dark text-light d-flex align-items-center justify-content-center py-3">
+            <p>
+                &copy; {{ now|date:"Y" }} Rooppur Operational Management System. All Rights Reserved.
+            </p>
+    </footer>
 
 </body>
 

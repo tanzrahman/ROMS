@@ -5,12 +5,12 @@
     <style>
         .dropbtn {
           color: white;
-          font-size: 16px;
+          font-size: 0.9em;
           border: none;
         }
         .dropbtn-b {
           color: grey;
-          font-size: 16px;
+          font-size: 0.9em;
           border: 1px solid black;
         }
 
@@ -22,7 +22,7 @@
           display: none;
           position: absolute;
           background-color: #f1f1f1;
-          min-width: 160px;
+          min-width: 200px;
           box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
           z-index: 1;
         }
@@ -81,7 +81,7 @@
     {% endif %}
     <div>
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark border-bottom py-sm-0">
-            <div class="collapse navbar-collapse">
+            <div class="collapse navbar-collapse" style="font-size: 0.9em">
                 <ul class="navbar-nav mr-auto">
 {#                    <li class="nav-item">#}
 {#                        <a class="nav-link" href="/task_management/milestone_list">All Milestone List</a>#}
@@ -253,15 +253,26 @@
 
     {% block chart %}
         {% if request.path == '/' %}
-            <h2 style="text-align: center">Document Review Chart</h2>
+            <h2 style="text-align: center">Document Review Summary</h2>
             <br>
 
-            <h4 style="text-align: center"><i>Total documents to be reviewed: {{ total_documents }}</i></h4>
-            <h5 style="text-align: center"><i>First tier review completed: {{ total_1st_tier_review_count }}</i></h5>
-            <h5 style="text-align: center"><i>Sent Document for committee approval: {{ total_2nd_tier_review_count }}</i></h5>
+            <table class="table table-bordered table-success" style="width: 25%; text-align: center; margin: 0 auto;">
+                <tr>
+                    <th>Total documents to be reviewed</th>
+                    <th>{{ total_documents }}</th>
+                </tr>
+                <tr>
+                    <th>First tier review completed</th>
+                    <th>{{ total_1st_tier_review_count }}</th>
+                </tr>
+                <tr>
+                    <th>Submitted Documents for recommendation</th>
+                    <th>{{ total_2nd_tier_review_count }}</th>
+                </tr>
+            </table>
             <br>
 
-            <div id="chart" style="margin-left: 5%; width: 80%">
+            <div id="chart" style="margin: 0 auto; width: 80%">
             </div>
         {% endif %}
 
