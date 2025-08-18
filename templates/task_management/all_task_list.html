@@ -56,47 +56,47 @@
                 </div>
             {% endif %}
 
-        {% if request.user.profile.access_level < 4 %}
-            {% if feedback_summary %}
-                <div class="column" style="margin-left: 10%">
-                    <table class="table table-sm table-bordered" style="width: 100%">
-                        <tr class="table-success">
-                            <td colspan="2">
-                                <h4 style="text-align: center">Task Feedback Summary</h4>
-                            </td>
-                        </tr>
-                        <tr style="text-align: center">
-                            <th>Total Feedbacks</th>
-                            <th><a href="/feedback/show_all">{{ feedback_summary.total_feedback.count }}</a></th>
-                        </tr>
-                        <tr style="text-align: center">
-                            <th>Supervisor Feedbacks</th>
-                            <th>{{ feedback_summary.supervisor_feedback.count }}</th>
-                        </tr>
-                        <tr style="text-align: center">
-                            <th>Executor Feedbacks</th>
-                            <th><a href="/feedback/executor_feedbacks">{{ feedback_summary.executor_feedback.count }}</a></th>
-                        </tr>
-                        <tr style="text-align: center">
-                            <th>Tasks with No Feedbacks(within 3 days)</th>
-                            <th>{{ feedback_summary.no_feedback.count }}</th>
-                        </tr>
-                    </table>
-                </div>
-                <div>
-                    <div id="dialog" style=" z-index: 100; display: none; float: left; right: 1%; position: static; bottom:15%">
-                        <div>
-                            <input type="button" onclick="document.getElementById('dialog').style.display='none'"
-                                   style="float: right" value="X"></input>
-                        </div>
-                        <div>
-                            <textarea id="details" style="font-size: 9pt" rows="10" cols="40" white-space: pre-wrap;>
-                            </textarea>
+        <!-- {% if request.user.profile.access_level < 4 %}
+                {% if feedback_summary %}
+                    <div class="column" style="margin-left: 10%">
+                        <table class="table table-sm table-bordered" style="width: 100%">
+                            <tr class="table-success">
+                                <td colspan="2">
+                                    <h4 style="text-align: center">Task Feedback Summary</h4>
+                                </td>
+                            </tr>
+                            <tr style="text-align: center">
+                                <th>Total Feedbacks</th>
+                                <th><a href="/feedback/show_all">{{ feedback_summary.total_feedback.count }}</a></th>
+                            </tr>
+                            <tr style="text-align: center">
+                                <th>Supervisor Feedbacks</th>
+                                <th>{{ feedback_summary.supervisor_feedback.count }}</th>
+                            </tr>
+                            <tr style="text-align: center">
+                                <th>Executor Feedbacks</th>
+                                <th><a href="/feedback/executor_feedbacks">{{ feedback_summary.executor_feedback.count }}</a></th>
+                            </tr>
+                            <tr style="text-align: center">
+                                <th>Tasks with No Feedbacks(within 3 days)</th>
+                                <th>{{ feedback_summary.no_feedback.count }}</th>
+                            </tr>
+                        </table>
+                    </div>
+                    <div>
+                        <div id="dialog" style=" z-index: 100; display: none; float: left; right: 1%; position: static; bottom:15%">
+                            <div>
+                                <input type="button" onclick="document.getElementById('dialog').style.display='none'"
+                                       style="float: right" value="X"></input>
+                            </div>
+                            <div>
+                                <textarea id="details" style="font-size: 9pt" rows="10" cols="40" white-space: pre-wrap;>
+                                </textarea>
+                            </div>
                         </div>
                     </div>
-                </div>
-            {% endif %}
-        {% endif %}
+                {% endif %}
+            {% endif %} -->
         </div>
 
         <div>
