@@ -81,8 +81,8 @@ def doc_review_handler(request,action=None,id=None):
     return render(request, 'document_review/doc_review_base.html')
 
 def list_all_doc(request,action=None,id=None):
-    as_supervisor = Task.objects.filter(task_category='DocumentReview', supervisor=request.user)
-    as_executor = Task.objects.filter(task_category='DocumentReview', task_executor=request.user)
+    as_supervisor = Task.objects.filter(task_category='DocumentReview', supervisor=request.user, created_date__gt='2025-07-31')
+    as_executor = Task.objects.filter(task_category='DocumentReview', task_executor=request.user, created_date__gt='2025-07-31')
     total = as_supervisor.union(as_executor)
     context = {"doc_list": total}
     return render(request, 'document_review/assigned_docs.html', context)

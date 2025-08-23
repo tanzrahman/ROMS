@@ -152,6 +152,8 @@
 
                 {% endblock %}
 
+                <br><br>
+
             {% else %}
 
                 {% block userlogin %}
@@ -166,10 +168,13 @@
 
                 {% endblock %}
 
+                <br><br>
+
             {% endif %}
 
 
         </div>
+
     </main>
 
     <footer class="bg-dark text-light d-flex align-items-center justify-content-center py-3">
@@ -186,4 +191,5 @@
         $($(this).attr('href')).addClass("active");
     });
 </script>
+
 </html>
