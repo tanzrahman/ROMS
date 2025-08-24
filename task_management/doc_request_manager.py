@@ -66,7 +66,7 @@ def create_reqeust(request, task_id=None, doc_request_id=None):
 
 
 def view_my_requests(request, task_id=None, doc_request_id=None):
-    my_requests = DocumentRequest.objects.filter(requested_by=request.user, requested_at__gte='2025-07-31').order_by('-requested_at')
+    my_requests = DocumentRequest.objects.filter(requested_by=request.user, task__created_date__gte='2025-07-31').order_by('-requested_at')
     return render(request, 'task_management/my_document_requests.html', {'my_requests': my_requests})
 
 
@@ -97,13 +97,13 @@ def delivered_documents(request):
                     filter_list.append(Q(**{date_filter: form.cleaned_data[each]}))
 
     if (len(filter_list) > 0):
-        delivered_doc = DocumentRequest.objects.filter(requested_at__gte='2025-07-31').filter(reduce(operator.and_, filter_list)).filter(approval_level=3).order_by('-requested_at')
-        delivered_doc_num = DocumentRequest.objects.filter(requested_at__gte='2025-07-31').filter(reduce(operator.and_, filter_list)).filter(
+        delivered_doc = DocumentRequest.objects.filter(task__created_date__gte='2025-07-31').filter(reduce(operator.and_, filter_list)).filter(approval_level=3).order_by('-requested_at')
+        delivered_doc_num = DocumentRequest.objects.filter(task__created_date__gte='2025-07-31').filter(reduce(operator.and_, filter_list)).filter(
             approval_level=3).count()
 
     else:
-        delivered_doc = DocumentRequest.objects.filter(requested_at__gte='2025-07-31', approval_level=3).order_by('-requested_at')
-        delivered_doc_num = DocumentRequest.objects.filter(requested_at__gte='2025-07-31', approval_level=3).count()
+        delivered_doc = DocumentRequest.objects.filter(task__created_date__gte='2025-07-31', approval_level=3).order_by('-requested_at')
+        delivered_doc_num = DocumentRequest.objects.filter(task__created_date__gte='2025-07-31', approval_level=3).count()
 
     no_of_items = 100
     paginator = Paginator(delivered_doc, no_of_items)
@@ -130,8 +130,8 @@ def not_received_documents(request):
     if (request.GET.get('page_no')):
         page_no = int(request.GET.get('page_no'))
 
-    not_received_doc = DocumentRequest.objects.filter(requested_at__gte='2025-07-31', approval_level=-1).order_by('-requested_at')
-    not_received_doc_num = DocumentRequest.objects.filter(requested_at__gte='2025-07-31', approval_level=-1).count()
+    not_received_doc = DocumentRequest.objects.filter(task__created_date__gte='2025-07-31', approval_level=-1).order_by('-requested_at')
+    not_received_doc_num = DocumentRequest.objects.filter(task__created_date__gte='2025-07-31', approval_level=-1).count()
 
     no_of_items = 100
     paginator = Paginator(not_received_doc, no_of_items)
@@ -227,45 +227,45 @@ def view_pending_requests(request):
                     filter_list.append(Q(**{each: search_form.cleaned_data[each]}))
 
     if (len(filter_list) > 0):
-        doc_req = DocumentRequest.objects.filter(reduce(operator.and_, filter_list)).filter(requested_at__gte='2025-07-31',
+        doc_req = DocumentRequest.objects.filter(reduce(operator.and_, filter_list)).filter(task__created_date__gte='2025-07-31',
             approval_level=1).order_by('-requested_at')
 
     else:
         if (request.user.profile.access_level < 2):
             time_limit = datetime.datetime.now() - datetime.timedelta(days=3)
-            doc_req = DocumentRequest.objects.filter(requested_at__gte='2025-07-31', requested_at__lt=time_limit, approval_level=1).order_by(
+            doc_req = DocumentRequest.objects.filter(task__created_date__gte='2025-07-31', requested_at__lt=time_limit, approval_level=1).order_by(
                 '-requested_at')
 
         elif (request.user.profile.access_level == 2):
             # list for dep cheif or dpds
-            doc_req = DocumentRequest.objects.filter(requested_at__gte='2025-07-31', approval_level=1).order_by('-requested_at')
+            doc_req = DocumentRequest.objects.filter(task__created_date__gte='2025-07-31', approval_level=1).order_by('-requested_at')
 
         elif (request.user.profile.access_level == 3 or request.user.profile.access_level == 4):
             # list for div head, shop man, dep shop man, distributors
-            doc_req = DocumentRequest.objects.filter(requested_at__gte='2025-07-31', approval_level=1,
+            doc_req = DocumentRequest.objects.filter(task__created_date__gte='2025-07-31', approval_level=1,
                                                      task__division=request.user.profile.division).order_by(
                 '-requested_at')
 
         elif (request.user.profile.access_level > 4 and request.user.profile.is_supervisor == True):
             # list for div head, shop man, dep shop man, distributors
-            doc_req = DocumentRequest.objects.filter(requested_at__gte='2025-07-31', approval_level=1, task__supervisor=request.user).order_by(
+            doc_req = DocumentRequest.objects.filter(task__created_date__gte='2025-07-31', approval_level=1, task__supervisor=request.user).order_by(
                 '-requested_at')
 
     context = {'my_requests': doc_req, 'form': search_form}
 
     if(request.user.profile.access_level < 2):
-        list_doc_level_1 = DocumentRequest.objects.filter(requested_at__gte='2025-07-31', approval_level=1).order_by('-requested_at')[:200]
-        list_doc_level_2 = DocumentRequest.objects.filter(requested_at__gte='2025-07-31', approval_level=2).order_by('-requested_at')[:200]
-        list_doc_level_3 = DocumentRequest.objects.filter(requested_at__gte='2025-07-31', approval_level=3).order_by('-requested_at')[:200]
+        list_doc_level_1 = DocumentRequest.objects.filter(task__created_date__gte='2025-07-31', approval_level=1).order_by('-requested_at')[:200]
+        list_doc_level_2 = DocumentRequest.objects.filter(task__created_date__gte='2025-07-31', approval_level=2).order_by('-requested_at')[:200]
+        list_doc_level_3 = DocumentRequest.objects.filter(task__created_date__gte='2025-07-31', approval_level=3).order_by('-requested_at')[:200]
 
-        doc_level_1 = DocumentRequest.objects.filter(requested_at__gte='2025-07-31', approval_level=1).count()
-        doc_level_2 = DocumentRequest.objects.filter(requested_at__gte='2025-07-31', approval_level=2).count()
-        doc_level_3 = DocumentRequest.objects.filter(requested_at__gte='2025-07-31', approval_level=3).count()
+        doc_level_1 = DocumentRequest.objects.filter(task__created_date__gte='2025-07-31', approval_level=1).count()
+        doc_level_2 = DocumentRequest.objects.filter(task__created_date__gte='2025-07-31', approval_level=2).count()
+        doc_level_3 = DocumentRequest.objects.filter(task__created_date__gte='2025-07-31', approval_level=3).count()
 
-        doc_div_level_1 = DocumentRequest.objects.filter(requested_at__gte='2025-07-31', approval_level=1).values('task__division__division_name').annotate(Count('id')).order_by()
-        doc_div_level_2 = DocumentRequest.objects.filter(requested_at__gte='2025-07-31', approval_level=2).values('task__division__division_name').annotate(
+        doc_div_level_1 = DocumentRequest.objects.filter(task__created_date__gte='2025-07-31', approval_level=1).values('task__division__division_name').annotate(Count('id')).order_by()
+        doc_div_level_2 = DocumentRequest.objects.filter(task__created_date__gte='2025-07-31', approval_level=2).values('task__division__division_name').annotate(
             Count('id')).order_by()
-        doc_div_level_3 = DocumentRequest.objects.filter(requested_at__gte='2025-07-31', approval_level=3).values('task__division__division_name').annotate(
+        doc_div_level_3 = DocumentRequest.objects.filter(task__created_date__gte='2025-07-31', approval_level=3).values('task__division__division_name').annotate(
             Count('id')).order_by()
 
         context.update({
@@ -289,7 +289,7 @@ def all_doc_request(request, task_id=None, doc_request_id=None):
         page_no = int(request.GET.get('page_no'))
 
     # doc_req_na = DocumentRequest.objects.filter(approval_level=-1).order_by('-requested_at')
-    doc_req_new = DocumentRequest.objects.filter(requested_at__gte='2025-07-31', approval_level=2).order_by('-requested_at')
+    doc_req_new = DocumentRequest.objects.filter(task__created_date__gte='2025-07-31', approval_level=2).order_by('-requested_at')
 
     doc_req = doc_req_new
 
@@ -350,13 +350,13 @@ def send_mail_for_doc_request(doc_req):
     if (not doc_req.requested_by.profile.division.division_name == 'Consultancy'):
         email_cc.append(doc_req.requested_by.email)
 
-    doc_team_email = 'documentation.site@rooppurnpp.gov.bd'
+    doc_team_email = 'ptd@rooppurnpp.gov.bd'
     send_email_with_cc(msg_body,subject=subject, receiver_email=doc_team_email,CC=email_cc)
 
 def view_consultant_requests(request):
 
     div = Division.objects.get(division_name='Consultancy')
-    doc_req = DocumentRequest.objects.filter(requested_at__gte='2025-07-31', approval_level=1, requested_by__profile__division=div).order_by('-requested_at')
+    doc_req = DocumentRequest.objects.filter(task__created_date__gte='2025-07-31', approval_level=1, requested_by__profile__division=div).order_by('-requested_at')
 
     context = {'consultant_requests': doc_req}
 
@@ -367,7 +367,7 @@ def view_consultant_requests(request):
 def approved_consultant_doc_requests(request):
 
     div = Division.objects.get(division_name='Consultancy')
-    approved_doc_req = DocumentRequest.objects.filter(requested_at__gte='2025-07-31', approval_level=2, requested_by__profile__division=div).order_by('-approved_at')
+    approved_doc_req = DocumentRequest.objects.filter(task__created_date__gte='2025-07-31', approval_level=2, requested_by__profile__division=div).order_by('-approved_at')
 
     context = {'approved_consultant_requests': approved_doc_req}
 
@@ -378,7 +378,7 @@ def approved_consultant_doc_requests(request):
 def delivered_consultant_doc_requests(request):
 
     div = Division.objects.get(division_name='Consultancy')
-    delivered_doc_req = DocumentRequest.objects.filter(requested_at__gte='2025-07-31', approval_level=3, requested_by__profile__division=div).order_by('-approved_at')
+    delivered_doc_req = DocumentRequest.objects.filter(task__created_date__gte='2025-07-31', approval_level=3, requested_by__profile__division=div).order_by('-approved_at')
 
     page_no = 1
     if (request.GET.get('page_no')):

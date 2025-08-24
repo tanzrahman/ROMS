@@ -169,7 +169,7 @@
                         </div>
                     </li>
                     {% if request.user.profile.access_level > 2 %}
-                        {% if request.user.profile.division.division_name == 'Documentation' %}
+                        {% if request.user.profile.department.dept_name == 'Production & Technical' %}
                             <li class="nav-item">
                                 <a class="nav-link" href="/document_request/all_requests">Document Requests to Deliver</a>
                             </li>
