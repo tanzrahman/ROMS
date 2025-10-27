@@ -923,5 +923,5 @@ class SecondTierReviewSearchForm(forms.Form):
     department = forms.ModelChoiceField(queryset=DepartmentShop.objects.all(), required=False, label="Department/Shop", widget=forms.Select(attrs={'class':'form-control'}))
     committee = forms.ModelChoiceField(queryset=Committee.objects.all(), required=False, widget=forms.Select(attrs={'class':'form-control'}))
     div_head_recommendation = forms.ChoiceField(choices=recommendation, label="Divisional Head Recommendation", required=False, widget=forms.Select(attrs={'class':'form-control'}))
-    chief_engr_recommendation = forms.ChoiceField(choices=recommendation, label="Chief Engineer Recommendation", required=False, widget=forms.Select(attrs={'class':'form-control'}))
-    sd_recommendation = forms.ChoiceField(choices=recommendation, label="Station Director Recommendation", required=False, widget=forms.Select(attrs={'rows': 1, 'cols': 50, 'class':'form-control'}))
+    chief_engr_recommendation = forms.ChoiceField(choices=recommendation, label="Chief Superintendent Recommendation", required=False, widget=forms.Select(attrs={'class':'form-control'}))
+    sd_recommendation = forms.ChoiceField(choices=recommendation, label="Managing Director Recommendation", required=False, widget=forms.Select(attrs={'rows': 1, 'cols': 50, 'class':'form-control'}))
