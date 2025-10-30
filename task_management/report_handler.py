@@ -43,15 +43,15 @@ def report(request, action=None, id=None):
 
 
 def consultant_task_report(request,action,id):
-    total_feedback = ConsultantTasks.objects.all().order_by('-report_submitted_at')
+    total_feedback = ConsultantTasks.objects.filter(task__created_date__gt='2025-07-31').order_by('-report_submitted_at')
 
     consultant_feedback_count = {}
 
     consultant = Profile.objects.filter(access_level=75)
     for each in consultant:
         consultant_feedback_count.update({
-                each.user: [ConsultantTasks.objects.filter(consultant=each.user).exclude(review_report=None).count(),
-                         ConsultantTasks.objects.filter(consultant=each.user).count()]
+                each.user: [ConsultantTasks.objects.filter(consultant=each.user).filter(task__created_date__gt='2025-07-31').exclude(review_report=None).count(),
+                         ConsultantTasks.objects.filter(consultant=each.user).filter(task__created_date__gt='2025-07-31').count()]
              })
 
     search_form = ConsultantTaskFeedbackSearchForm(request.GET)
@@ -73,7 +73,7 @@ def consultant_task_report(request,action,id):
                 search_filters.append(Q(**{'report_submitted_at__lte': search_form.cleaned_data[each]}))
 
     if (len(search_filters) > 0):
-        total_feedback = ConsultantTasks.objects.filter(reduce(operator.and_, search_filters)).order_by('-report_submitted_at')
+        total_feedback = ConsultantTasks.objects.filter(reduce(operator.and_, search_filters)).filter(task__created_date__gt='2025-07-31').order_by('-report_submitted_at')
 
     if(request.GET.get('filter')):
         if(request.GET.get('filter') != 'all'):
@@ -91,7 +91,7 @@ def consultant_feedback_show(request, action, id):
     print(id)
     feedback = ConsultantTasks.objects.get(id=id)
     print(feedback)
-    comment_list = Comment.objects.filter(consultant_task_feedback=feedback).order_by('-created_date')
+    comment_list = Comment.objects.filter(consultant_task_feedback=feedback).filter(task_id__created_date__gt='2025-07-31').order_by('-created_date')
     context = {
         'feedback': feedback,
         'comment_list': comment_list,
@@ -101,7 +101,7 @@ def consultant_feedback_show(request, action, id):
 
 
 def consultant_discussion_report(request, action):
-    total_feedback = ConsultantQA.objects.all().order_by('-created_at')
+    total_feedback = ConsultantQA.objects.filter(created_at__gt='2025-07-31').order_by('-created_at')
 
     consultant_feedback_count = {}
     consultant = Profile.objects.filter(access_level=75)
@@ -109,9 +109,9 @@ def consultant_discussion_report(request, action):
         consultant_feedback_count.update({
             each.user:
                 [
-                    ConsultantQA.objects.filter(consultant=each.user).count(),
-                    ConsultantLecture.objects.filter(consultant=each.user,lecture__schedule__lte=datetime.datetime.now()).count(),
-                    ConsultantLecture.objects.filter(consultant=each.user).count()
+                    ConsultantQA.objects.filter(consultant=each.user).filter(created_at__gt='2025-07-31').count(),
+                    ConsultantLecture.objects.filter(consultant=each.user, lecture__schedule__lte=datetime.datetime.now(), created_at__gt='2025-07-31').count(),
+                    ConsultantLecture.objects.filter(consultant=each.user, created_at__gt='2025-07-31').count()
                 ]
         })
 
@@ -152,7 +152,7 @@ def consultant_discussion_report(request, action):
 def consultant_discussion_feedback_show(request, action, id):
     feedback = ConsultantQA.objects.get(id=id)
     form = ConsultantQAForm()
-    comment_list = Comment.objects.filter(consultant_qa=feedback).order_by('-created_date')
+    comment_list = Comment.objects.filter(consultant_qa=feedback, task_id__created_date__gt='2025-07-31').order_by('-created_date')
     context = {
         'form': form,
         'feedback': feedback,
@@ -183,7 +183,7 @@ def task_distribution_report(request):
     form = DivisionSelectionForm()
 
     details = {}
-    exec_tasks = Task.objects.filter(task_executor__in=executor_list,percent_completed__lt=100).values_list(
+    exec_tasks = Task.objects.filter(task_executor__in=executor_list,percent_completed__lt=100, created_date__gt='2025-07-31').values_list(
         'task_executor__id','task_executor__username','task_executor__profile__division__division_name').annotate(task_count=Count('task_id')).order_by('task_executor__profile__division','-task_count')
 
     for each in exec_tasks:
@@ -192,7 +192,7 @@ def task_distribution_report(request):
         })
 
 
-    sup_tasks = Task.objects.filter(supervisor__in=supervisor_list,percent_completed__lt=100).values_list(
+    sup_tasks = Task.objects.filter(supervisor__in=supervisor_list,percent_completed__lt=100, created_date__gt='2025-07-31').values_list(
         'supervisor__id','supervisor__username','supervisor__profile__division__division_name').annotate(task_count=Count('task_id')).order_by('-task_count')
 
     for each in sup_tasks:

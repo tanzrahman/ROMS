@@ -1426,10 +1426,10 @@ def consultancy_request(request):
                     filters.append(Q(**{each: search_form.cleaned_data[each]}))
 
     if (len(filters) > 0):
-        request_list = ConsultancyRequest.objects.filter(reduce(operator.and_, filters))
+        request_list = ConsultancyRequest.objects.filter(reduce(operator.and_, filters)).filter(task__created_date__gt='2025-07-31')
 
     else:
-        request_list = ConsultancyRequest.objects.all()
+        request_list = ConsultancyRequest.objects.filter(task__created_date__gt='2025-07-31')
 
     page_no = 1
     if(request.GET.get('page_no')):
