@@ -123,10 +123,19 @@
                                     </a>
                             </li> -->
                             {% endif %}
+
+                            {% if request.user.is_superuser %}
+                                <li class="nav-item">
+                                    <a class="btn btn-outline-light blink" href="#"> Access to Document Cloud</a>
+                                </li>
+                            {% endif %}
+
                         <li class="nav-item">
                                 <a class="nav-link" href="/notifications/show"><b>My Notifications</b></a>
                         </li>
+
                     {% endif %}
+
                         <div class="dropdown" style="float:left;">
                             <li class="nav-item">
                                 {% if not request.user.is_anonymous %}
