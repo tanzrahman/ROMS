@@ -21,8 +21,7 @@ import json
 from task_management.models import *
 from task_management.forms_doc_review import OperationalDocumentReviewForm, RegulationDocumentReviewForm, \
     OthersDocumentReviewForm, FireAndEmergencyDocumentReviewForm, DocRevAssignCommittee, ApprovalSignatureForm, \
-    SafetyAnalysisReportReviewForm, SARCommitteeReportForm
-
+    SafetyAnalysisReportReviewForm, SARCommitteeReportForm, ApprovalSignatureForm_MD
 
 from task_management.ftp_handler import FILETYPE, upload_to_ftp
 
@@ -585,7 +584,11 @@ def committee_recomendation(request,id):
     if (committe_rev.committee_approval.filter(signed_by=request.user).exists()):
         return HttpResponse("You have already recommended the initial review of this Document!")
 
-    form = ApprovalSignatureForm()
+    if(request.user.username == 'md@npcbl.gov.bd'):
+        form = ApprovalSignatureForm_MD()
+    else:
+        form = ApprovalSignatureForm()
+
     context = {
         'form': form,
         'feedback': feed_back,
@@ -593,14 +596,17 @@ def committee_recomendation(request,id):
         'committee_rev': committe_rev,
     }
     if(request.method == 'POST'):
-        form = ApprovalSignatureForm(request.POST)
+        if(request.user.username == 'md@npcbl.gov.bd'):
+            form = ApprovalSignatureForm_MD(request.POST)
+        else:
+            form = ApprovalSignatureForm(request.POST)
 
         if(form.is_valid()):
             try:
                 approval = form.save(commit=False)
                 approval.sign_hash = request.user.profile.signature
                 approval.signed_by = request.user
-                approval.signed_on =  datetime.datetime.today()
+                approval.signed_on = datetime.datetime.today()
                 approval.save()
 
                 if(request.GET.get('recommendation_by')):

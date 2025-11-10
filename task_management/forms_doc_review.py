@@ -23,6 +23,12 @@ approvalChoiceList = [("","Select"),("recommend_to_revise","Recommend to Revise 
                       ("accept_with_remarks","Document can be provisionally accepted considering the review comments"),
                       ("no_saw_accept_with_remarks","SAW Not Completed & Document can be provisionally accepted considering the review comments"),
                       ]
+
+
+approvalChoiceList_MD = [("","Select"), ("approve","Approved"), ("reject","Rejected"),
+                      ("accept_with_remarks","Provisionally accepted considering the review comments"),
+                      ]
+
 #("provisional_acceptance_with_remarks","Document can be provisionally accepted with incorporating the comments provided during review")
 
 def get_approval_list():
@@ -31,6 +37,13 @@ def get_approval_list():
         if (each[0] != 'saw_not_completed' and each[0] != 'recommend_to_revise' and each[0] != 'no_saw_recommend_to_revise'):
             new_approvalChoiceList.append(each)
     return new_approvalChoiceList
+def get_approval_list_MD():
+    new_approvalChoiceList = []
+    for each in approvalChoiceList_MD:
+        new_approvalChoiceList.append(each)
+    print(new_approvalChoiceList)
+    return new_approvalChoiceList
+
 class OperationalDocumentReviewForm(forms.ModelForm):
     task = forms.ModelChoiceField(queryset=Task.objects.none(), label='Document Code')
     ######QUESTIONS#########
@@ -330,7 +343,13 @@ class DocRevAssignCommittee(forms.ModelForm):
 
 
 class ApprovalSignatureForm(forms.ModelForm):
-    remarks = forms.ChoiceField(choices=get_approval_list(),required=True, label="Select Your Remarks")
+    remarks = forms.ChoiceField(choices=get_approval_list(), required=True, label="Select Your Remarks")
+    class Meta:
+        model = ApprovalSignature
+        fields = ['remarks']
+
+class ApprovalSignatureForm_MD(forms.ModelForm):
+    remarks = forms.ChoiceField(choices=get_approval_list_MD(), required=True, label="Select Your Remarks")
     class Meta:
         model = ApprovalSignature
         fields = ['remarks']

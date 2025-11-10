@@ -80,7 +80,7 @@
                             <td>{{ each.committee_approval.count }} / {{ each.committee.members.count }}  </td>
                             <td>{{ each.division_head_approval.remarks|remarks_display_str }}</td>
                             <td>{{ each.chief_eng_approval.remarks|remarks_display_str }}</td>
-                            <td>{{ each.sd_approval.remarks|remarks_display_str }}</td>
+                            <td>{{ each.sd_approval.remarks|remarks_display_str_MD }}</td>
                         </tr>
                     {% endfor %}
                 </table>
