@@ -803,6 +803,16 @@ class DocumentReviewComments(models.Model):
         db_table = 'document_review_comments'
 
 
+# class DocumentReviewComments_MD(models.Model):
+#     id = models.AutoField(primary_key=True)
+#     task = models.ForeignKey(Task, on_delete=models.DO_NOTHING, blank=True, null=True)
+#     second_tier_committee_review = models.ForeignKey(SecondTierDocumentReview, on_delete=models.DO_NOTHING, blank=True, null=True)
+#     remarks_by = models.ForeignKey(User, on_delete=models.DO_NOTHING, blank=True, null=True, related_name='review_comment_remarks_by')
+#     created_at = models.DateTimeField(blank=True, null=True)
+#     remarks = models.TextField(blank=True, null=True)
+#     class Meta:
+#         db_table = 'document_review_comments_MD'
+
 
 class SafetyAnalysisReportReview(models.Model):
     id = models.AutoField(primary_key=True)

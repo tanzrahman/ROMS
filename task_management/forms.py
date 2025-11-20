@@ -905,6 +905,14 @@ class DocumentReviewCommentsForm(forms.ModelForm):
         fields = ('section_no','original_text', 'proposed_text', 'remarks')
 
 
+# class DocumentReviewCommentsForm_MD(forms.ModelForm):
+#
+#     remarks = forms.CharField(widget=forms.Textarea(attrs={'rows':3,'cols':40}), label="Remarks")
+#     class Meta:
+#         model = DocumentReviewComments_MD
+#         fields = ('remarks')
+
+
 class DocumentReviewSearchForm(forms.Form):
     task_id = forms.CharField(label='Task ID', required=False, widget=forms.TextInput(attrs={'class':'form-control'}))
     title = forms.CharField(label='Title', required=False, widget=forms.Textarea(attrs={'rows': 1, 'cols': 40, 'class':'form-control'}))

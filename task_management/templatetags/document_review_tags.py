@@ -1,5 +1,5 @@
 from task_management.models import *
-from task_management.forms_doc_review import approvalChoiceList, approvalChoiceList_MD
+from task_management.forms_doc_review import approvalChoiceList
 from django import template
 
 register = template.Library()
@@ -22,14 +22,14 @@ def remarks_display_str(remarks):
             return each[1]
     return ""
 
-@register.filter(name='remarks_display_str_MD')
-def remarks_display_str(remarks):
-    if(remarks == ""):
-        return remarks
-    for each in approvalChoiceList_MD:
-        if (each[0] == remarks):
-            return each[1]
-    return ""
+# @register.filter(name='remarks_display_str_MD')
+# def remarks_display_str(remarks):
+#     if(remarks == ""):
+#         return remarks
+#     for each in approvalChoiceList_MD:
+#         if (each[0] == remarks):
+#             return each[1]
+#     return ""
 
 @register.filter(name='get_sar_committ_report')
 def get_sar_committee_report(committee):

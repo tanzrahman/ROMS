@@ -122,6 +122,7 @@
                     <th>Recommendation By</th>
                     <th>Recommendation</th>
                     <th>Signature</th>
+                    <th>Remarks</th>
                 </tr>
                 {% for each in committee_rev.committee_approval.all %}
                     <tr>
@@ -193,6 +194,7 @@
                             {{ committee_rev.sd_approval.signed_on }}
                         {% endif %}
                     </td>
+                    <td>{{ committee_rev.sd_approval.comments }}</td>
                 </tr>
             </table>
         {% endif %}

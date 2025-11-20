@@ -63,7 +63,7 @@
                     {% endif %}
                     {% if request.user|is_sd  %}
                         <a href="/task_management/document_review/recommend/{{ committee_rev.id }}?category={{ committee_rev.category }}&recommendation_by=sd"
-                           class="btn btn-info">Recommend Document for Approve or Review</a>
+                           class="btn btn-info">Document for Approve or Reject</a>
                     {% endif %}
                 </div><br>
                 <div>
@@ -94,9 +94,13 @@
             <h3>Review Recommendation of Committee Members</h3>
             {% if committee_rev.committee_approval %}
                 <table class="table table-sm table-bordered" style="width: 80%">
-                    <th>Recommendation By</th>
-                    <th>Recommendation Date</th>
-                    <th>Recommendation</th>
+                    <tr style="text-align: center">
+                        <th>Recommendation By</th>
+                        <th>Recommendation Date</th>
+                        <th>Recommendation</th>
+                        <th>Remarks</th>
+                    </tr>
+
                     {% for each in committee_rev.committee_approval.all %}
                         <tr>
                             <td>{{ each.signed_by }}</td>
@@ -110,7 +114,6 @@
                                     <a href="/task_management/document_review/change_document_recommendation/{{ each.id }}?second_tier_id={{ committee_rev.id }}">Change</a>
                                 {% endif %}
                             </td>
-
                         </tr>
                     {% endfor %}
                     <tr>
@@ -136,6 +139,20 @@
                             {% if request.user.is_staff %}
                                 <a href="/admin_site_control/manpower/approvalsignature/{{ committee_rev.chief_eng_approval.id }}/change/">Change</a>
                             {% endif %}
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>{{ committee_rev.sd_approval.signed_by }} <br>Managing Director</td>
+                        <td>{{ committee_rev.sd_approval.signed_on }}</td>
+                        <td>
+                            {{ committee_rev.sd_approval.remarks|remarks_display_str }}
+                            {% if request.user.is_staff %}
+                                <a href="/admin_site_control/manpower/approvalsignature/{{ committee_rev.sd_approval.id }}/change/">Change</a>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {{ committee_rev.sd_approval.comments }}
                         </td>
                     </tr>
                 </table>

@@ -114,6 +114,7 @@ class ApprovalSignature(models.Model):
     signed_by = models.ForeignKey(User, on_delete=models.DO_NOTHING, blank=True, null=True)
     remarks = models.CharField(max_length=512, blank=True, null=True)
     remarks_1 = models.CharField(max_length=512, blank=True, null=True)
+    comments = models.TextField(blank=True, null=True)
 
     class Meta:
         db_table = 'approval_signature'

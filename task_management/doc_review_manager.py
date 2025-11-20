@@ -622,7 +622,7 @@ def committee_recomendation(request,id):
                         if(request.user.username == 'md@npcbl.gov.bd'):
                             committe_rev.sd_approval = approval
                         else:
-                            return HttpResponse("Alert! You are not allowed to recommend!")
+                            return HttpResponse("Alert! You are not allowed to approve document!")
                 else:
                     committe_rev.committee_approval.add(approval)
 
@@ -630,7 +630,11 @@ def committee_recomendation(request,id):
                 context.update({'success': True})
             except Exception as e:
                 return HttpResponse(e.__str__())
-    return render(request, 'document_review/second_tier_recommendation.html', context=context)
+
+    if (request.user.username == 'md@npcbl.gov.bd'):
+        return render(request, 'document_review/second_tier_recommendation_MD.html', context=context)
+    else:
+        return render(request, 'document_review/second_tier_recommendation.html', context=context)
 
 
 def committee_review_comment(request, id):
@@ -657,6 +661,33 @@ def committee_review_comment(request, id):
             context.update({'success': True})
 
     return render(request, 'document_review/committee_review_comment.html', context=context)
+
+
+# def MD_review_comment(request, id):
+#     form = DocumentReviewCommentsForm_MD()
+#
+#     second_tier = SecondTierDocumentReview.objects.get(id=id)
+#     review_comments = DocumentReviewComments.objects.filter(second_tier_committee_review=second_tier)
+#     context = {
+#         'form': form,
+#         'committee_rev_cmnt': review_comments,
+#         'doc_rev': second_tier,
+#     }
+#
+#     if (request.method == 'POST'):
+#         form = DocumentReviewCommentsForm_MD(request.POST)
+#
+#         if (form.is_valid()):
+#             comment_submission = form.save(commit=False)
+#             comment_submission.remarks_by = request.user
+#             comment_submission.created_at = datetime.datetime.now()
+#             comment_submission.task = second_tier.task
+#             comment_submission.second_tier_committee_review = second_tier
+#             comment_submission.save()
+#             context.update({'success': True})
+#
+#     return render(request, 'document_review/md_review_comment.html', context=context)
+
 
 def edit_review_comment(request, id):
     rev_comment = DocumentReviewComments.objects.get(id=id)

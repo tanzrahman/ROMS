@@ -48,7 +48,7 @@
         {% if doc_list %}
             <div class="container-fluid">
                 <h2 class="card-header">Second Tier Document Review Feedback List</h2>
-                <table class="table table-bordered table-hover table-sm" style="text-align: center">
+                <table class="table table-bordered table-hover table-sm" style="text-align:">
                     <tr>
                         <th>Sl No</th>
                         <th>Task</th>
@@ -62,6 +62,7 @@
                         <th>Division Head Recommendation</th>
                         <th>Chief Superintendent Recommendation</th>
                         <th>Managing Director Recommendation</th>
+                        <th>Managing Director Remarks</th>
                     </tr>
                     {% for each in doc_list %}
                         <tr>
@@ -80,7 +81,8 @@
                             <td>{{ each.committee_approval.count }} / {{ each.committee.members.count }}  </td>
                             <td>{{ each.division_head_approval.remarks|remarks_display_str }}</td>
                             <td>{{ each.chief_eng_approval.remarks|remarks_display_str }}</td>
-                            <td>{{ each.sd_approval.remarks|remarks_display_str_MD }}</td>
+                            <td>{{ each.sd_approval.remarks|remarks_display_str }}</td>
+                            <td>{{ each.sd_approval.comments }}</td>
                         </tr>
                     {% endfor %}
                 </table>

@@ -17,30 +17,33 @@ from task_management.forms import OperationalDocumentReview, User, Division, Dep
 from task_management.forms import RegulationDocumentReview, OthersDocumentReview, FireAndEmergencyDocumentReview
 from task_management.models import SecondTierDocumentReview, SafetyAnalysisReportReview, SARCommitteeReport
 
-approvalChoiceList = [("","Select"),("recommend_to_revise","Recommend to Revise "),("no_saw_recommend_to_revise", "SAW Not Completed & Revise Document Required"),
-                      ("recommend_to_approve","Recommend to Approve"),("no_saw_recommend_to_approve","SAW Not Complete but Recommend to Approve"),
+approvalChoiceList = [("", "Select"), ("approve", "Approved"), ("reject", "Rejected"), ("recommend_to_revise", "Recommend to Revise "), ("no_saw_recommend_to_revise", "SAW Not Completed & Revise Document Required"),
+                      ("recommend_to_approve", "Recommend to Approve"), ("no_saw_recommend_to_approve", "SAW Not Complete but Recommend to Approve"),
                       ("saw_not_completed", "SAW Not Completed"),
-                      ("accept_with_remarks","Document can be provisionally accepted considering the review comments"),
-                      ("no_saw_accept_with_remarks","SAW Not Completed & Document can be provisionally accepted considering the review comments"),
+                      ("accept_with_remarks", "Document can be provisionally accepted considering the review comments"),
+                      ("provisionally_accepted", "Provisionally accepted considering the review comments"),
+                      ("no_saw_accept_with_remarks", "SAW Not Completed & Document can be provisionally accepted considering the review comments"),
                       ]
 
 
-approvalChoiceList_MD = [("","Select"), ("approve","Approved"), ("reject","Rejected"),
-                      ("accept_with_remarks","Provisionally accepted considering the review comments"),
-                      ]
+# approvalChoiceList_MD = [("","Select"), ("approve","Approved"), ("reject","Rejected"),
+#                       ("accept_with_remarks","Provisionally accepted considering the review comments"),
+#                       ]
 
 #("provisional_acceptance_with_remarks","Document can be provisionally accepted with incorporating the comments provided during review")
 
 def get_approval_list():
     new_approvalChoiceList = []
     for each in approvalChoiceList:
-        if (each[0] != 'saw_not_completed' and each[0] != 'recommend_to_revise' and each[0] != 'no_saw_recommend_to_revise'):
+        if (each[0] != 'saw_not_completed' and each[0] != 'recommend_to_revise' and each[0] != 'no_saw_recommend_to_revise' and each[0] != 'approve'and each[0] != 'reject' and each[0] != 'provisionally_accepted'):
             new_approvalChoiceList.append(each)
     return new_approvalChoiceList
+
 def get_approval_list_MD():
     new_approvalChoiceList = []
-    for each in approvalChoiceList_MD:
-        new_approvalChoiceList.append(each)
+    for each in approvalChoiceList:
+        if (each[0] == '' or each[0] == 'approve' or each[0] == 'reject' or each[0] == 'provisionally_accepted'):
+            new_approvalChoiceList.append(each)
     print(new_approvalChoiceList)
     return new_approvalChoiceList
 
@@ -350,9 +353,11 @@ class ApprovalSignatureForm(forms.ModelForm):
 
 class ApprovalSignatureForm_MD(forms.ModelForm):
     remarks = forms.ChoiceField(choices=get_approval_list_MD(), required=True, label="Select Your Remarks")
+    comments = forms.CharField(required=False, label="Comments",
+                              widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 2}))
     class Meta:
         model = ApprovalSignature
-        fields = ['remarks']
+        fields = ['remarks', 'comments']
 
 class SafetyAnalysisReportReviewForm(forms.ModelForm):
     committee = forms.ModelChoiceField(queryset=SafetyAnalysisReportCommittee.objects.all(),
