@@ -49,21 +49,21 @@
                 <div>
                     {% if request.user in committee_rev.committee.members.all %}
                         <a href="/task_management/document_review/recommend/{{ committee_rev.id }}?category={{ committee_rev.category }}"
-                           class="btn btn-info">Recommend Document for Approve or Review</a>
+                           class="btn btn-info">Recommend Document to Approve or Review</a>
                         <a href="/task_management/document_review/review_comment/{{ committee_rev.id }}?category={{ committee_rev.category }}"
                            class="btn btn-info">Add Document Review Comments</a>
                     {% endif %}
                     {% if request.user ==  committee_rev.committee.div_head%}
                         <a href="/task_management/document_review/recommend/{{ committee_rev.id }}?category={{ committee_rev.category }}&recommendation_by=div_head"
-                           class="btn btn-info">Recommend Document for Approve or Review as Divisional Head</a>
+                           class="btn btn-info">Recommend Document to Approve or Review as Divisional Head</a>
                     {% endif %}
                     {% if request.user|is_chief_eng  %}
                         <a href="/task_management/document_review/recommend/{{ committee_rev.id }}?category={{ committee_rev.category }}&recommendation_by=chief_eng"
-                           class="btn btn-info">Recommend Document for Approve or Review as Chief Superintendent</a>
+                           class="btn btn-info">Recommend Document to Approve or Review as Chief Superintendent</a>
                     {% endif %}
                     {% if request.user|is_sd  %}
                         <a href="/task_management/document_review/recommend/{{ committee_rev.id }}?category={{ committee_rev.category }}&recommendation_by=sd"
-                           class="btn btn-info">Document for Approve or Reject</a>
+                           class="btn btn-info">Finalize Approval Status</a>
                     {% endif %}
                 </div><br>
                 <div>
