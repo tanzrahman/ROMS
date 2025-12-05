@@ -43,6 +43,8 @@ def doc_review_handler(request,action=None,id=None):
         return assign_doc_rev_committee(request, id)
     if(action=='second_tier_doc_review_list'):
         return second_tier_doc_review_list(request)
+    if(action=='pms_second_tier_doc_review_list'):
+        return pms_second_tier_doc_review_list(request)
     if(action=='second_tier_doc_review'):
         return second_tier_doc_review(request)
     if(action=='committee_open_review'):
@@ -442,6 +444,113 @@ def second_tier_doc_review_list(request, action=None, id=None):
     }
 
     return render(request, 'document_review/second_tier_doc_review_list.html', context)
+
+
+def pms_second_tier_doc_review_list(request, action=None, id=None):
+    page_no = 1
+    no_of_items = 200
+
+    search_form = SecondTierReviewSearchForm()
+
+    filter_list = []
+
+    if (request.GET):
+        search_form = SecondTierReviewSearchForm(request.GET)
+
+        if (search_form.is_valid()):
+            for each in search_form.changed_data:
+                if ('task_id' in each):
+                    filter_list.append(Q(**{'task__task_id__icontains': search_form.cleaned_data[each].upper()}))
+                if ('title' in each):
+                    filter_list.append(Q(**{'task__title__icontains': search_form.cleaned_data[each].upper()}))
+                if (each == 'division'):
+                    filter_list.append(Q(**{'task__division': search_form.cleaned_data[each]}))
+                if (each == 'department'):
+                    filter_list.append(Q(**{'task__dept_id': search_form.cleaned_data[each]}))
+                if (each == 'committee'):
+                    filter_list.append(Q(**{'committee': search_form.cleaned_data[each]}))
+                if (each == 'div_head_recommendation'):
+                    if search_form.cleaned_data[each] != "":
+                        value = True
+                        if search_form.cleaned_data[each] == "Yes":
+                            value = False
+                        filter_list.append(Q(**{'division_head_approval__isnull': value}))
+                if (each == 'chief_engr_recommendation'):
+                    if search_form.cleaned_data[each] != "":
+                        value = True
+                        if search_form.cleaned_data[each] == "Yes":
+                            value = False
+                        filter_list.append(Q(**{'chief_eng_approval__isnull': value}))
+                if (each == 'sd_recommendation'):
+                    if search_form.cleaned_data[each] != "":
+                        value = True
+                        if search_form.cleaned_data[each] == "Yes":
+                            value = False
+                        filter_list.append(Q(**{'sd_approval__isnull': value}))
+
+    if (len(filter_list) > 0):
+        doc_list = SecondTierDocumentReview.objects.filter(task__created_date__lt='2025-07-31').filter(reduce(operator.and_, filter_list)).annotate(count=Count('committee_approval')).order_by('-count')
+    else:
+        doc_list = SecondTierDocumentReview.objects.filter(task__created_date__lt='2025-07-31').annotate(count=Count('committee_approval')).order_by('-count')
+
+    total_reviews = len(doc_list)
+
+    # for download list as excel
+    if (request.GET.get('download')):
+        if (request.GET.get('download') == 'excel'):
+            print("Send CSV report")
+            response = HttpResponse(content_type='text/csv')
+            response['Content-Disposition'] = 'attachment; filename="committee_recommendation_list.csv"'
+            writer = csv.writer(response)
+            writer.writerow(
+                ["Task", "Title", "Division", "Department/Shop", "Committee", "Assigned Date", "Deadline",
+                 "Div Head Recommendation", "CE Recommendation", "SD Recommendation"])
+            for each in doc_list:
+                row = []
+                row.append(each.task)
+                row.append(each.task.title)
+                row.append(each.task.division)
+                row.append(each.task.dept_id)
+                row.append(each.committee)
+                row.append(each.assigned_date)
+                row.append(each.committee_deadline)
+                if(each.division_head_approval == None):
+                    row.append("")
+                else:
+                    row.append(each.division_head_approval.remarks)
+                if(each.chief_eng_approval == None):
+                    row.append("")
+                else:
+                    row.append(each.chief_eng_approval.remarks)
+                if(each.sd_approval == None):
+                    row.append("")
+                else:
+                    row.append(each.sd_approval.remarks)
+                writer.writerow(row)
+            return response
+
+
+    paginator = Paginator(doc_list, no_of_items)
+
+    if (request.GET.get('page_no')):
+        page_no = int(request.GET.get('page_no'))
+    try:
+        doc_list = paginator.page(page_no)
+
+    except PageNotAnInteger:
+        doc_list = paginator.page(page_no)
+
+    except EmptyPage:
+        doc_list = paginator.page(paginator.num_pages)
+
+    context = {
+            'doc_list': doc_list,
+            'total_reviews': total_reviews,
+            'form': search_form,
+    }
+
+    return render(request, 'document_review/pms_second_tier_doc_review_list.html', context)
+
 
 
 def second_tier_doc_review(request, action=None, id=None):
