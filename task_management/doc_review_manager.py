@@ -57,6 +57,8 @@ def doc_review_handler(request,action=None,id=None):
         return edit_review_comment(request, id)
     if (action == 'download_committee_review'):
         return download_committee_review(request, id)
+    if (action == 'pms_download_committee_review'):
+        return pms_download_committee_review(request, id)
     if (action == 'assign_sar_reviewer'):
         return assign_sar_reviewer(request)
     if(action == 'delete_sar_reviewer'):
@@ -449,7 +451,7 @@ def second_tier_doc_review_list(request, action=None, id=None):
 def pms_second_tier_doc_review_list(request, action=None, id=None):
     # to change MD sir's approval remarks
     doc_list_ = SecondTierDocumentReview.objects.filter(task__created_date__lt='2025-07-31',
-                                                       sd_approval__remarks='accept_with_remarks')
+                                                        sd_approval__remarks__in=['accept_with_remarks', 'recommend_to_approve'])
     print("doc_list: ", doc_list_.count())
     for each in doc_list_:
         each.sd_approval.remarks='approve'
