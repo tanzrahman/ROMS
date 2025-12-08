@@ -447,6 +447,14 @@ def second_tier_doc_review_list(request, action=None, id=None):
 
 
 def pms_second_tier_doc_review_list(request, action=None, id=None):
+    # to change MD sir's approval remarks
+    doc_list_ = SecondTierDocumentReview.objects.filter(task__created_date__lt='2025-07-31',
+                                                       sd_approval__remarks='accept_with_remarks')
+    print("doc_list: ", doc_list_.count())
+    for each in doc_list_:
+        each.sd_approval.remarks='approve'
+        each.sd_approval.save()
+
     page_no = 1
     no_of_items = 200
 
@@ -489,9 +497,9 @@ def pms_second_tier_doc_review_list(request, action=None, id=None):
                         filter_list.append(Q(**{'sd_approval__isnull': value}))
 
     if (len(filter_list) > 0):
-        doc_list = SecondTierDocumentReview.objects.filter(task__created_date__lt='2025-07-31').filter(reduce(operator.and_, filter_list)).annotate(count=Count('committee_approval')).order_by('-count')
+        doc_list = SecondTierDocumentReview.objects.filter(task__created_date__lt='2025-07-31', sd_approval__remarks='approve').filter(reduce(operator.and_, filter_list)).annotate(count=Count('committee_approval')).order_by('-count')
     else:
-        doc_list = SecondTierDocumentReview.objects.filter(task__created_date__lt='2025-07-31').annotate(count=Count('committee_approval')).order_by('-count')
+        doc_list = SecondTierDocumentReview.objects.filter(task__created_date__lt='2025-07-31', sd_approval__remarks='approve').annotate(count=Count('committee_approval')).order_by('-count')
 
     total_reviews = len(doc_list)
 
@@ -857,6 +865,54 @@ def download_committee_review(request, id):
         return render(request, 'document_review/doc_review_complete.html', context=context)
     else:
         template = get_template('document_review/doc_review_complete_report.html')
+        context.update({'host': '172.30.31.254'})
+        report = template.render(context)
+        result = BytesIO()
+        pdf = pisa.pisaDocument(BytesIO(report.encode(encoding="utf-8",errors='replace')),encoding="utf-8", dest=result)
+        response = HttpResponse(result.getvalue(), content_type='application/pdf')
+        response['Content-Disposition'] = 'inline; filename="doc_rev_' + str(feed_back.task) + '.pdf"'
+        return response
+
+
+def pms_download_committee_review(request, id):
+    committee_rev = SecondTierDocumentReview.objects.get(id=id)
+    category = committee_rev.category
+    feed_back = None
+    form = None
+    if (category == 'Operational'):
+        feed_back = committee_rev.op_doc_review
+        form = OperationalDocumentReviewForm(instance=feed_back, initial={'task': feed_back.task})
+    if (category == 'Regulation'):
+        feed_back = committee_rev.regulation_doc_review
+        form = RegulationDocumentReviewForm(instance=feed_back, initial={'task': feed_back.task})
+    if (category == 'Fire'):
+        feed_back = committee_rev.fire_doc_review
+        form = FireAndEmergencyDocumentReviewForm(instance=feed_back, initial={'task': feed_back.task})
+    if (category == 'Other'):
+        feed_back = committee_rev.other_doc_review
+        form = OthersDocumentReviewForm(instance=feed_back, initial={'task': feed_back.task})
+
+    committee_rev_cmnt = DocumentReviewComments.objects.filter(second_tier_committee_review_id=id)
+
+    no_pdf = False
+
+    for each in committee_rev_cmnt:
+        print(len(each.proposed_text),len(each.original_text),len(each.remarks))
+        if(len(each.proposed_text)> 2200 or len(each.original_text)>2200 or len(each.remarks)>2200):
+            no_pdf = True
+
+    context = {
+        'form': form,
+        'feedback': feed_back,
+        'task': feed_back.task,
+        'committee_rev': committee_rev,
+        'committee_rev_cmnt': committee_rev_cmnt,
+        'host':request.get_host()
+    }
+    if(no_pdf):
+        return render(request, 'document_review/pms_doc_review_complete.html', context=context)
+    else:
+        template = get_template('document_review/pms_doc_review_complete_report.html')
         context.update({'host': '172.30.31.254'})
         report = template.render(context)
         result = BytesIO()

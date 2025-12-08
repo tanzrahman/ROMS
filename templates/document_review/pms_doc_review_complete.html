@@ -1,0 +1,228 @@
+<html>
+{% load document_review_tags %}
+{% load static %}
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <script src="{% static 'js/selectize.js' %}"></script>
+    <script src="/static/js/jquery-3.5.1.min.js"></script>
+    <link href="/static/css/selectize.css" rel="stylesheet"/>
+    <link href="/static/css/bootstrap.css" rel="stylesheet"/>
+    <style>
+        table {
+            page-break-inside: avoid;
+        }
+
+        div {
+            page-break-inside: avoid;
+            page-break-after: always;
+        }
+
+        p {
+            break-inside: avoid;
+            break-after: auto;
+        }
+    </style>
+</head>
+
+<body style='font-family: "Roboto", "Lucida Grande", "DejaVu Sans", "Bitstream Vera Sans", Verdana, Arial, "sans-serif"'>
+
+<div style="padding-left: 5%; padding-top: 15%">
+    <div style="padding-bottom:1% ">
+        <h2 style="text-align: center; font-size: 1.1em; padding-bottom: 5%">Rooppur NPP Document Review</h2>
+        <table class="table" style="width: 100%; text-align: center; font-size: 1.1em;">
+            <tr>
+                <td>
+                    <span><b>Document Code: </b>{{ task }}</span><br>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span><b>Document Version: </b>{{ form.initial.version_of_doc|extract_version_info }}</span>
+                    <br><br>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span><b>Title: </b>{{ task.title }}</span>
+                </td>
+            </tr>
+            <tr>
+                <td><b>Responsible Division:</b> {{ feedback.task.division }}</td>
+            </tr>
+            <tr>
+                <td><b>Review By:</b> {{ feedback.user }}</td>
+            </tr>
+            <tr>
+                <td><b>Review Date:</b> {{ feedback.modified_at }}</td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<div style='padding-left:5%;'>
+    <div style="padding-bottom:1% ">
+        {% if form %}
+            <h2>Feedback Details</h2>
+            {% for each in form %}
+                <p style="text-align: justify-all">
+                    <span style="font-weight: bold">Question-{{ forloop.counter }}: {{ each.label }}</span>
+                    <br>
+                    <span style="width: 95%">
+                    <b>Answer: </b>
+                    {{ each.initial|linebreaksbr }}
+                    <br>
+                </span>
+                </p>
+            {% endfor %}
+        {% endif %}
+    </div>
+</div>
+
+<div style="padding-left: 5%; padding-bottom: 2%; width: 95%">
+    <h2 style="text-align: center">Committee Review Comments</h2>
+
+    <table class="table table-bordered">
+        <thead>
+        <th>SL. No</th>
+        <th>Section No</th>
+        <th>Original Text</th>
+        <th>Proposed Text</th>
+        <th>Remarks</th>
+        </thead>
+        {% for each in committee_rev_cmnt %}
+            <tr>
+                <td style="width: 3%">{{ forloop.counter }}</td>
+                <td style="width: 7%">{{ each.section_no }}</td>
+                <td style="width: 35%; word-wrap: anywhere;">{{ each.original_text|linebreaks }}</td>
+                <td style="width: 35%; word-wrap: anywhere;">{{ each.proposed_text|linebreaks }}</td>
+                <td style="width: 20%; word-wrap: anywhere;">{{ each.remarks|linebreaks }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+</div>
+
+
+<div style="padding-left: 5%;">
+    <div>
+        {% if committee_rev.committee_approval %}
+            <table class="table table-bordered table-responsive" style="width: 100%">
+                 <tr>
+                    <td colspan="3">
+                        <h3>Approval Sheet</h3>
+                    </td>
+                </tr>
+                <tr style="text-align: left">
+                    <td colspan="3">
+                        <span><b>Document Code: </b>{{ task }}</span><br>
+                        <span><b>Document Version: </b>{{ form.initial.version_of_doc|extract_version_info }}</span><br>
+                        <span><b>Title: </b>{{ task.title }}</span>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Recommendation By</th>
+                    <th>Recommendation</th>
+                    <th>Signature</th>
+                    <th>Remarks</th>
+                </tr>
+                {% for each in committee_rev.committee_approval.all %}
+                    <tr>
+                        <td>
+                            {{ each.signed_by.get_full_name }}
+                            <br>
+                            {{ each.signed_by }}
+                        </td>
+                        <td>{{ each.remarks|remarks_display_str }}</td>
+                        <td style="margin-top:5%">
+                            <img id="signature_{{ forloop.counter }}" height="40" width="100"
+                                 src="https://{{ host }}/manpower/user/embedd_signature?hash={{ each.sign_hash }}">
+                            <br>
+                            {{ each.signed_on }}
+                        </td>
+                    </tr>
+                {% endfor %}
+                <tr>
+                    <td>
+                        {{ committee_rev.division_head_approval.signed_by.get_full_name }}
+                        <br>
+                        Head of Division
+                    </td>
+                    <td>
+                        {{ committee_rev.division_head_approval.remarks|remarks_display_str }}
+                    </td>
+                    <td style="margin-top:5%">
+                        {% if committee_rev.division_head_approval.sign_hash %}
+                            <img id="signature" height="40" width="100"
+                                 src="https://{{ host }}/manpower/user/embedd_signature?hash={{ committee_rev.division_head_approval.sign_hash }}">
+                            <br>
+                            {{ committee_rev.division_head_approval.signed_on }}
+                        {% endif %}
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        {{ committee_rev.chief_eng_approval.signed_by.get_full_name }}
+                        <br>
+                        Chief Engineer
+                    </td>
+                    <td>
+                        {{ committee_rev.chief_eng_approval.remarks|remarks_display_str }}
+                    </td>
+                    <td style="margin-top:5%">
+                        {% if committee_rev.chief_eng_approval.sign_hash %}
+                            <img id="signature" height="40" width="100"
+                                 src="https://{{ host }}/manpower/user/embedd_signature?hash={{ committee_rev.chief_eng_approval.sign_hash }}">
+                            <br>
+                            {{ committee_rev.chief_eng_approval.signed_on }}
+                        {% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Dr. Md. Zahedul Hassan
+                        <br>
+                        Station Director
+                    </td>
+                    <td>
+                        {{ committee_rev.sd_approval.remarks|remarks_display_str }}
+                    </td>
+                    <td style="margin-top:5%">
+                        {% if committee_rev.sd_approval.sign_hash %}
+                            <img id="signature" height="40" width="100"
+                                 src="https://{{ host }}/manpower/user/embedd_signature?hash={{ committee_rev.sd_approval.sign_hash }}">
+                            <br>
+                            {{ committee_rev.sd_approval.signed_on }}
+                        {% endif %}
+                    </td>
+                    <td>{{ committee_rev.sd_approval.comments }}</td>
+                </tr>
+            </table>
+        {% endif %}
+    </div>
+</div>
+<script>
+    function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+    function to_pdf()
+    {
+        //window.print()
+    }
+    async function load_all_sigs() {
+        var sig_count = {{committee_rev.committee_approval.all.count}};
+        await sleep(500);
+        for (i = 1; i <= sig_count; i++) {
+            var item = 'signature_' + i;
+            var src = document.getElementById(item).src;
+            document.getElementById(item).src = src;
+            await sleep(600);
+        }
+        to_pdf();
+    }
+
+    $(document).ready(function () {
+        load_all_sigs();
+    });
+</script>
+</body>
+</html>
