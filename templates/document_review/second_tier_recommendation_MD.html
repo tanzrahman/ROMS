@@ -56,10 +56,14 @@
                             <a href="/manpower/user/upload_signature" target="_blank">Click here to upload
                                 signature</a>
                         {% else %}
-                            <input type="submit" name="submit" value="Submit Remarks">
+                            <input class="btn btn-success" type="submit" name="submit" value="Submit Remarks">
                         {% endif %}
                     </form>
                 {% endif %}
+            <br>
+                <!--<a href="/task_management/document_review/send_comment/{{ feedback.task.id }}?type=first_tier" class="btn btn-outline-info"><b>Notify First Tier Reviewer</b></a>
+                <a href="/task_management/document_review/send_comment/{{ feedback.task.id }}?type=second_tier" class="btn btn-outline-info"><b>Notify Second Tier Review Committee</b></a>
+                <a href="/task_management/document_review/send_comment/{{ feedback.task.id }}?type=all_tier" class="btn btn-outline-info"><b>Notify to first & second tier</b></a>-->
             </div>
         </div>
     </div>

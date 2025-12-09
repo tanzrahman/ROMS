@@ -115,6 +115,7 @@ class ApprovalSignature(models.Model):
     remarks = models.CharField(max_length=512, blank=True, null=True)
     remarks_1 = models.CharField(max_length=512, blank=True, null=True)
     comments = models.TextField(blank=True, null=True)
+    comment_notify = models.CharField(max_length=512, blank=True, null=True)
 
     class Meta:
         db_table = 'approval_signature'

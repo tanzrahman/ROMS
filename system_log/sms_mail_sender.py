@@ -78,10 +78,83 @@ def mail_and_send_sms(msg_body, user=None, subject=None):
     new_log.save()
 
 
+def doc_review_mail_and_send_sms(msg_body, user=None, task_id=None, subject=None):
+    print("Send Mail, SMS to ", user.email)
+
+   # user = User.objects.get(username='omar.faruk384')
+    if(settings.DEBUG==True):
+        print("Successfully called SMS/Mailer ", msg_body)
+        return
+
+    receiver_phone = user.profile.phone
+    receiver_email = user.email
+
+    api_url = "https://api.greenweb.com.bd/api.php"
+
+    token = settings.SMS_TOKEN
+
+    data = {"token": token,
+            "to": receiver_phone,
+            "message": msg_body
+            }
+
+    response = requests.post(url=api_url, data=data)
+
+    sms_success = False
+    sms_error = ""
+    email_error = ""
+    email_success = False
+    if (response.status_code == 200):
+        if ('Successfully' in response.text):
+            sms_success = True
+        else:
+            sms_error = response.text
+
+    current_time = datetime.datetime.now()
+
+    smtp_server = settings.EMAIL_HOST
+    port = settings.SMTP_PORT  # For starttls
+    sender_email = settings.EMAIL_SENDER
+    password = settings.EMAIL_PASS
+
+    # Create a secure SSL context
+    context = ssl.create_default_context()
+
+
+    message_details = f'Subject: Document ({task_id}) Review Comment from MD\n\n{str(msg_body)}'
+    if(subject):
+        message_details = f'Subject: Document ({task_id}) Review Comment from MD\n\n{str(msg_body)}'
+
+    # Try to log in to server and send email
+    try:
+        server = smtplib.SMTP(smtp_server, port)
+        server.ehlo()  # Can be omitted
+        server.starttls(context=context)  # Secure the connection
+        server.ehlo()  # Can be omitted
+        server.login(sender_email, password)
+        resp = server.sendmail(from_addr=sender_email, to_addrs=user.email, msg=message_details)
+
+    except Exception as e:
+        # Print any error messages to stdout
+        print(e)
+        email_error = e.__str__()
+    finally:
+        server.quit()
+
+    if(email_error == ""):
+        email_success = True
+
+    new_log = MailAndSMSLog(receiver=user, message_body=msg_body, send_time=current_time,
+                            email=receiver_email, phone_no=receiver_phone,
+                            sms_success=sms_success, email_success=email_success,
+                            sms_error_reason=sms_error, email_error_reason=email_error)
+    new_log.save()
+
+
 def send_email_only(msg_body, subject=None, receiver_email=None):
     print("Send Mail to ", receiver_email)
 
-   # user = User.objects.get(username='omar.faruk384')
+   # user = User.objects.get(username='tanziar.rahman523')
     if(settings.DEBUG==True):
         print("Successfully called SMS/Mailer")
         return

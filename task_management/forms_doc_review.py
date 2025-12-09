@@ -25,6 +25,8 @@ approvalChoiceList = [("", "Select"), ("approve", "Approved"), ("reject", "Rejec
                       ("no_saw_accept_with_remarks", "SAW Not Completed & Document can be provisionally accepted considering the review comments"),
                       ]
 
+notifyReviewerList = [("", "Select"), ("first_tier", "First Tier"), ("second_tier", "Second Tier"), ("first_second_tier", "Both")]
+
 
 # approvalChoiceList_MD = [("","Select"), ("approve","Approved"), ("reject","Rejected"),
 #                       ("accept_with_remarks","Provisionally accepted considering the review comments"),
@@ -354,10 +356,12 @@ class ApprovalSignatureForm(forms.ModelForm):
 class ApprovalSignatureForm_MD(forms.ModelForm):
     remarks = forms.ChoiceField(choices=get_approval_list_MD(), required=True, label="Select Your Remarks")
     comments = forms.CharField(required=False, label="Comments",
-                              widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 2}))
+                              widget=forms.Textarea(attrs={'class': 'form-control mb-3', 'rows': 2}))
+    comment_notify = forms.ChoiceField(choices=notifyReviewerList, required=False, label="Send Comment to reviewers")
+
     class Meta:
         model = ApprovalSignature
-        fields = ['remarks', 'comments']
+        fields = ['remarks', 'comments', 'comment_notify']
 
 class SafetyAnalysisReportReviewForm(forms.ModelForm):
     committee = forms.ModelChoiceField(queryset=SafetyAnalysisReportCommittee.objects.all(),

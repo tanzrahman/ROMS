@@ -24,6 +24,8 @@ from task_management.forms_doc_review import OperationalDocumentReviewForm, Regu
     SafetyAnalysisReportReviewForm, SARCommitteeReportForm, ApprovalSignatureForm_MD
 
 from task_management.ftp_handler import FILETYPE, upload_to_ftp
+from system_log.sms_mail_sender import doc_review_mail_and_send_sms
+from time import sleep
 
 
 def doc_review_handler(request,action=None,id=None):
@@ -51,6 +53,8 @@ def doc_review_handler(request,action=None,id=None):
         return open_doc_rev_by_committee(request,id)
     if (action == 'recommend'):
         return committee_recomendation(request, id)
+    if (action == 'send_comment'):
+        return send_MD_comment_to_reviewers(request, id)
     if (action == 'review_comment'):
         return committee_review_comment(request, id)
     if (action == 'edit_review_comment'):
@@ -682,7 +686,7 @@ def open_doc_rev_by_committee(request, id):
     }
     return render(request, 'document_review/committee_view_doc_feedback.html', context=context)
 
-def committee_recomendation(request,id):
+def committee_recomendation(request, id):
 
     committe_rev = SecondTierDocumentReview.objects.get(id=id)
     if (request.user.profile.access_level > 2):
@@ -727,6 +731,42 @@ def committee_recomendation(request,id):
                 approval.signed_by = request.user
                 approval.signed_on = datetime.datetime.today()
                 approval.save()
+
+                # Notify MD's approval comment to reviewers
+                if(request.POST.get('comment_notify')):
+                    notify_reviewer = request.POST.get('comment_notify')
+                    if(notify_reviewer == 'first_tier'):
+                        reviewer = User.objects.get(email=feed_back.user)
+
+                        # send notification
+                        msg_body = request.POST.get('comments')
+                        notify = threading.Thread(target=doc_review_mail_and_send_sms, args=(msg_body, reviewer, feed_back.task.task_id))
+                        notify.start()
+                        sleep(2)
+
+                    elif(notify_reviewer == 'second_tier'):
+                        committee_members = committe_rev.committee.members.all()
+
+                        # send notification
+                        msg_body = request.POST.get('comments')
+                        for reviewer in committee_members:
+                            notify = threading.Thread(target=doc_review_mail_and_send_sms,
+                                                  args=(msg_body, reviewer, feed_back.task.task_id))
+                            notify.start()
+                            sleep(2)
+
+                    else:
+                        committee_members = committe_rev.committee.members.all() | User.objects.filter(email=feed_back.user)
+
+                        # send notification
+                        msg_body = request.POST.get('comments')
+                        for reviewer in committee_members:
+                            print(reviewer)
+                            notify = threading.Thread(target=doc_review_mail_and_send_sms,
+                                                  args=(msg_body, reviewer, feed_back.task.task_id))
+                            notify.start()
+                        sleep(2)
+
 
                 if(request.GET.get('recommendation_by')):
                     recommend_by = request.GET.get('recommendation_by')
