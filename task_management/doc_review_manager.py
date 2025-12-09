@@ -743,6 +743,7 @@ def committee_recomendation(request, id):
                         notify = threading.Thread(target=doc_review_mail_and_send_sms, args=(msg_body, reviewer, feed_back.task.task_id))
                         notify.start()
                         sleep(2)
+                        context.update({'comment_sent': True, 'notify_reviewer': 'First Tier Reviewer'})
 
                     elif(notify_reviewer == 'second_tier'):
                         committee_members = committe_rev.committee.members.all()
@@ -753,7 +754,8 @@ def committee_recomendation(request, id):
                             notify = threading.Thread(target=doc_review_mail_and_send_sms,
                                                   args=(msg_body, reviewer, feed_back.task.task_id))
                             notify.start()
-                            sleep(2)
+                        sleep(2)
+                        context.update({'comment_sent': True, 'notify_reviewer': 'Second Tier Reviewer'})
 
                     else:
                         committee_members = committe_rev.committee.members.all() | User.objects.filter(email=feed_back.user)
@@ -766,6 +768,7 @@ def committee_recomendation(request, id):
                                                   args=(msg_body, reviewer, feed_back.task.task_id))
                             notify.start()
                         sleep(2)
+                        context.update({'comment_sent': True, 'notify_reviewer': 'Both (First & Second Tier Reviewers)'})
 
 
                 if(request.GET.get('recommendation_by')):

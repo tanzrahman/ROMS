@@ -9,8 +9,16 @@
 
         {% if success %}
             <div>
-                <h3 style="color: darkgreen">
-                    Remarks Successfully Submitted.
+                <h3 style="color: darkgreen; text-align: center">
+                    Remarks Successfully Submitted.<br>
+                </h3>
+            </div>
+        {% endif %}
+
+        {% if comment_sent %}
+            <div>
+                <h3 style="color: darkgreen; text-align: center">
+                    Comment Sent to {{ notify_reviewer }}<br>
                 </h3>
             </div>
         {% endif %}

@@ -25,7 +25,7 @@ approvalChoiceList = [("", "Select"), ("approve", "Approved"), ("reject", "Rejec
                       ("no_saw_accept_with_remarks", "SAW Not Completed & Document can be provisionally accepted considering the review comments"),
                       ]
 
-notifyReviewerList = [("", "Select"), ("first_tier", "First Tier"), ("second_tier", "Second Tier"), ("first_second_tier", "Both")]
+notifyReviewerList = [("", "Select"), ("first_tier", "First Tier Reviewer"), ("second_tier", "Second Tier Reviewer"), ("first_second_tier", "Both (First Tier & Second Tier)")]
 
 
 # approvalChoiceList_MD = [("","Select"), ("approve","Approved"), ("reject","Rejected"),
