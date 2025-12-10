@@ -51,10 +51,10 @@ def doc_review_handler(request,action=None,id=None):
         return second_tier_doc_review(request)
     if(action=='committee_open_review'):
         return open_doc_rev_by_committee(request,id)
+    if(action=='pms_committee_open_review'):
+        return pms_open_doc_rev_by_committee(request,id)
     if (action == 'recommend'):
         return committee_recomendation(request, id)
-    if (action == 'send_comment'):
-        return send_MD_comment_to_reviewers(request, id)
     if (action == 'review_comment'):
         return committee_review_comment(request, id)
     if (action == 'edit_review_comment'):
@@ -685,6 +685,44 @@ def open_doc_rev_by_committee(request, id):
         'task_comment_list': task_comment_list,
     }
     return render(request, 'document_review/committee_view_doc_feedback.html', context=context)
+
+
+def pms_open_doc_rev_by_committee(request, id):
+
+    committe_rev = SecondTierDocumentReview.objects.get(id=id)
+    if(request.user.profile.access_level > 2 and request.user.has_perm('task_management.view_secondtierdocumentreview') == False):
+        if (not request.user in committe_rev.committee.members.all()):
+            if(request.user != committe_rev.committee.div_head):
+                return HttpResponse("You are not a member of the Second Tier committee of this Document!")
+    category = committe_rev.category
+    feed_back = None
+    form = None
+    if (category == 'Operational'):
+        feed_back = committe_rev.op_doc_review
+        form = OperationalDocumentReviewForm(instance=feed_back, initial={'task': feed_back.task})
+    if (category == 'Regulation'):
+        feed_back = committe_rev.regulation_doc_review
+        form = RegulationDocumentReviewForm(instance=feed_back, initial={'task': feed_back.task})
+    if (category == 'Fire'):
+        feed_back = committe_rev.fire_doc_review
+        form = FireAndEmergencyDocumentReviewForm(instance=feed_back, initial={'task': feed_back.task})
+    if (category == 'Other'):
+        feed_back = committe_rev.other_doc_review
+        form = OthersDocumentReviewForm(instance=feed_back, initial={'task': feed_back.task})
+
+    committee_rev_cmnt = DocumentReviewComments.objects.filter(second_tier_committee_review_id=id)
+
+    task_comment_list = Comment.objects.filter(task_id=committe_rev.task).order_by('-created_date')
+
+    context = {
+        'form': form,
+        'feedback': feed_back,
+        'task':feed_back.task,
+        'committee_rev': committe_rev,
+        'committee_rev_cmnt': committee_rev_cmnt,
+        'task_comment_list': task_comment_list,
+    }
+    return render(request, 'document_review/pms_committee_view_doc_feedback.html', context=context)
 
 def committee_recomendation(request, id):
 
