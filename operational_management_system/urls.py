@@ -31,7 +31,7 @@ import system_log.notification_manager as notif_man
 from task_management.doc_request_manager import document_request_handler
 from task_management.lecture_manager import lecture_request_handler
 urlpatterns = [
-    path('admin_site_control/', admin.site.urls),
+    path('admin_roms_control/', admin.site.urls),
     path('ts/',include("technical_solution.urls")),
     path('',task_management.views.homepage,name='homepage'),
     path('ru_task/', task_management.russian_manager.ru_task_list, name='ru_task_list'),
