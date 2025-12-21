@@ -68,24 +68,39 @@
 
     <!-- front page -->
     <div style="padding-left: 5%; padding-top: 15%">
-        <h3 style="text-align: center; padding-bottom: 5%; font-weight: bold">NUCLEAR POWER PLANT COMPANY BANGLADESH LIMITED<br>(NPCBL)</h3>
+        <p style="font-size:18pt; text-align: center; padding-bottom: 5%; font-weight: bold">NUCLEAR POWER PLANT COMPANY BANGLADESH LIMITED<br>(NPCBL)</p>
         <div style="text-align: center">
             <img src={{ npcbl_logo_path }} alt="npcbl_logo">
         </div>
 
         <br><br>
-        <div style="text-align: right; margin-right: 20%">
-            <h4 style="font-weight: bold">APPROVED</h4>
-            <h5>Managing Director</h5><br>
-            {% if committee_rev.chief_eng_approval.sign_hash %}
-                <img id="signature" height="40" width="100"
-                     src="http://{{ host }}/manpower/user/embedd_signature?hash={{ committee_rev.sd_approval.sign_hash }}">
-                <br>
-                <div style="width: 200px; border-top: 2px solid #000; margin-left: auto; margin-right: 0;"></div>
-                (Dr. Md. Zahedul Hassan) <br>
-                {{ committee_rev.sd_approval.signed_on }}
-            {% endif %}
-        </div>
+        <table style="width: 100%">
+            <tr>
+                <td style="width: 60%"></td>
+                <td style="width: 40%; text-align: right">
+                    <h4><b>APPROVED</b></h4>
+                    <h5>Managing Director</h5>
+                    <br>
+
+                    {% if committee_rev.sd_approval.sign_hash %}
+                        <img height="40" width="100"
+                             src="http://{{ host }}/manpower/user/embedd_signature?hash={{ committee_rev.sd_approval.sign_hash }}">
+                        <br><br>
+
+                        <table width="200" align="right">
+                            <tr>
+                                <td style="border-top:2px solid black;"></td>
+                            </tr>
+                        </table>
+
+                        <br>
+                        (Dr. Md. Zahedul Hassan)<br>
+                        {{ committee_rev.sd_approval.signed_on }}
+                    {% endif %}
+                </td>
+            </tr>
+        </table>
+
         <br><br>
         <div style="text-align: center">
             {% if unit == '0' %}
