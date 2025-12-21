@@ -79,9 +79,9 @@
             <h5>Managing Director</h5><br>
             {% if committee_rev.chief_eng_approval.sign_hash %}
                 <img id="signature" height="40" width="100"
-                     src="https://{{ host }}/manpower/user/embedd_signature?hash={{ committee_rev.sd_approval.sign_hash }}">
+                     src="http://{{ host }}/manpower/user/embedd_signature?hash={{ committee_rev.sd_approval.sign_hash }}">
                 <br>
-                <hr style="width: 200px; margin-left: auto; margin-right: 0; border-top: 2px solid #000;">
+                <div style="width: 200px; border-top: 2px solid #000; margin-left: auto; margin-right: 0;"></div>
                 (Dr. Md. Zahedul Hassan) <br>
                 {{ committee_rev.sd_approval.signed_on }}
             {% endif %}
@@ -141,7 +141,7 @@
         <div>
             <table class="table table-bordered" style="width: 100%; text-align: center;  border:1px solid black; border-collapse: collapse;" >
                 <tr>
-                    <th style="border:1px solid black;"></th>
+                    <th style="border:1px solid black;">&nbsp;</th>
                     <th style="border:1px solid black;">Position</th>
                     <th style="border:1px solid black;">Full Name</th>
                     <th style="border:1px solid black;">Signature</th>
@@ -156,7 +156,7 @@
                     {% if committee_rev.chief_eng_approval.sign_hash %}
                         <td style="margin-top:5%; border:1px solid black;">
                             <img id="signature" height="40" width="100"
-                                     src="https://{{ host }}/manpower/user/embedd_signature?hash={{ committee_rev.chief_eng_approval.sign_hash }}">
+                                     src="http://{{ host }}/manpower/user/embedd_signature?hash={{ committee_rev.chief_eng_approval.sign_hash }}">
                         </td>
                         <td style="border:1px solid black;">{{ committee_rev.chief_eng_approval.signed_on }}</td>
 
@@ -171,7 +171,7 @@
                     {% if committee_rev.division_head_approval.sign_hash %}
                         <td style="margin-top:5%; border:1px solid black;">
                             <img id="signature" height="40" width="100"
-                                 src="https://{{ host }}/manpower/user/embedd_signature?hash={{ committee_rev.division_head_approval.sign_hash }}">
+                                 src="http://{{ host }}/manpower/user/embedd_signature?hash={{ committee_rev.division_head_approval.sign_hash }}">
                         </td>
                         <td style="border:1px solid black;">{{ committee_rev.division_head_approval.signed_on }}</td>
                     {% endif %}
@@ -189,7 +189,7 @@
                             </td>
                             <td style="margin-top:5%; border:1px solid black;">
                                 <img id="signature_{{ forloop.counter }}" height="40" width="100"
-                                     src="https://{{ host }}/manpower/user/embedd_signature?hash={{ each.sign_hash }}">
+                                     src="http://{{ host }}/manpower/user/embedd_signature?hash={{ each.sign_hash }}">
                             </td>
                             <td style="border:1px solid black;">
                                 {{ each.signed_on }}
