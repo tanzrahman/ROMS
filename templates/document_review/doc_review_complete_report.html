@@ -151,9 +151,7 @@
                     <td style="border:1px solid black;">Agreed by</td>
                     <td style="border:1px solid black;">Chief Superintendent (Addl. Charge)</td>
                     <td style="border:1px solid black;">
-                        <para style="word-wrap: break-word;">
-                            {{ committee_rev.chief_eng_approval.signed_by.get_full_name }}
-                        </para>
+                        {{ committee_rev.chief_eng_approval.signed_by.get_full_name }}
                     </td>
                     {% if committee_rev.chief_eng_approval.sign_hash %}
                         <td style="margin-top:5%; border:1px solid black;">
@@ -184,10 +182,12 @@
                         <tr>
                             <td style="border:1px solid black;">Agreed by</td>
                             <td style="border:1px solid black;">{{ each.signed_by.profile.npcbl_designation }}</td>
-                            <td style="border:1px solid black;">
+                            <td style="border:1px solid black; width: 30%">
                                 {{ each.signed_by.get_full_name }}
                                 <br>
-                                {{ each.signed_by }}
+                                <para style="word-wrap: break-word;">
+                                    {{ each.signed_by }}
+                                </para>
                             </td>
                             <td style="margin-top:5%; border:1px solid black;">
                                 <img id="signature_{{ forloop.counter }}" height="40" width="100"
