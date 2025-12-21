@@ -70,11 +70,11 @@
     <div style="padding-left: 5%; padding-top: 15%">
         <h3 style="text-align: center; padding-bottom: 5%; font-weight: bold">NUCLEAR POWER PLANT COMPANY BANGLADESH LIMITED<br>(NPCBL)</h3>
         <div style="text-align: center">
-            <img src="{% static '/npcbl.png' %}" alt="npcbl logo">
+            <img src="/static/npcbl.png" alt="npcbl_logo">
         </div>
 
         <br><br>
-        <div style="text-align: right; margin-right: 10%">
+        <div style="text-align: right; margin-right: 20%">
             <h4 style="font-weight: bold">APPROVED</h4>
             <h5>Managing Director</h5><br>
             {% if committee_rev.chief_eng_approval.sign_hash %}
@@ -151,7 +151,9 @@
                     <td style="border:1px solid black;">Agreed by</td>
                     <td style="border:1px solid black;">Chief Superintendent (Addl. Charge)</td>
                     <td style="border:1px solid black;">
-                        {{ committee_rev.chief_eng_approval.signed_by.get_full_name }}
+                        <para style="word-wrap: break-word;">
+                            {{ committee_rev.chief_eng_approval.signed_by.get_full_name }}
+                        </para>
                     </td>
                     {% if committee_rev.chief_eng_approval.sign_hash %}
                         <td style="margin-top:5%; border:1px solid black;">
