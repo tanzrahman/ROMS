@@ -68,9 +68,9 @@
 
     <!-- front page -->
     <div style="padding-left: 5%; padding-top: 15%">
-        <p style="font-size:18pt; text-align: center; padding-bottom: 5%; font-weight: bold">NUCLEAR POWER PLANT COMPANY BANGLADESH LIMITED<br>(NPCBL)</p>
+        <p style="font-size:16pt; text-align: center; padding-bottom: 5%; font-weight: bold">NUCLEAR POWER PLANT COMPANY BANGLADESH LIMITED<br>(NPCBL)</p>
         <div style="text-align: center">
-            <img src={{ npcbl_logo_path }} alt="npcbl_logo" width="500" height="300">
+            <img src={{ npcbl_logo_path }} alt="npcbl_logo" width="300" height="100">
         </div>
 
         <br><br>
@@ -78,8 +78,8 @@
             <tr>
                 <td style="width: 40%"></td>
                 <td style="width: 60%; text-align: right">
-                    <p style="font-size: 16pt; font-weight: bold">APPROVED</p>
-                    <p style="font-size: 16pt; font-weight: bold">Managing Director</p>
+                    <p style="font-size: 14pt; font-weight: bold">APPROVED</p>
+                    <p style="font-size: 14pt; font-weight: bold">Managing Director</p>
                     <br>
 
                     {% if committee_rev.sd_approval.sign_hash %}
@@ -94,8 +94,8 @@
                         </table>
 
                         <br>
-                        (Dr. Md. Zahedul Hassan)<br>
-                        {{ committee_rev.sd_approval.signed_on }}
+                        <p style="font-size: 14pt;">(Dr. Md. Zahedul Hassan)<br>
+                        {{ committee_rev.sd_approval.signed_on }}</p>
                     {% endif %}
                 </td>
             </tr>
@@ -104,13 +104,13 @@
         <br><br>
         <div style="text-align: center">
             {% if unit == '0' %}
-                <p style="font-size: 16pt; font-weight: bold">ROOPPUR NPP<br>UNIT No. 1, 2</p><br>
+                <p style="font-size: 14pt; font-weight: bold">ROOPPUR NPP<br>UNIT No. 1, 2</p><br>
             {% elif unit == '1' %}
-                <p style="font-size: 16pt; font-weight: bold">ROOPPUR NPP<br>UNIT No. 1</p><br>
+                <p style="font-size: 14pt; font-weight: bold">ROOPPUR NPP<br>UNIT No. 1</p><br>
             {% elif unit == '2' %}
-                <p style="font-size: 16pt; font-weight: bold">ROOPPUR NPP<br>UNIT No. 2</p><br>
+                <p style="font-size: 14pt; font-weight: bold">ROOPPUR NPP<br>UNIT No. 2</p><br>
             {% else %}
-                <p style="font-size: 16pt; font-weight: bold">ROOPPUR NPP<br>UNIT UNDEFINED</p><br>
+                <p style="font-size: 14pt; font-weight: bold">ROOPPUR NPP<br>UNIT UNDEFINED</p><br>
             {% endif %}
             <h5>
                 {{ task.title }}
@@ -135,7 +135,7 @@
     <div style="padding-left: 5%;">
         <table class="table table-bordered table-responsive" style="width: 100%; border: 1px solid grey; border-collapse: collapse; text-align: center">
             <tr>
-                <td style="border:1px solid black;">Rooppur NPP</td>
+                <td style="border:1px solid black; width: 20%; vertical-align: middle;">Rooppur NPP</td>
                 <td rowspan="2" style="vertical-align: middle; border: 1px solid black;">
                     <span>{{ task.title }}</span>
                 </td>
@@ -144,7 +144,7 @@
                 </td>
             </tr>
             <tr>
-                <td style="border: 1px solid black;">Version {{ form.initial.version_of_doc|extract_version_info }}</td>
+                <td style="border: 1px solid black; width: 20%; vertical-align: middle;">Version {{ form.initial.version_of_doc|extract_version_info }}</td>
             </tr>
         </table>
     </div>
