@@ -70,16 +70,16 @@
     <div style="padding-left: 5%; padding-top: 15%">
         <p style="font-size:18pt; text-align: center; padding-bottom: 5%; font-weight: bold">NUCLEAR POWER PLANT COMPANY BANGLADESH LIMITED<br>(NPCBL)</p>
         <div style="text-align: center">
-            <img src={{ npcbl_logo_path }} alt="npcbl_logo">
+            <img src={{ npcbl_logo_path }} alt="npcbl_logo" width="500" height="300">
         </div>
 
         <br><br>
         <table style="width: 100%">
             <tr>
-                <td style="width: 60%"></td>
-                <td style="width: 40%; text-align: right">
-                    <h4><b>APPROVED</b></h4>
-                    <h5>Managing Director</h5>
+                <td style="width: 40%"></td>
+                <td style="width: 60%; text-align: right">
+                    <p style="font-size: 16pt; font-weight: bold">APPROVED</p>
+                    <p style="font-size: 16pt; font-weight: bold">Managing Director</p>
                     <br>
 
                     {% if committee_rev.sd_approval.sign_hash %}
@@ -87,7 +87,7 @@
                              src="http://{{ host }}/manpower/user/embedd_signature?hash={{ committee_rev.sd_approval.sign_hash }}">
                         <br><br>
 
-                        <table width="200" align="right">
+                        <table style= "width: 20%; text-align: right">
                             <tr>
                                 <td style="border-top:2px solid black;"></td>
                             </tr>
@@ -104,13 +104,13 @@
         <br><br>
         <div style="text-align: center">
             {% if unit == '0' %}
-                <h5 style="font-weight: bold">ROOPPUR NPP<br>UNIT No. 1, 2</h5><br>
+                <p style="font-size: 16pt; font-weight: bold">ROOPPUR NPP<br>UNIT No. 1, 2</p><br>
             {% elif unit == '1' %}
-                <h5 style="font-weight: bold">ROOPPUR NPP<br>UNIT No. 1</h5><br>
+                <p style="font-size: 16pt; font-weight: bold">ROOPPUR NPP<br>UNIT No. 1</p><br>
             {% elif unit == '2' %}
-                <h5 style="font-weight: bold">ROOPPUR NPP<br>UNIT No. 2</h5><br>
+                <p style="font-size: 16pt; font-weight: bold">ROOPPUR NPP<br>UNIT No. 2</p><br>
             {% else %}
-                <h5 style="font-weight: bold">ROOPPUR NPP<br>UNIT UNDEFINED</h5><br>
+                <p style="font-size: 16pt; font-weight: bold">ROOPPUR NPP<br>UNIT UNDEFINED</p><br>
             {% endif %}
             <h5>
                 {{ task.title }}
