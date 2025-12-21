@@ -1,4 +1,5 @@
 import datetime
+import os
 import threading
 
 from django.core import paginator
@@ -26,6 +27,7 @@ from task_management.forms_doc_review import OperationalDocumentReviewForm, Regu
 from task_management.ftp_handler import FILETYPE, upload_to_ftp
 from system_log.sms_mail_sender import doc_review_mail_and_send_sms
 from time import sleep
+from django.conf import settings
 
 
 def doc_review_handler(request,action=None,id=None):
@@ -934,7 +936,11 @@ def download_committee_review(request, id):
         if(len(each.proposed_text)> 2200 or len(each.original_text)>2200 or len(each.remarks)>2200):
             no_pdf = True
 
-
+    npcbl_logo_path = os.path.join(
+        settings.BASE_DIR,
+        'static',
+        'npcbl.png'
+    )
 
     context = {
         'form': form,
@@ -943,7 +949,8 @@ def download_committee_review(request, id):
         'committee_rev': committee_rev,
         'committee_rev_cmnt': committee_rev_cmnt,
         'host':request.get_host(),
-        'unit': str(feed_back.task).split('.')[2]
+        'unit': str(feed_back.task).split('.')[2],
+        'npcbl_logo_path': npcbl_logo_path
     }
     if(no_pdf):
         return render(request, 'document_review/doc_review_complete.html', context=context)
