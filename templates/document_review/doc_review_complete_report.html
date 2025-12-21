@@ -85,7 +85,7 @@
                     <!-- Signature and line in same container -->
                     <table style="border-collapse: collapse; margin: 0 auto;">
                         <tr>
-                            <td style="text-align: center;">
+                            <td>
                                 <img height="40" width="100"
                                      src="http://{{ host }}/manpower/user/embedd_signature?hash={{ committee_rev.sd_approval.sign_hash }}">
                                 <br>
@@ -119,7 +119,11 @@
             {% endif %}
             <p style="font-size: 12pt;"><b>{{ task.title }}</b>
                 <br>{{ task }}
+                {% if form.initial.version_of_doc %}
                 <br>Version {{ form.initial.version_of_doc|extract_version_info }}
+                {% else %}
+                <br>Version 2
+                {% endif %}
             </p>
 
         </div>
@@ -146,7 +150,11 @@
                 </td>
             </tr>
             <tr>
+                {% if form.initial.version_of_doc %}
                 <td style="border: 1px solid black; width: 20%; vertical-align: middle;">Version {{ form.initial.version_of_doc|extract_version_info }}</td>
+                {% else %}
+                <td style="border: 1px solid black; width: 20%; vertical-align: middle;">Version 2</td>
+                {% endif %}
             </tr>
         </table>
     </div>
