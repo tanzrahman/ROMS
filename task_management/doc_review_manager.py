@@ -942,11 +942,13 @@ def download_committee_review(request, id):
         'task': feed_back.task,
         'committee_rev': committee_rev,
         'committee_rev_cmnt': committee_rev_cmnt,
-        'host':request.get_host()
+        'host':request.get_host(),
+        'unit': str(feed_back.task).split('.')[2]
     }
     if(no_pdf):
         return render(request, 'document_review/doc_review_complete.html', context=context)
     else:
+        #return render(request, 'document_review/doc_review_complete_report.html', context=context)
         template = get_template('document_review/doc_review_complete_report.html')
         context.update({'host': '172.30.31.254'})
         report = template.render(context)

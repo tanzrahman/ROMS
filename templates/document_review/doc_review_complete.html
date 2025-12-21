@@ -26,35 +26,128 @@
 
 <body style='font-family: "Roboto", "Lucida Grande", "DejaVu Sans", "Bitstream Vera Sans", Verdana, Arial, "sans-serif"'>
 
+
+<!-- new template design -->
 <div style="padding-left: 5%; padding-top: 15%">
-    <div style="padding-bottom:1% ">
-        <h2 style="text-align: center; font-size: 1.1em; padding-bottom: 5%">Rooppur NPP Document Review</h2>
-        <table class="table" style="width: 100%; text-align: center; font-size: 1.1em;">
+    <h3 style="text-align: center; padding-bottom: 5%; font-weight: bold">NUCLEAR POWER PLANT COMPANY BANGLADESH LIMITED<br>(NPCBL)</h3>
+    <div style="text-align: center">
+        <img src="{% static '\npcbl.png' %}" alt="npcbl logo">
+    </div>
+
+    <br><br>
+    <div style="text-align: right; margin-right: 10%">
+        <h4 style="font-weight: bold">APPROVED</h4>
+        <h5>Managing Director</h5><br>
+        {% if committee_rev.chief_eng_approval.sign_hash %}
+            <img id="signature" height="40" width="100"
+                 src="https://{{ host }}/manpower/user/embedd_signature?hash={{ committee_rev.chief_eng_approval.sign_hash }}">
+            <br>
+            <hr style="width: 200px; margin-left: auto; margin-right: 0; border-top: 2px solid #000;">
+            (Dr. Md. Zahedul Hassan) <br>
+            {{ committee_rev.chief_eng_approval.signed_on }}
+        {% endif %}
+    </div>
+    <br><br>
+    <div style="text-align: center">
+        {% if unit == 0 %}
+            <h5 style="font-weight: bold">ROOPPUR NPP<br>UNIT No. 1, 2</h5><br>
+        {% elif unit == 1 %}
+            <h5 style="font-weight: bold">ROOPPUR NPP<br>UNIT No. 1</h5><br>
+        {% elif unit == 2 %}
+            <h5 style="font-weight: bold">ROOPPUR NPP<br>UNIT No. 2</h5><br>
+        {% else %}
+            <h5 style="font-weight: bold">ROOPPUR NPP<br>UNIT UNDEFINED</h5><br>
+        {% endif %}
+        <h5>
+            {{ task.title }}
+            <br>
+            {{ task }}
+            <br>
+            Version {{ form.initial.version_of_doc|extract_version_info }}
+        </h5>
+
+    </div>
+
+</div>
+
+<div style="padding-left: 5%;">
+    <table class="table table-bordered table-responsive" style="width: 100%">
+        <tr>
+            <td>Rooppur NPP</td>
+            <td rowspan="2" style="vertical-align: middle;">
+                <span>{{ task.title }}</span>
+            </td>
+            <td rowspan="2" style="vertical-align: middle;">
+                <span>{{ task.title }}</span>
+            </td>
+        </tr>
+        <tr>
+            <td>Version {{ form.initial.version_of_doc|extract_version_info }}</td>
+        </tr>
+    </table>
+</div>
+
+<div style="padding-left: 5%;">
+    <h3 style="text-align: center; font-weight: bold">Approval Sheet</h3>
+    <div>
+        <table class="table table-bordered table-responsive" style="width: 100%; text-align: center">
             <tr>
+                <th></th>
+                <th>Position</th>
+                <th>Full Name</th>
+                <th>Signature</th>
+                <th>Date</th>
+            </tr>
+            <tr>
+                <td>Agreed by</td>
+                <td>Chief Superintendent (Addl. Charge)</td>
                 <td>
-                    <span><b>Document Code: </b>{{ task }}</span><br>
+                    {{ committee_rev.chief_eng_approval.signed_by.get_full_name }}
                 </td>
+                {% if committee_rev.chief_eng_approval.sign_hash %}
+                    <td style="margin-top:5%">
+                        <img id="signature" height="40" width="100"
+                                 src="https://{{ host }}/manpower/user/embedd_signature?hash={{ committee_rev.chief_eng_approval.sign_hash }}">
+                    </td>
+                    <td>{{ committee_rev.chief_eng_approval.signed_on }}</td>
+
+                {% endif %}
             </tr>
             <tr>
+                <td>Agreed by</td>
+                <td>Head of Division</td>
                 <td>
-                    <span><b>Document Version: </b>{{ form.initial.version_of_doc|extract_version_info }}</span>
-                    <br><br>
+                    {{ committee_rev.division_head_approval.signed_by.get_full_name }}
                 </td>
+                {% if committee_rev.division_head_approval.sign_hash %}
+                    <td style="margin-top:5%">
+                        <img id="signature" height="40" width="100"
+                             src="https://{{ host }}/manpower/user/embedd_signature?hash={{ committee_rev.division_head_approval.sign_hash }}">
+                    </td>
+                    <td>{{ committee_rev.division_head_approval.signed_on }}</td>
+                {% endif %}
             </tr>
-            <tr>
-                <td>
-                    <span><b>Title: </b>{{ task.title }}</span>
-                </td>
-            </tr>
-            <tr>
-                <td><b>Responsible Division:</b> {{ feedback.task.division }}</td>
-            </tr>
-            <tr>
-                <td><b>Review By:</b> {{ feedback.user }}</td>
-            </tr>
-            <tr>
-                <td><b>Review Date:</b> {{ feedback.modified_at }}</td>
-            </tr>
+
+            {% if committee_rev.committee_approval %}
+                {% for each in committee_rev.committee_approval.all %}
+                    <tr>
+                        <td>Agreed by</td>
+                        <td>{{ each.signed_by.profile.npcbl_designation }}</td>
+                        <td>
+                            {{ each.signed_by.get_full_name }}
+                            <br>
+                            {{ each.signed_by }}
+                        </td>
+                        <td style="margin-top:5%">
+                            <img id="signature_{{ forloop.counter }}" height="40" width="100"
+                                 src="https://{{ host }}/manpower/user/embedd_signature?hash={{ each.sign_hash }}">
+                        </td>
+                        <td>
+                            {{ each.signed_on }}
+                        </td>
+                    </tr>
+                {% endfor %}
+            {% endif %}
         </table>
     </div>
 </div>
@@ -101,7 +194,7 @@
     </table>
 </div>
 
-
+<!--
 <div style="padding-left: 5%;">
     <div>
         {% if committee_rev.committee_approval %}
@@ -199,7 +292,9 @@
             </table>
         {% endif %}
     </div>
-</div>
+</div> -->
+
+
 <script>
     function sleep(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
