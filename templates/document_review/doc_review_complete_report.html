@@ -70,16 +70,16 @@
     <div style="padding-left: 5%; padding-top: 15%">
         <p style="font-size:16pt; text-align: center; padding-bottom: 5%; font-weight: bold">NUCLEAR POWER PLANT COMPANY BANGLADESH LIMITED<br>(NPCBL)</p>
         <div style="text-align: center">
-            <img src={{ npcbl_logo_path }} alt="npcbl_logo" width="250" height="120">
+            <img src={{ npcbl_logo_path }} alt="npcbl_logo" width="220" height="150">
         </div>
 
-        <br><br>
+        <br><br><br>
         <table style="width: 100%">
             <tr>
                 <td style="width: 40%"></td>
                 <td style="width: 60%; text-align: center">
-                    <p style="font-size: 14pt; font-weight: bold">APPROVED</p>
-                    <p style="font-size: 14pt; font-weight: bold">Managing Director</p>
+                    <p style="font-size: 14pt; font-weight: bold">APPROVED
+                        <br style="font-size: 14pt;">Managing Director</p>
                     <br>
 
                     {% if committee_rev.sd_approval.sign_hash %}
@@ -87,9 +87,9 @@
                              src="http://{{ host }}/manpower/user/embedd_signature?hash={{ committee_rev.sd_approval.sign_hash }}">
                         <br><br>
 
-                        <table style= "width: 20%; text-align: right">
+                        <table style= "width: 200px; text-align: right">
                             <tr>
-                                <td style="border-top:2px solid black;"></td>
+                                <td style="border-top:2px solid black;">&nbsp;</td>
                             </tr>
                         </table>
 
@@ -112,9 +112,11 @@
             {% else %}
                 <p style="font-size: 14pt; font-weight: bold">ROOPPUR NPP<br>UNIT UNDEFINED</p><br>
             {% endif %}
-            <p style="font-size: 12pt; font-weight: bold>{{ task.title }} <br>
-                {{ task }} <br>
-                Version {{ form.initial.version_of_doc|extract_version_info }}</p>
+            <p style="font-size: 12pt; font-weight: bold">{{ task.title }}
+                <br style="font-size: 12pt">{{ task }}
+                <br style="font-size: 12pt">
+                    Version {{ form.initial.version_of_doc|extract_version_info }}
+            </p>
 
         </div>
     </div>
