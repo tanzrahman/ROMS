@@ -59,6 +59,177 @@
 </div>
 <div style='padding:5%;'>
     <pdf:nexttemplate name="details_page"/>
+
+    <!-- ....................................
+         ....................................
+            start of new template design
+         ....................................
+         .................................... -->
+
+    <!-- front page -->
+    <div style="padding-left: 5%; padding-top: 15%">
+        <p style="font-size:16pt; text-align: center; padding-bottom: 5%; font-weight: bold">NUCLEAR POWER PLANT COMPANY BANGLADESH LIMITED<br>(NPCBL)</p>
+        <div style="text-align: center">
+            <img src={{ npcbl_logo_path }} alt="npcbl_logo" width="4.26cm" height="5cm">
+        </div>
+
+        <br><br><br>
+
+    <table style="width: 100%; text-align: center; border-collapse: collapse;">
+        <tr>
+            <td style="width: 45%"></td>
+            <td style="width: 35%; text-align: center">
+                <p style="font-size: 14pt;"><b>APPROVED</b><br>Managing Director</p>
+
+                {% if committee_rev.sd_approval.sign_hash %}
+                    <!-- Signature and line in same container -->
+                    <table style="border-collapse: collapse; margin: 0 auto;">
+                        <tr>
+                            <td style="text-align: center;">
+                                <img height="40" width="100"
+                                     src="http://{{ host }}/manpower/user/embedd_signature?hash={{ committee_rev.sd_approval.sign_hash }}">
+                                <br>
+                                <!-- Line exactly same width as signature -->
+                                <div style="width: 50px; border-bottom: 1px solid black; margin: 0 auto;">&nbsp;</div>
+                            </td>
+                        </tr>
+                    </table>
+                    <br>
+
+                    <p style="font-size: 14pt; margin-top: 2px;">
+                        (Dr. Md. Zahedul Hassan)<br>
+                        {{ committee_rev.sd_approval.signed_on }}
+                    </p>
+                {% endif %}
+            </td>
+            <td style="width: 20%"></td>
+        </tr>
+    </table>
+
+        <br><br>
+        <div style="text-align: center">
+            {% if unit == '0' %}
+                <p style="font-size: 14pt; font-weight: bold">ROOPPUR NPP<br>UNIT No. 1, 2</p><br>
+            {% elif unit == '1' %}
+                <p style="font-size: 14pt; font-weight: bold">ROOPPUR NPP<br>UNIT No. 1</p><br>
+            {% elif unit == '2' %}
+                <p style="font-size: 14pt; font-weight: bold">ROOPPUR NPP<br>UNIT No. 2</p><br>
+            {% else %}
+                <p style="font-size: 14pt; font-weight: bold">ROOPPUR NPP<br>UNIT UNDEFINED</p><br>
+            {% endif %}
+            <p style="font-size: 12pt;"><b>{{ task.title }}</b>
+                <br>{{ task }}
+                <br>Version {{ form.initial.version_of_doc|extract_version_info }}
+            </p>
+
+        </div>
+    </div>
+
+
+<div>
+    <div>
+        <pdf:nexttemplate name="signature_page"/>
+        <pdf:nextpage/>
+    </div>
+
+    <!-- heading of approval sheet -->
+
+    <div style="padding-left: 5%;">
+        <table class="table table-bordered table-responsive" style="width: 100%; border: 1px solid grey; border-collapse: collapse; text-align: center">
+            <tr>
+                <td style="border:1px solid black; width: 20%; vertical-align: middle;">Rooppur NPP</td>
+                <td rowspan="2" style="vertical-align: middle; border: 1px solid black;">
+                    <span>{{ task.title }}</span>
+                </td>
+                <td rowspan="2" style="width: 30%; vertical-align: middle; border: 1px solid black;">
+                    <span>{{ task }}</span>
+                </td>
+            </tr>
+            <tr>
+                <td style="border: 1px solid black; width: 20%; vertical-align: middle;">Version {{ form.initial.version_of_doc|extract_version_info }}</td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- Approval sheet table -->
+
+    <div style="padding-left: 5%;">
+        <p style="font-size: 14pt; font-weight: bold; text-align: center">Approval Sheet</p>
+        <div>
+            <table class="table table-bordered" style="width: 100%; text-align: center;  border:1px solid black; border-collapse: collapse;" >
+                <tr>
+                    <th style="border:1px solid black;">&nbsp;</th>
+                    <th style="border:1px solid black;">Position</th>
+                    <th style="border:1px solid black;">Full Name</th>
+                    <th style="border:1px solid black;">Signature</th>
+                    <th style="border:1px solid black;">Date</th>
+                </tr>
+                <tr>
+                    <td style="border:1px solid black;">Agreed by</td>
+                    <td style="border:1px solid black;">Chief Superintendent (Addl. Charge)</td>
+                    <td style="border:1px solid black;">
+                        {{ committee_rev.chief_eng_approval.signed_by.get_full_name }}
+                    </td>
+                    {% if committee_rev.chief_eng_approval.sign_hash %}
+                        <td style="margin-top:5%; border:1px solid black;">
+                            <img id="signature" height="40" width="100"
+                                     src="http://{{ host }}/manpower/user/embedd_signature?hash={{ committee_rev.chief_eng_approval.sign_hash }}">
+                        </td>
+                        <td style="border:1px solid black;">{{ committee_rev.chief_eng_approval.signed_on }}</td>
+
+                    {% endif %}
+                </tr>
+                <tr>
+                    <td style="border:1px solid black;">Agreed by</td>
+                    <td style="border:1px solid black;">Head of Division</td>
+                    <td style="border:1px solid black;">
+                        {{ committee_rev.division_head_approval.signed_by.get_full_name }}
+                    </td>
+                    {% if committee_rev.division_head_approval.sign_hash %}
+                        <td style="margin-top:5%; border:1px solid black;">
+                            <img id="signature" height="40" width="100"
+                                 src="http://{{ host }}/manpower/user/embedd_signature?hash={{ committee_rev.division_head_approval.sign_hash }}">
+                        </td>
+                        <td style="border:1px solid black;">{{ committee_rev.division_head_approval.signed_on }}</td>
+                    {% endif %}
+                </tr>
+
+                {% if committee_rev.committee_approval %}
+                    {% for each in committee_rev.committee_approval.all %}
+                        <tr>
+                            <td style="border:1px solid black;">Agreed by</td>
+                            <td style="border:1px solid black;">{{ each.signed_by.profile.npcbl_designation }}</td>
+                            <td style="border:1px solid black; width: 30%">
+                                {{ each.signed_by.get_full_name }}
+                                <br>
+                                <para style="word-wrap: break-word;">
+                                    {{ each.signed_by }}
+                                </para>
+                            </td>
+                            <td style="margin-top:5%; border:1px solid black;">
+                                <img id="signature_{{ forloop.counter }}" height="40" width="100"
+                                     src="http://{{ host }}/manpower/user/embedd_signature?hash={{ each.sign_hash }}">
+                            </td>
+                            <td style="border:1px solid black;">
+                                {{ each.signed_on }}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                {% endif %}
+            </table>
+        </div>
+    </div>
+
+</div>
+
+    <!-- ....................................
+         ....................................
+              End of new template design
+         ....................................
+         .................................... -->
+
+    <pdf:nexttemplate name="details_page"/>
+    <pdf:nextpage/>
     <div>
         <div>
             <h2 style="text-align: center; font-size: 2em;">Rooppur NPP Document Review</h2>
@@ -92,6 +263,7 @@
             </table>
         </div>
     </div>
+
     <pdf:nexttemplate name="details_page"/>
     <pdf:nextpage/>
     <div style="padding-bottom:1% ">
@@ -154,107 +326,5 @@
     <br>
 </div>
 
-<div>
-    <div>
-        <pdf:nexttemplate name="signature_page"/>
-        <pdf:nextpage/>
-    </div>
-    <div style="width: 90%">
-        {% if committee_rev.committee_approval %}
-            <table style="width: 40%; border: 1px solid grey; text-align: center; vertical-align: top">
-                <tr>
-                    <td colspan="3">
-                        <h3>Approval Sheet</h3>
-                    </td>
-                </tr>
-                <tr style="text-align: left">
-                    <td colspan="3">
-                        <span><b>Document Code: </b>{{ task }}</span><br>
-                        <span><b>Document Version: </b>{{ form.initial.version_of_doc|extract_version_info }}</span><br>
-                        <span><b>Title: </b>{{ task.title }}</span>
-                    </td>
-                </tr>
-                <tr>
-                    <th>Recommendation By</th>
-                    <th>Recommendation</th>
-                    <th>Signature</th>
-                    <th>Remarks</th>
-                </tr>
-                {% for each in committee_rev.committee_approval.all %}
-                    <tr>
-                        <td>
-                            {{ each.signed_by.get_full_name }}
-                            <br>
-                            {{ each.signed_by }}
-                        </td>
-                        <td>{{ each.remarks|remarks_display_str }}</td>
-                        <td style="margin-top:5%">
-                            <img id="signature" height="40" width="100" src="http://{{ host }}/manpower/user/embedd_signature?hash={{ each.sign_hash }}">
-                            <br>
-                            {{ each.signed_on }}
-                        </td>
-                    </tr>
-                {% endfor %}
-
-                <tr>
-                    <td>
-                        {{ committee_rev.division_head_approval.signed_by.get_full_name }}
-                        <br>
-                        Head of Division
-                    </td>
-                    <td>
-                        {{ committee_rev.division_head_approval.remarks|remarks_display_str }}
-                    </td>
-                    <td style="margin-top:5%">
-                        {% if committee_rev.division_head_approval.sign_hash %}
-                            <img id="signature" height="40" width="100"
-                                 src="http://{{ host }}/manpower/user/embedd_signature?hash={{ committee_rev.division_head_approval.sign_hash }}">
-                            <br>
-                            {{ committee_rev.division_head_approval.signed_on }}
-                        {% endif %}
-                    </td>
-                </tr>
-
-                <tr>
-                    <td>
-                        {{ committee_rev.chief_eng_approval.signed_by.get_full_name }}
-                        <br>
-                        Chief Engineer
-                    </td>
-                    <td>
-                        {{ committee_rev.chief_eng_approval.remarks|remarks_display_str }}
-                    </td>
-                    <td style="margin-top:5%">
-                        {% if committee_rev.chief_eng_approval.sign_hash %}
-                            <img id="signature" height="40" width="100"
-                                 src="http://{{ host }}/manpower/user/embedd_signature?hash={{ committee_rev.chief_eng_approval.sign_hash }}">
-                            <br>
-                            {{ committee_rev.chief_eng_approval.signed_on }}
-                        {% endif %}
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        Dr. Md. Zahedul Hassan
-                        <br>
-                        Managing Director
-                    </td>
-                    <td>
-                        {{ committee_rev.sd_approval.remarks|remarks_display_str }}
-                    </td>
-                    <td style="margin-top:5%">
-                        {% if committee_rev.sd_approval.sign_hash %}
-                            <img id="signature" height="40" width="100"
-                                 src="http://{{ host }}/manpower/user/embedd_signature?hash={{ committee_rev.sd_approval.sign_hash }}">
-                            <br>
-                            {{ committee_rev.sd_approval.signed_on }}
-                        {% endif %}
-                    </td>
-                    <td>{{ committee_rev.sd_approval.comments }}</td>
-                </tr>
-            </table>
-        {% endif %}
-    </div>
-</div>
 </body>
 </html>

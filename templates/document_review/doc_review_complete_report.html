@@ -70,7 +70,7 @@
     <div style="padding-left: 5%; padding-top: 15%">
         <p style="font-size:16pt; text-align: center; padding-bottom: 5%; font-weight: bold">NUCLEAR POWER PLANT COMPANY BANGLADESH LIMITED<br>(NPCBL)</p>
         <div style="text-align: center">
-            <img src={{ npcbl_logo_path }} alt="npcbl_logo" width="200" height="180">
+            <img src={{ npcbl_logo_path }} alt="npcbl_logo" width="4.26cm" height="5cm">
         </div>
 
         <br><br><br>
@@ -230,6 +230,42 @@
 
     <pdf:nexttemplate name="details_page"/>
     <pdf:nextpage/>
+    <div>
+        <div>
+            <h2 style="text-align: center; font-size: 2em;">Rooppur NPP Document Review</h2>
+            <br><br>
+            <table class="table" style="width: 100%; text-align: center; font-size: 2em;">
+                <tr>
+                    <td>
+                        <span><b>Document Code: </b>{{ task }}</span><br>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span><b>Document Version: </b>{{ form.initial.version_of_doc|extract_version_info }}</span>
+                        <br><br>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span><b>Title: </b>{{ task.title }}</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td><b>Responsible Division:</b> {{ feedback.task.division }}</td>
+                </tr>
+                <tr>
+                    <td><b>Review By:</b> {{ feedback.user }}</td>
+                </tr>
+                <tr>
+                    <td><b>Review Date:</b> {{ feedback.modified_at|date }}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <pdf:nexttemplate name="details_page"/>
+    <pdf:nextpage/>
     <div style="padding-bottom:1% ">
         {% if form %}
             <h2>Review Details</h2>
@@ -289,110 +325,6 @@
     </div>
     <br>
 </div>
-
-<!--
-<div>
-    <div>
-        <pdf:nexttemplate name="signature_page"/>
-        <pdf:nextpage/>
-    </div>
-    <div style="width: 90%">
-        {% if committee_rev.committee_approval %}
-            <table style="width: 40%; border: 1px solid grey; text-align: center; vertical-align: top">
-                <tr>
-                    <td colspan="3">
-                        <h3>Approval Sheet</h3>
-                    </td>
-                </tr>
-                <tr style="text-align: left">
-                    <td colspan="3">
-                        <span><b>Document Code: </b>{{ task }}</span><br>
-                        <span><b>Document Version: </b>{{ form.initial.version_of_doc|extract_version_info }}</span><br>
-                        <span><b>Title: </b>{{ task.title }}</span>
-                    </td>
-                </tr>
-                <tr>
-                    <th>Recommendation By</th>
-                    <th>Recommendation</th>
-                    <th>Signature</th>
-                    <th>Remarks</th>
-                </tr>
-                {% for each in committee_rev.committee_approval.all %}
-                    <tr>
-                        <td>
-                            {{ each.signed_by.get_full_name }}
-                            <br>
-                            {{ each.signed_by }}
-                        </td>
-                        <td>{{ each.remarks|remarks_display_str }}</td>
-                        <td style="margin-top:5%">
-                            <img id="signature" height="40" width="100" src="http://{{ host }}/manpower/user/embedd_signature?hash={{ each.sign_hash }}">
-                            <br>
-                            {{ each.signed_on }}
-                        </td>
-                    </tr>
-                {% endfor %}
-
-                <tr>
-                    <td>
-                        {{ committee_rev.division_head_approval.signed_by.get_full_name }}
-                        <br>
-                        Head of Division
-                    </td>
-                    <td>
-                        {{ committee_rev.division_head_approval.remarks|remarks_display_str }}
-                    </td>
-                    <td style="margin-top:5%">
-                        {% if committee_rev.division_head_approval.sign_hash %}
-                            <img id="signature" height="40" width="100"
-                                 src="http://{{ host }}/manpower/user/embedd_signature?hash={{ committee_rev.division_head_approval.sign_hash }}">
-                            <br>
-                            {{ committee_rev.division_head_approval.signed_on }}
-                        {% endif %}
-                    </td>
-                </tr>
-
-                <tr>
-                    <td>
-                        {{ committee_rev.chief_eng_approval.signed_by.get_full_name }}
-                        <br>
-                        Chief Superintendent (Addl. Charge)
-                    </td>
-                    <td>
-                        {{ committee_rev.chief_eng_approval.remarks|remarks_display_str }}
-                    </td>
-                    <td style="margin-top:5%">
-                        {% if committee_rev.chief_eng_approval.sign_hash %}
-                            <img id="signature" height="40" width="100"
-                                 src="http://{{ host }}/manpower/user/embedd_signature?hash={{ committee_rev.chief_eng_approval.sign_hash }}">
-                            <br>
-                            {{ committee_rev.chief_eng_approval.signed_on }}
-                        {% endif %}
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        Dr. Md. Zahedul Hassan
-                        <br>
-                        Managing Director
-                    </td>
-                    <td>
-                        {{ committee_rev.sd_approval.remarks|remarks_display_str }}
-                    </td>
-                    <td style="margin-top:5%">
-                        {% if committee_rev.sd_approval.sign_hash %}
-                            <img id="signature" height="40" width="100"
-                                 src="http://{{ host }}/manpower/user/embedd_signature?hash={{ committee_rev.sd_approval.sign_hash }}">
-                            <br>
-                            {{ committee_rev.sd_approval.signed_on }}
-                        {% endif %}
-                    </td>
-                    <td>{{ committee_rev.sd_approval.comments }}</td>
-                </tr>
-            </table>
-        {% endif %}
-    </div>
-</div> -->
 
 </body>
 </html>

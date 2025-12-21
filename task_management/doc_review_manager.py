@@ -993,13 +993,21 @@ def pms_download_committee_review(request, id):
         if(len(each.proposed_text)> 2200 or len(each.original_text)>2200 or len(each.remarks)>2200):
             no_pdf = True
 
+    npcbl_logo_path = os.path.join(
+        settings.BASE_DIR,
+        'static',
+        'npcbl.png'
+    )
+
     context = {
         'form': form,
         'feedback': feed_back,
         'task': feed_back.task,
         'committee_rev': committee_rev,
         'committee_rev_cmnt': committee_rev_cmnt,
-        'host':request.get_host()
+        'host':request.get_host(),
+        'unit': str(feed_back.task).split('.')[2],
+        'npcbl_logo_path': npcbl_logo_path
     }
     if(no_pdf):
         return render(request, 'document_review/pms_doc_review_complete.html', context=context)
