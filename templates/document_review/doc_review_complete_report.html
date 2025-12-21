@@ -76,8 +76,8 @@
         <br><br><br>
         <table style="width: 100%">
             <tr>
-                <td style="width: 50%"></td>
-                <td style="width: 50%; text-align: center">
+                <td style="width: 40%"></td>
+                <td style="width: 60%; text-align: center">
                     <p style="font-size: 14pt;"><b>APPROVED</b>
                         <br>Managing Director</p>
                     <br>
@@ -87,7 +87,12 @@
                              src="http://{{ host }}/manpower/user/embedd_signature?hash={{ committee_rev.sd_approval.sign_hash }}">
                         <br><br>
 
-                        <hr style="width: 100px; border: 1px solid black; margin: 5px auto;">
+                        <!-- Horizontal line using a table -->
+                        <table style="margin: 0 auto; border-collapse: collapse;">
+                            <tr>
+                                <td style="width: 100px; border-bottom: 1px solid black;">&nbsp;</td>
+                            </tr>
+                        </table>
 
                         <p style="font-size: 14pt;">(Dr. Md. Zahedul Hassan)<br>
                         {{ committee_rev.sd_approval.signed_on }}</p>
