@@ -74,6 +74,37 @@
         </div>
 
         <br><br><br>
+
+    <table style="width: 100%; text-align: center; border-collapse: collapse;">
+    <tr>
+        <td style="width: 40%"></td>
+        <td style="width: 60%; text-align: center">
+            <p style="font-size: 14pt;"><b>APPROVED</b><br>Managing Director</p>
+            <br>
+
+            {% if committee_rev.sd_approval.sign_hash %}
+                <!-- Signature and line in same container -->
+                <table style="border-collapse: collapse; margin: 0 auto;">
+                    <tr>
+                        <td style="text-align: center;">
+                            <img height="40" width="100"
+                                 src="http://{{ host }}/manpower/user/embedd_signature?hash={{ committee_rev.sd_approval.sign_hash }}">
+                            <br>
+                            <!-- Line exactly same width as signature -->
+                            <div style="width: 100px; border-bottom: 1px solid black; margin: 0 auto;"></div>
+                        </td>
+                    </tr>
+                </table>
+
+                <p style="font-size: 14pt; margin-top: 2px;">
+                    (Dr. Md. Zahedul Hassan)<br>
+                    {{ committee_rev.sd_approval.signed_on }}
+                </p>
+            {% endif %}
+        </td>
+    </tr>
+</table>
+    <!--
         <table style="width: 100%">
             <tr>
                 <td style="width: 40%"></td>
@@ -87,7 +118,6 @@
                              src="http://{{ host }}/manpower/user/embedd_signature?hash={{ committee_rev.sd_approval.sign_hash }}">
                         <br><br>
 
-                        <!-- Horizontal line using a table -->
                         <table style="text-align: right; border-collapse: collapse;">
                             <tr>
                                 <td style="width: 200px; border-bottom: 1px solid black;">&nbsp;</td>
@@ -99,7 +129,7 @@
                     {% endif %}
                 </td>
             </tr>
-        </table>
+        </table> -->
 
         <br><br>
         <div style="text-align: center">
