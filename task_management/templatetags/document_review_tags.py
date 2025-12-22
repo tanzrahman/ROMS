@@ -80,7 +80,7 @@ def format_approval_year(text):
     return year
 
 @register.filter(name='pdf_wrap')
-def pdf_wrap(value, width=25):
+def pdf_wrap(value, width):
     if not value:
         return ""
     return "\n".join(textwrap.wrap(str(value), width))
