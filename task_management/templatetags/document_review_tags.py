@@ -54,3 +54,13 @@ def extract_version_info(text):
         return 2
     elif('1' in text):
         return 1
+@register.filter(name='format_custom_date')
+def format_custom_date(text):
+    if not text:
+        return ""
+    # %d = zero-padded day, %B = full month name, %Y = 4-digit year
+    # We use .replace(" 0", " ") if you want to remove leading zeros from the day
+    day = text.strftime("%d").lstrip("0")
+    month_year = text.strftime("%B , %Y")
+
+    return f': " {day} " {month_year}'

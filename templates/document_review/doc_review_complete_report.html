@@ -42,18 +42,18 @@
         }
          @font-face {
             font-family: Roboto;
-            src: url(static/fonts/Roboto-Regular.ttf);
+            src: url(static/fonts/times.ttf);
         }
 
         @font-face {
             font-family: Roboto;
-            src: url(static/fonts/Roboto-Bold.ttf);
+            src: url(static/fonts/times.ttf);
             font-weight: bold;
         }
     </style>
 </head>
 
-<body style='font-family: "Roboto", "Lucida Grande", "DejaVu Sans", "Bitstream Vera Sans", "Verdana", "Arial", "sans-serif"'>
+<body style='font-family: "Times New Roman"; font-size: 14pt'>
 <div id="footer_content"> Page <pdf:pagenumber/>
         of <pdf:pagecount/>
 </div>
@@ -67,44 +67,44 @@
          .................................... -->
 
     <!-- front page -->
-    <div style="padding-left: 5%; padding-top: 15%">
-        <p style="font-size:16pt; text-align: center; padding-bottom: 5%; font-weight: bold">NUCLEAR POWER PLANT COMPANY BANGLADESH LIMITED<br>(NPCBL)</p>
+    <div style="padding-left: 5%; padding-top: 15%; font-size: 14pt">
+        <p style="text-align: center; padding-bottom: 5%; font-weight: bold">NUCLEAR POWER PLANT COMPANY BANGLADESH LIMITED<br>(NPCBL)</p>
         <div style="text-align: center">
-            <img src={{ npcbl_logo_path }} alt="npcbl_logo" width="4.26cm" height="5cm">
+            <img src={{ npcbl_logo_path }} alt="npcbl_logo" style="width: 4.26cm; height: 5cm">
         </div>
 
         <br><br><br>
 
-    <table style="width: 100%; border-collapse: collapse;">
-        <tr>
-            <td style="width: 45%"></td>
-            <td style="width: 35%;">
-                <p style="font-size: 14pt;"><b>APPROVED</b><br>Managing Director</p>
+        <table style="width: 100%; border-collapse: collapse;">
+            <tr>
+                <td style="width: 45%"></td>
+                <td style="width: 35%;">
+                    <p style="font-size: 14pt;"><b>APPROVED</b><br>Managing Director</p>
 
-                {% if committee_rev.sd_approval.sign_hash %}
-                    <!-- Signature and line in same container -->
-                    <table style="border-collapse: collapse; margin: 0 auto;">
-                        <tr>
-                            <td>
-                                <img height="45" width="120"
-                                     src="http://{{ host }}/manpower/user/embedd_signature?hash={{ committee_rev.sd_approval.sign_hash }}">
-                                <br>
-                                <!-- Line exactly same width as signature -->
-                                <div style="width: 50px; border-bottom: 1px solid black; margin: 0 auto;">&nbsp;</div>
-                            </td>
-                        </tr>
-                    </table>
-                    <br>
+                    {% if committee_rev.sd_approval.sign_hash %}
+                        <!-- Signature and line in same container -->
+                        <table style="border-collapse: collapse; margin: 0 auto;">
+                            <tr>
+                                <td>
+                                    <img height="50" width="150"
+                                         src="http://{{ host }}/manpower/user/embedd_signature?hash={{ committee_rev.sd_approval.sign_hash }}">
+                                    <br>
+                                    <!-- Line exactly same width as signature -->
+                                    <div style="width: 50px; border-bottom: 1px solid black; margin: 0 auto;">&nbsp;</div>
+                                </td>
+                            </tr>
+                        </table>
+                        <br>
 
-                    <p style="font-size: 14pt; margin-top: 2px;">
-                        (Dr. Md. Zahedul Hassan)<br>
-                        {{ committee_rev.sd_approval.signed_on }}
-                    </p>
-                {% endif %}
-            </td>
-            <td style="width: 20%"></td>
-        </tr>
-    </table>
+                        <p style="font-size: 14pt; margin-top: 2px;">
+                            (Dr. Md. Zahedul Hassan)<br>
+                            {{ committee_rev.sd_approval.signed_on }}
+                        </p>
+                    {% endif %}
+                </td>
+                <td style="width: 20%"></td>
+            </tr>
+        </table>
 
         <br><br>
         <div style="text-align: center">
@@ -117,15 +117,13 @@
             {% else %}
                 <p style="font-size: 14pt; font-weight: bold">ROOPPUR NPP<br>UNIT UNDEFINED</p><br>
             {% endif %}
-            <p style="font-size: 12pt;"><b>{{ task.title }}</b>
-                <br>{{ task }}
+            <p style="font-size: 12pt;"><b>{{ task.title }}</b></p>
+                <p>{{ task }}</p>
                 {% if form.initial.version_of_doc %}
-                <br>Version {{ form.initial.version_of_doc|extract_version_info }}
+                    <p>Version {{ form.initial.version_of_doc|extract_version_info }}</p>
                 {% else %}
-                <br>Version 2
+                    <p>Version 2</p>
                 {% endif %}
-            </p>
-
         </div>
     </div>
 
@@ -138,7 +136,7 @@
 
     <!-- heading of approval sheet -->
 
-    <div style="padding-left: 5%;">
+    <div style="padding-left: 5%; font-size: 10pt">
         <table class="table table-bordered table-responsive" style="width: 100%; border: 1px solid grey; border-collapse: collapse; text-align: center">
             <tr>
                 <td style="border:1px solid black; width: 20%; vertical-align: middle;">Rooppur NPP</td>
@@ -164,7 +162,7 @@
     <div style="padding-left: 5%;">
         <p style="font-size: 14pt; font-weight: bold; text-align: center">Approval Sheet</p>
         <div>
-            <table class="table table-bordered" style="width: 100%; text-align: center;  border:1px solid black; border-collapse: collapse;" >
+            <table class="table table-bordered" style="width: 100%; text-align: center;  border:1px solid black; border-collapse: collapse; font-size: 12pt" >
                 <tr>
                     <th style="border:1px solid black;">&nbsp;</th>
                     <th style="border:1px solid black;">Position</th>
@@ -206,7 +204,11 @@
                     {% for each in committee_rev.committee_approval.all %}
                         <tr>
                             <td style="border:1px solid black;">Agreed by</td>
+                            {% if each.signed_by.profile.npcbl_designation %}
                             <td style="border:1px solid black;">{{ each.signed_by.profile.npcbl_designation }}</td>
+                            {% else %}
+                            <td>&nbsp;</td>
+                            {% endif %}
                             <td style="border:1px solid black; width: 30%">
                                 {{ each.signed_by.get_full_name }}
                                 <br>
