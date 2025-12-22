@@ -327,7 +327,7 @@
                 {% for each in committee_rev_cmnt %}
                     <tr>
                         <td style="width: 3%">{{ forloop.counter|linebreaks }}</td>
-                        <td style="width: 7%">{{ each.section_no }}</td>
+                        <td style="width: 7%">{{ each.section_no|pdf_wrap:10 }}</td>
                         <td style="width: 35%; font-size: 1em">{{ each.original_text|linebreaks }}</td>
                         <td style="width: 35%; font-size: 1em">{{ each.proposed_text|linebreaks }}</td>
                         <td style="width: 20%; font-size: 1em">{{ each.remarks|linebreaks }}</td>
