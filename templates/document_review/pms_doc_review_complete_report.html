@@ -151,7 +151,7 @@
                     <span>{{ task.title }}</span>
                 </td>
                 <td rowspan="2" style="width: 30%; vertical-align: middle; border: 1px solid black;">
-                    <span>{{ task|linebreaks }}</span>
+                    <span>{{ task|pdf_wrap:20 }}</span>
                 </td>
             </tr>
             <tr>

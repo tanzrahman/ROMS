@@ -1,3 +1,5 @@
+import textwrap
+
 from django.utils.safestring import mark_safe
 
 from task_management.models import *
@@ -76,3 +78,9 @@ def format_approval_year(text):
     year = text.strftime("%Y")
 
     return year
+
+@register.filter(name='pdf_wrap')
+def pdf_wrap(value, width=25):
+    if not value:
+        return ""
+    return "\n".join(textwrap.wrap(str(value), width))
