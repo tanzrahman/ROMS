@@ -151,7 +151,7 @@
                     <span>{{ task.title }}</span>
                 </td>
                 <td rowspan="2" style="width: 30%; vertical-align: middle; border: 1px solid black;">
-                    <span>{{ task }}</span>
+                    <span>{{ task|linebreaks }}</span>
                 </td>
             </tr>
             <tr>
@@ -327,10 +327,10 @@
                 {% for each in committee_rev_cmnt %}
                     <tr>
                         <td style="width: 3%">{{ forloop.counter }}</td>
-                        <td style="width: 7%">{{ each.section_no }}</td>
-                        <td style="width: 35%; font-size: 1em">{{ each.original_text|linebreaks }}</td>
-                        <td style="width: 35%; font-size: 1em">{{ each.proposed_text|linebreaks }}</td>
-                        <td style="width: 20%; font-size: 1em">{{ each.remarks|linebreaks }}</td>
+                        <td style="width: 7%">{{ each.section_no|linebreaks }}</td>
+                        <td style="width: 35%; font-size: 12pt">{{ each.original_text|linebreaks }}</td>
+                        <td style="width: 35%; font-size: 12pt">{{ each.proposed_text|linebreaks }}</td>
+                        <td style="width: 20%; font-size: 12pt">{{ each.remarks|linebreaks }}</td>
                     </tr>
                 {% endfor %}
             </table>
