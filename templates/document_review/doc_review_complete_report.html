@@ -41,12 +41,12 @@
             }
         }
          @font-face {
-            font-family: Roboto;
+            font-family: "Times New Roman";
             src: url(static/fonts/times.ttf);
         }
 
         @font-face {
-            font-family: Roboto;
+            font-family: "Times New Roman";
             src: url(static/fonts/times.ttf);
             font-weight: bold;
         }
@@ -98,7 +98,7 @@
 
                         <p style="font-size: 14pt; margin-top: 2px;">
                             (Dr. Md. Zahedul Hassan)<br>
-                            {{ committee_rev.sd_approval.signed_on }}
+                            {{ committee_rev.sd_approval.signed_on|format_custom_date }}
                         </p>
                     {% endif %}
                 </td>
@@ -109,15 +109,15 @@
         <br><br>
         <div style="text-align: center">
             {% if unit == '0' %}
-                <p style="font-size: 14pt; font-weight: bold">ROOPPUR NPP<br>UNIT No. 1, 2</p><br>
+                <p style="font-weight: bold">ROOPPUR NPP<br>UNIT No. 1, 2</p><br>
             {% elif unit == '1' %}
-                <p style="font-size: 14pt; font-weight: bold">ROOPPUR NPP<br>UNIT No. 1</p><br>
+                <p style="font-weight: bold">ROOPPUR NPP<br>UNIT No. 1</p><br>
             {% elif unit == '2' %}
-                <p style="font-size: 14pt; font-weight: bold">ROOPPUR NPP<br>UNIT No. 2</p><br>
+                <p style="font-weight: bold">ROOPPUR NPP<br>UNIT No. 2</p><br>
             {% else %}
-                <p style="font-size: 14pt; font-weight: bold">ROOPPUR NPP<br>UNIT UNDEFINED</p><br>
+                <p style="font-weight: bold">ROOPPUR NPP<br>UNIT UNDEFINED</p><br>
             {% endif %}
-            <p style="font-size: 12pt;"><b>{{ task.title }}</b></p>
+            <p><b>{{ task.title }}</b></p>
                 <p>{{ task }}</p>
                 {% if form.initial.version_of_doc %}
                     <p>Version {{ form.initial.version_of_doc|extract_version_info }}</p>
@@ -212,9 +212,9 @@
                             <td style="border:1px solid black; width: 30%">
                                 {{ each.signed_by.get_full_name }}
                                 <br>
-                                <para style="word-wrap: break-word;">
+                                <div style="word-break: break-all; white-space: normal;">
                                     {{ each.signed_by }}
-                                </para>
+                                </div>
                             </td>
                             <td style="margin-top:5%; border:1px solid black;">
                                 <img id="signature_{{ forloop.counter }}" height="40" width="100"
@@ -242,9 +242,9 @@
     <pdf:nextpage/>
     <div>
         <div>
-            <h2 style="text-align: center; font-size: 2em;">Rooppur NPP Document Review</h2>
+            <h2 style="text-align: center;">Rooppur NPP Document Review</h2>
             <br><br>
-            <table class="table" style="width: 100%; text-align: center; font-size: 2em;">
+            <table class="table" style="width: 100%; text-align: center;">
                 <tr>
                     <td>
                         <span><b>Document Code: </b>{{ task }}</span><br>
@@ -306,9 +306,9 @@
         <pdf:nexttemplate name="comment_page"/>
         <pdf:nextpage/>
     </div>
-    <div style="padding-left: 5%">
+    <div style="padding-left: 5%; font-size: 12pt">
         <div>
-            <table style="width: 100%; font-size: 1em; text-align: left; border: 1px solid dimgrey";>
+            <table style="width: 100%; text-align: left; border: 1px solid dimgrey";>
                 <tr>
                     <td colspan="5">
                         <h2>Committee Review Comments</h2>
