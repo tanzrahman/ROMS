@@ -63,4 +63,4 @@ def format_custom_date(text):
     day = text.strftime("%d").lstrip("0")
     month_year = text.strftime("%B , %Y")
 
-    return f': " {day} " {month_year}'
+    return f'"{day}", {month_year}'
