@@ -54,9 +54,11 @@
 </head>
 
 <body style='font-family: "Times New Roman"; font-size: 14pt'>
+
 <div id="footer_content"> Page <pdf:pagenumber/>
         of <pdf:pagecount/>
 </div>
+
 <div style='padding:5%;'>
     <pdf:nexttemplate name="details_page"/>
 
@@ -127,8 +129,22 @@
         </div>
     </div>
 
+    <br><br>
+
+    <!-- approval year in footer -->
+    <div style="text-align: center">
+        <p>{{ committee_rev.sd_approval.signed_on|format_approval_year }}</p>
+    </div>
+
 
 <div>
+    <pdf:template name="signature_page">
+        <pdf:footer>
+            <div style="text-align: center; font-size: 9pt;">
+                Page 3
+            </div>
+        </pdf:footer>
+    </pdf:template>
     <div>
         <pdf:nexttemplate name="signature_page"/>
         <pdf:nextpage/>
@@ -211,8 +227,6 @@
                             {% endif %}
                             <td style="width: 30%; word-break: break-all; white-space: normal; border:1px solid black;">
                                 {{ each.signed_by.get_full_name }}
-                                <br>
-                                {{ each.signed_by }}
                             </td>
                             <td style="margin-top:5%; border:1px solid black;">
                                 <img id="signature_{{ forloop.counter }}" height="40" width="100"

@@ -1,3 +1,5 @@
+from django.utils.safestring import mark_safe
+
 from task_management.models import *
 from task_management.forms_doc_review import approvalChoiceList
 from django import template
@@ -54,6 +56,7 @@ def extract_version_info(text):
         return 2
     elif('1' in text):
         return 1
+
 @register.filter(name='format_custom_date')
 def format_custom_date(text):
     if not text:
@@ -61,6 +64,15 @@ def format_custom_date(text):
     # %d = zero-padded day, %B = full month name, %Y = 4-digit year
     # We use .replace(" 0", " ") if you want to remove leading zeros from the day
     day = text.strftime("%d").lstrip("0")
-    month_year = text.strftime("%B , %Y")
+    month = text.strftime("%B")
+    year = text.strftime("%Y")
 
-    return f'"{day}", {month_year}'
+    return mark_safe(f'"<u>{day}</u>" <u>{month}</u>, {year}')
+
+@register.filter(name='format_approval_year')
+def format_approval_year(text):
+    if not text:
+        return ""
+    year = text.strftime("%Y")
+
+    return year
