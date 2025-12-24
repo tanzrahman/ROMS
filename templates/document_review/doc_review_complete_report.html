@@ -246,8 +246,10 @@
                             <img id="signature" height="40" width="100"
                                  src="http://{{ host }}/manpower/user/embedd_signature?hash={{ feedback.user.profile.signature }}">
                         </td>
-                        <td style="border:1px solid black;">{{ feedback.modified_at|date }}</td>
+                    {% else %}
+                        <td>&nbsp;</td>
                     {% endif %}
+                        <td style="border:1px solid black;">{{ feedback.modified_at|date }}</td>
                 </tr>
             </table>
         </div>
