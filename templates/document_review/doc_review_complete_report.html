@@ -212,9 +212,9 @@
                         <tr>
                             <td style="border:1px solid black;">Agreed by</td>
                             {% if each.signed_by.profile.npcbl_designation %}
-                            <td style="border:1px solid black;">{{ each.signed_by.profile.npcbl_designation }}</td>
+                                <td style="border:1px solid black;">{{ each.signed_by.profile.npcbl_designation }}</td>
                             {% else %}
-                            <td>&nbsp;</td>
+                                <td>&nbsp;</td>
                             {% endif %}
                             <td style="width: 30%; word-break: break-all; white-space: normal; border:1px solid black;">
                                 {{ each.signed_by.get_full_name }}
@@ -229,6 +229,26 @@
                         </tr>
                     {% endfor %}
                 {% endif %}
+
+                <!-- Reviewer's approval sign -->
+                <tr>
+                    <td style="border:1px solid black;">Agreed by</td>
+                    {% if feedback.user.profile.npcbl_designation %}
+                        <td style="border:1px solid black;">{{ feedback.user.profile.npcbl_designation }}</td>
+                    {% else %}
+                        <td>&nbsp;</td>
+                    {% endif %}
+                    <td style="border:1px solid black;">
+                        {{ feedback.user.get_full_name }}
+                    </td>
+                    {% if feedback.user.profile.signature %}
+                        <td style="margin-top:5%; border:1px solid black;">
+                            <img id="signature" height="40" width="100"
+                                 src="http://{{ host }}/manpower/user/embedd_signature?hash={{ feedback.user.profile.signature }}">
+                        </td>
+                        <td style="border:1px solid black;">{{ feedback.modified_at|date }}</td>
+                    {% endif %}
+                </tr>
             </table>
         </div>
     </div>
