@@ -40,8 +40,20 @@
                     <td>{{ user.email }}</td>
                 </tr>
                 <tr>
-                    <th><label>Employee ID</label></th>
-                    <td>{{ user.employee_id }}</td>
+                    <th><label>Division</label></th>
+                    <td>{{ user.profile.division }}</td>
+                </tr>
+                <tr>
+                    <th><label>Department</label></th>
+                    <td>{{ user.profile.department }}</td>
+                </tr>
+                <tr>
+                    <th><label>NPCBL Designation</label></th>
+                    <td>{{ user.profile.npcbl_designation }}</td>
+                </tr>
+                <tr>
+                    <th><label>Designation</label></th>
+                    <td>{{ user.profile.designation }}</td>
                 </tr>
 
                 <tr>
@@ -63,11 +75,19 @@
                     <th><label>Signature</label></th>
                     <td>
                         {% if not user.profile.signature %}
-                            You did not uploaded your signature,
+                            You did not upload your signature,
                             <a href="/manpower/user/upload_signature"> Click to upload Signature</a>
                         {% else %}
-                            <img id="my_signature" height="100" width="200" src="/manpower/user/load_signature?hash={{user.profile.signature}}">
+                            <img id="my_signature" height="100" width="200" src="/manpower/user/load_signature?hash={{user.profile.signature}}"><br>
+                            <a href="/manpower/user/upload_signature"> Click to upload updated Signature</a>
                         {% endif %}
+                    </td>
+                </tr>
+
+                <tr>
+                    <th><label>Edit</label></th>
+                    <td>
+                        <a class="btn btn-outline-info" href="/manpower/user/edit_profile">Edit Profile</a>
                     </td>
                 </tr>
             </table>

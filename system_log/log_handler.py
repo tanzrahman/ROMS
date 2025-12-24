@@ -162,3 +162,28 @@ def deactivated_user_log(request, page_no=None):
         log_list = paginator.page(paginator.num_pages)
 
     return render(request, 'system_log/deactivated_user_log.html', {'deactivated_user_log': log_list})
+
+def profile_edit_log(request, page_no=None):
+    log_list = ProfileEditLog.objects.all().order_by('-changed_at')
+
+    if(request.GET.get('page_no')):
+        page_no = int(request.GET.get('page_no'))
+
+    # pagination number comes from system parameter model
+    paginator_object = SystemParameter.objects.filter(name='pagination_number')
+    no_of_items = 10
+    if (paginator_object.count() != 0):
+        no_of_items = paginator_object[0].value
+
+    paginator = Paginator(log_list, no_of_items)
+
+    if (not page_no):
+        page_no = 1
+    try:
+        log_list = paginator.page(page_no)
+    except PageNotAnInteger:
+        log_list = paginator.page(page_no)
+    except EmptyPage:
+        log_list = paginator.page(paginator.num_pages)
+
+    return render(request, 'system_log/profile_edit_log.html', {'profile_edit_log': log_list})

@@ -44,7 +44,7 @@
                     <tr class="align-content-center">
                         <td>{{ forloop.counter }}
                             {% if request.user.is_staff %}
-                            <a href="/admin_site_control/manpower/profile/{{ each.profile.id }}/change/" target="_blank">(Edit)</a>
+                            <a href="/admin_roms_control/manpower/profile/{{ each.profile.id }}/change/" target="_blank">(Edit)</a>
                             {% endif %}
                         </td>
                         <td>{{ each.first_name }} {{ each.last_name }}

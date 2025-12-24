@@ -150,3 +150,20 @@ class SARCommitteeForm(forms.ModelForm):
     class Meta:
         model = SafetyAnalysisReportCommittee
         fields = ('name', 'sar_section', 'sar_section_title', 'members', 'lead')
+
+class EditProfileForm(forms.Form):
+    first_name = forms.CharField(max_length=30, required=False)
+    last_name = forms.CharField(max_length=30, required=False)
+    npcbl_designation = forms.CharField(required=False, label='NPCBL Designation')
+    designation = forms.CharField(required=False, label='Plant Designation')
+    division = forms.ModelChoiceField(required=False, label="Division", queryset=Division.objects.all())
+    department = forms.ModelChoiceField(required=False, label="Department", queryset=DepartmentShop.objects.all())
+    subdepartment = forms.ModelChoiceField(required=False, queryset=SubDepartment.objects.all())
+    section = forms.ModelChoiceField(required=False, queryset=Section.objects.all())
+    phone = forms.CharField(max_length=11, required=False, label='Mobile No', help_text='Start with 0 (ex. 019########)', widget=forms.TextInput(attrs={
+                'placeholder': '019########'
+            }))
+
+    class Meta:
+        model = User
+        fields = ('first_name', 'last_name', 'npcbl_designation', 'plant_designation', 'division', 'department', 'subdepartment', 'section', 'phone')

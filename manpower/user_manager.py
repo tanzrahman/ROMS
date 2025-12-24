@@ -8,7 +8,7 @@ from django.db.models import Q
 from django.http import JsonResponse, FileResponse, HttpResponse
 from task_management.models import File, SystemParameter, SubSystem, Facility
 from django.shortcuts import render, redirect
-from datetime import datetime,timedelta
+from datetime import timedelta, datetime
 from django.contrib.auth.forms import UserCreationForm
 import random, string
 from django.shortcuts import render, redirect
@@ -18,9 +18,10 @@ from django.http import  HttpResponse, HttpResponseForbidden
 from manpower.models import User, Profile, SubDepartment, DepartmentShop, Section, Division, Committee, SafetyAnalysisReportCommittee, \
     UserConsentDocReviewRemarks, ApprovalSignature
 from .forms import GroupPermissionForm, UserActivationForm, AdminResetPasswordForm, UserChangePasswordForm, SignUpForm, \
-    UserSearchForm, CommitteeForm, SARCommitteeForm
+    UserSearchForm, CommitteeForm, SARCommitteeForm, EditProfileForm
 from operational_management_system.settings import PYTZ_TIME_ZONE
-from system_log.models import UserLog, UserNotificationLog, UserDeactivateLog, FailedLoginLog, PasswordChangeLog
+from system_log.models import UserLog, UserNotificationLog, UserDeactivateLog, FailedLoginLog, PasswordChangeLog, \
+    ProfileEditLog
 from task_management.ftp_handler import upload_to_ftp, FILETYPE, fetch_file
 from csv import reader
 
@@ -130,6 +131,8 @@ def request_handler(request, action=None, query_string=None):
         return user_activation(request,query_string)
     if (action == 'reset_pass'):
         return reset_password(request, query_string)
+    if (action == 'edit_profile'):
+        return edit_profile(request, query_string)
 
 
 
@@ -214,6 +217,81 @@ def reset_password(request, query_string):
                 return render(request, 'manpower/reset_password.html', {'form': form, "result": result})
         else:
                 return render(request, 'manpower/reset_password.html', {'form': form})
+
+
+def get_profile_initial(user):
+    profile = Profile.objects.get(user=user)
+
+    return {
+        'first_name': user.first_name,
+        'last_name': user.last_name,
+        'npcbl_designation': profile.npcbl_designation,
+        'designation': profile.designation,
+        'division': profile.division,
+        'department': profile.department,
+        'subdepartment': profile.subdepartment,
+        'section': profile.section,
+        'phone': profile.phone,
+        'creating_user': user,
+    }
+
+def edit_profile(request, query_string):
+    user = request.user
+    initial = get_profile_initial(user)
+
+    if (request.method == 'GET'):
+        edit_profile_form = EditProfileForm(initial=initial)
+
+        context = {'form': edit_profile_form}
+
+        return render(request, 'manpower/edit_profile.html', context)
+
+    if request.method == 'POST':
+        changed_fields = {}
+        form = EditProfileForm(request.POST, initial=initial)
+
+        user = request.user
+        profile = Profile.objects.get(user=user)
+
+        USER_FIELDS = ['first_name', 'last_name']
+        PROFILE_FIELDS = ['npcbl_designation', 'designation', 'division', 'department', 'subdepartment', 'section', 'phone']
+
+        if form.is_valid():
+
+            for field in form.changed_data:
+
+                if field in USER_FIELDS:
+                    setattr(user, field, form.cleaned_data[field])
+
+                elif field in PROFILE_FIELDS:
+                    setattr(profile, field, form.cleaned_data[field])
+
+                old_data = form.initial.get(field)
+                new_data = form.cleaned_data.get(field)
+
+                changed_fields[field] = {'old': old_data, 'new': new_data}
+
+            if any(f in USER_FIELDS for f in form.changed_data):
+                user.save(update_fields=USER_FIELDS)
+
+            if any(f in PROFILE_FIELDS for f in form.changed_data):
+                profile.save()
+
+            # Saved data to ProfileEditLog
+            ProfileEditLog.objects.create(
+                changed_fields=changed_fields,
+                changed_by=request.user,
+                changed_at=datetime.now(),
+                ip=request.META['REMOTE_ADDR'],
+            )
+
+            profile_edit_form = EditProfileForm()
+            context = {'form': profile_edit_form, 'success': 'success'}
+
+            return render(request, 'user.html', context)
+
+        else:
+            HttpResponse("ERROR! INSERT VALID DATA.")
 
 
 def change_password(request, query_string):
