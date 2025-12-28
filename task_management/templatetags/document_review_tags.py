@@ -81,7 +81,7 @@ def format_custom_date_committee(text):
     month = text.strftime("%B")
     year = text.strftime("%Y")
 
-    return mark_safe(f'"{day}" {month}, {year}')
+    return mark_safe(f'{day} {month}, {year}')
 
 @register.filter(name='format_approval_year')
 def format_approval_year(text):

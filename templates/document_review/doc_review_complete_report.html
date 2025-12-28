@@ -144,6 +144,36 @@
     <!-- heading of approval sheet -->
 
     <div style="padding-left: 5%; font-size: 10pt">
+        <table style="width:100%; border-collapse:collapse; text-align:center;">
+            <tr style="height: 40px;">
+                <td style="border:1px solid black; width:20%; vertical-align:middle;">
+                    Rooppur NPP
+                </td>
+
+                <td rowspan="2"
+                    style="border:1px solid black; vertical-align:middle;">
+                    {{ task.title }}
+                </td>
+
+                <td rowspan="2"
+                    style="border:1px solid black; width:30%; vertical-align:middle;">
+                    {{ task|linebreaks }}
+                </td>
+            </tr>
+
+            <tr style="height: 40px;">
+                <td style="border:1px solid black; vertical-align:middle;">
+                    {% if form.initial.version_of_doc %}
+                        Version {{ form.initial.version_of_doc|extract_version_info }}
+                    {% else %}
+                        Version 2
+                    {% endif %}
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <div style="padding-left: 5%; font-size: 10pt">
         <table class="table table-bordered table-responsive" style="width: 100%; border: 1px solid grey; border-collapse: collapse; text-align: center">
             <tr>
                 <td style="border:1px solid black; width: 20%; vertical-align: middle;">Rooppur NPP</td>
