@@ -161,7 +161,7 @@
                 <td style="width: 20%"></td>
             </tr>
         </table>
-    
+
         <div style="text-align: center">
             {% if unit == '0' %}
                 <p style="font-weight: bold">ROOPPUR NPP<br>UNIT No. 1, 2</p>
@@ -191,6 +191,7 @@
     <div>
 
         <pdf:nexttemplate name="approval_page"/>
+        <pdf:nextpage/>
 
         <!-- heading of approval sheet -->
 
@@ -319,8 +320,6 @@
 
     </div>
 
-    <pdf:nextpage/>
-
     <!-- ....................................
          ....................................
               End of new template design
@@ -330,6 +329,7 @@
     <pdf:resetpagenumber />
 
     <pdf:nexttemplate name="normal_page"/>
+    <pdf:nextpage/>
 
     <div>
         <div>
@@ -391,6 +391,7 @@
     </div>
     <br><br>
 </div>
+
 <pdf:nextpage/>
 
 <div>
