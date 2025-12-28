@@ -122,8 +122,8 @@ def request_handler(request, action=None, query_string=None):
 
         return render(request, 'manpower/all_users.html', context)
 
-    if (not request.user.has_perm("auth.change_user")):
-        return HttpResponse("UnAuthorized Access", 401)
+    # if (not request.user.has_perm("auth.change_user")):
+    #     return HttpResponse("UnAuthorized Access", 401)
 
     if (action == "signup" or action =='create'):
         return signup(request)

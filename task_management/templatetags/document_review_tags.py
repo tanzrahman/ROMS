@@ -59,8 +59,8 @@ def extract_version_info(text):
     elif('1' in text):
         return 1
 
-@register.filter(name='format_custom_date')
-def format_custom_date(text):
+@register.filter(name='format_custom_date_MD')
+def format_custom_date_MD(text):
     if not text:
         return ""
     # %d = zero-padded day, %B = full month name, %Y = 4-digit year
@@ -70,6 +70,18 @@ def format_custom_date(text):
     year = text.strftime("%Y")
 
     return mark_safe(f'"<u>{day}</u>" <u>{month}</u>, {year}')
+
+@register.filter(name='format_custom_date_committee')
+def format_custom_date_committee(text):
+    if not text:
+        return ""
+    # %d = zero-padded day, %B = full month name, %Y = 4-digit year
+    # We use .replace(" 0", " ") if you want to remove leading zeros from the day
+    day = text.strftime("%d").lstrip("0")
+    month = text.strftime("%B")
+    year = text.strftime("%Y")
+
+    return mark_safe(f'"{day}" {month}, {year}')
 
 @register.filter(name='format_approval_year')
 def format_approval_year(text):
