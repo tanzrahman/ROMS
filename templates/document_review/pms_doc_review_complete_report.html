@@ -182,7 +182,7 @@
             <p>{{ committee_rev.sd_approval.signed_on|format_approval_year }}</p>
         </div>
 
-        <div style="position: absolute; bottom: 1cm; width: 100%; text-align: center; font-size: 12pt;">
+        <div style="position: absolute; bottom: 0; left: 0; width: 100%; text-align: center; font-size: 12pt;">
             2025
         </div>
     </div>
@@ -324,7 +324,6 @@
          ....................................
          .................................... -->
 
-    <pdf:resetpagenumber />
 
     <pdf:nexttemplate name="normal_page"/>
     <pdf:nextpage/>
@@ -362,6 +361,8 @@
             </table>
         </div>
     </div>
+
+    <pdf:nextpage/>
 
     <div style="padding-bottom:1% ">
         {% if form %}
