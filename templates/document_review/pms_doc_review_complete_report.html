@@ -98,30 +98,30 @@
 
 <body style='font-family: "Times New Roman"; font-size: 14pt'>
 
-<div id="footer_front">
-    <div style="text-align: center; font-size: 14pt;">
-        2025
+    <div id="footer_front">
+        <div style="text-align: center; font-size: 14pt;">
+            2025
+        </div>
     </div>
-</div>
 
-<div id="footer_approval">
-    <div style="text-align: right; font-size: 9pt;">
-        3
+    <div id="footer_approval">
+        <div style="text-align: right; font-size: 9pt;">
+            3
+        </div>
     </div>
-</div>
 
-<div id="footer_normal">
-    <div style="text-align: right; font-size: 9pt;">
-        Page <pdf:pagenumber/>
+    <div id="footer_normal">
+        <div style="text-align: right; font-size: 9pt;">
+            Page <pdf:pagenumber/>
+        </div>
     </div>
-</div>
 
     <!-- ....................................
          ....................................
             start of new template design
          ....................................
          .................................... -->
-<div>
+
     <pdf:nexttemplate name="front_page"/>
 
     <!-- front page -->
@@ -187,12 +187,10 @@
         <p>{{ committee_rev.sd_approval.signed_on|format_approval_year }}</p>
     </div>
 
+    <pdf:nexttemplate name="approval_page"/>
+    <pdf:nextpage/>
 
     <div>
-
-        <pdf:nexttemplate name="approval_page"/>
-        <pdf:nextpage/>
-
         <!-- heading of approval sheet -->
 
         <div style="padding-left: 5%; font-size: 10pt">
@@ -329,7 +327,6 @@
     <pdf:resetpagenumber />
 
     <pdf:nexttemplate name="normal_page"/>
-    <pdf:nextpage/>
 
     <div>
         <div>
@@ -390,40 +387,39 @@
         {% endif %}
     </div>
     <br><br>
-</div>
 
-<pdf:nextpage/>
+    <pdf:nextpage/>
 
-<div>
-    <div style="padding-left: 5%;">
-        <div>
-            <table style="width: 100%; text-align: left; border: 1px solid dimgrey; font-size: 12pt">
-                <tr>
-                    <td colspan="5">
-                        <h2>Committee Review Comments</h2>
-                    </td>
-                </tr>
-                <tr>
-                    <th>SL. No</th>
-                    <th>Section No</th>
-                    <th>Original Text</th>
-                    <th>Proposed Text</th>
-                    <th>Remarks</th>
-                </tr>
-                {% for each in committee_rev_cmnt %}
+    <div>
+        <div style="padding-left: 5%;">
+            <div>
+                <table style="width: 100%; text-align: left; border: 1px solid dimgrey; font-size: 12pt">
                     <tr>
-                        <td style="width: 3%">{{ forloop.counter }}</td>
-                        <td style="width: 15%">{{ each.section_no|pdf_wrap:100|linebreaks }}</td>
-                        <td style="width: 35%; font-size: 12pt">{{ each.original_text|linebreaks }}</td>
-                        <td style="width: 35%; font-size: 12pt">{{ each.proposed_text|linebreaks }}</td>
-                        <td style="width: 20%; font-size: 12pt">{{ each.remarks|linebreaks }}</td>
+                        <td colspan="5">
+                            <h2>Committee Review Comments</h2>
+                        </td>
                     </tr>
-                {% endfor %}
-            </table>
+                    <tr>
+                        <th>SL. No</th>
+                        <th>Section No</th>
+                        <th>Original Text</th>
+                        <th>Proposed Text</th>
+                        <th>Remarks</th>
+                    </tr>
+                    {% for each in committee_rev_cmnt %}
+                        <tr>
+                            <td style="width: 3%">{{ forloop.counter }}</td>
+                            <td style="width: 15%">{{ each.section_no|pdf_wrap:100|linebreaks }}</td>
+                            <td style="width: 35%; font-size: 12pt">{{ each.original_text|linebreaks }}</td>
+                            <td style="width: 35%; font-size: 12pt">{{ each.proposed_text|linebreaks }}</td>
+                            <td style="width: 20%; font-size: 12pt">{{ each.remarks|linebreaks }}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
         </div>
+        <br>
     </div>
-    <br>
-</div>
 
 </body>
 </html>
