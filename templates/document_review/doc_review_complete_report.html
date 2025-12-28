@@ -79,7 +79,7 @@
 
         <table style="width: 100%; border-collapse: collapse;">
             <tr>
-                <td style="width: 45%"></td>
+                <td style="width: 50%"></td>
                 <td style="width: 35%;">
                     <p style="font-size: 14pt;"><b>APPROVED</b><br>Managing Director</p>
 
@@ -88,22 +88,22 @@
                         <table style="border-collapse: collapse; margin: 0 auto;">
                             <tr>
                                 <td>
-                                    <img height="30" width="150"
+                                    <img height="40" width="150"
                                          src="http://{{ host }}/manpower/user/embedd_signature?hash={{ committee_rev.sd_approval.sign_hash }}">
                                     <br>
                                     <!-- Line exactly same width as signature -->
-                                    <div style="width: 40px; border-bottom: 1px solid black; margin: 0 auto;">&nbsp;</div>
+                                    <div style="width: 35px; border-bottom: 1px solid black; margin: 0 auto;">&nbsp;</div>
                                 </td>
                             </tr>
                         </table>
 
                         <p style="font-size: 14pt; margin-top: 2px;">
-                            (Dr. Md. Zahedul Hassan)
+                            (Dr. Md. Zahedul Hassan)<br>
                             {{ committee_rev.sd_approval.signed_on|format_custom_date_MD }}
                         </p>
                     {% endif %}
                 </td>
-                <td style="width: 20%"></td>
+                <td style="width: 15%"></td>
             </tr>
         </table>
 
@@ -119,11 +119,11 @@
                 <p style="font-weight: bold">ROOPPUR NPP<br>UNIT UNDEFINED</p>
             {% endif %}
             <p><b>{{ task.title }}</b></p>
-                <p>{{ task }}</p>
+                <p>{{ task }}<br>
                 {% if form.initial.version_of_doc %}
-                    <p>Version {{ form.initial.version_of_doc|extract_version_info }}</p>
+                    Version {{ form.initial.version_of_doc|extract_version_info }}<br>
                 {% else %}
-                    <p>Version 2</p>
+                    Version 2 <br>
                 {% endif %}
         </div>
     </div>
