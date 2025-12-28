@@ -4,16 +4,6 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <style>
-        @page normal_page {
-            size: A4;
-            margin: 2cm 2cm 2.5cm 2cm;
-
-            @frame footer {
-                -pdf-frame-content: footer_normal;
-                bottom: 1cm;
-                height: 1cm;
-            }
-        }
         @page details_page {
             size: a4 portrait;
             margin: 1cm;
@@ -61,12 +51,41 @@
             font-weight: bold;
         }
 
+         /* --- Front Page --- */
+        @page front_page {
+            size: A4 portrait;
+            margin: 1cm;
+
+            @frame footer {
+                -pdf-frame-content: footer_front;
+                bottom: 1cm;
+                margin-left: 2cm;
+                margin-right: 2cm;
+                height: 1cm;
+            }
+        }
+
+        /* --- Approval Sheet --- */
         @page approval_page {
-            size: a4 portrait;
+            size: A4 portrait;
             margin: 1cm;
 
             @frame footer {
                 -pdf-frame-content: footer_approval;
+                bottom: 1cm;
+                margin-left: 2cm;
+                margin-right: 2cm;
+                height: 1cm;
+            }
+        }
+
+        /* --- Normal Pages --- */
+        @page normal_page {
+            size: A4 portrait;
+            margin: 1cm;
+
+            @frame footer {
+                -pdf-frame-content: footer_normal;
                 bottom: 1cm;
                 margin-left: 2cm;
                 margin-right: 2cm;
@@ -79,14 +98,17 @@
 
 <body style='font-family: "Times New Roman"; font-size: 14pt'>
 
-<div id="footer_approval">
-    <div style="text-align: right; font-size: 10pt;">
-        3
+    <div id="footer_front">
+        <div style="text-align: center; font-size: 14pt;">
+            2025
+        </div>
     </div>
-</div>
 
-<div style='padding:5%;'>
-    <pdf:nexttemplate name="details_page"/>
+    <div id="footer_approval">
+        <div style="text-align: right; font-size: 9pt;">
+            3
+        </div>
+    </div>
 
     <!-- ....................................
          ....................................
@@ -94,202 +116,204 @@
          ....................................
          .................................... -->
 
-    <!-- front page -->
-    <div style="padding-left: 5%; padding-top: 15%;">
-        <p style="text-align: center; padding-bottom: 5%; font-weight: bold; font-size: 14pt">NUCLEAR POWER PLANT COMPANY BANGLADESH LIMITED<br>(NPCBL)</p>
-        <div style="text-align: center">
-            <img src={{ npcbl_logo_path }} alt="npcbl_logo" style="width: 4.26cm; height: 5cm">
-        </div>
+    <pdf:nexttemplate name="front_page"/>
 
-        <br>
+    <div>
+        <!-- front page -->
+        <div style="padding-left: 5%; padding-top: 15%;">
+            <p style="text-align: center; padding-bottom: 5%; font-weight: bold; font-size: 14pt">NUCLEAR POWER PLANT COMPANY BANGLADESH LIMITED<br>(NPCBL)</p>
+            <div style="text-align: center">
+                <img src={{ npcbl_logo_path }} alt="npcbl_logo" style="width: 4.26cm; height: 5cm">
+            </div>
 
-        <table style="width: 100%; border-collapse: collapse;">
-            <tr>
-                <td style="width: 50%"></td>
-                <td style="width: 30%;">
-                    <p style="font-size: 14pt;"><b>APPROVED</b><br>Managing Director</p>
+            <br>
 
-                    {% if committee_rev.sd_approval.sign_hash %}
-                        <!-- Signature and line in same container -->
-                        <table style="border-collapse: collapse; margin: 0 auto;">
-                            <tr>
-                                <td>
-                                    <img height="40" width="150"
-                                         src="http://{{ host }}/manpower/user/embedd_signature?hash={{ committee_rev.sd_approval.sign_hash }}">
-                                    <!-- Line exactly same width as signature -->
-                                    <div style="width: 10%; border-bottom: 1px solid black; margin: 0 auto;">&nbsp;</div>
-                                </td>
-                            </tr>
-                        </table>
+            <table style="width: 100%; border-collapse: collapse;">
+                <tr>
+                    <td style="width: 50%"></td>
+                    <td style="width: 30%;">
+                        <p style="font-size: 14pt;"><b>APPROVED</b><br>Managing Director</p>
 
-                        <p style="font-size: 14pt; margin-top: 2px;">
-                            (Dr. Md. Zahedul Hassan)<br>
-                            {{ committee_rev.sd_approval.signed_on|format_custom_date_MD }}
-                        </p>
-                    {% endif %}
-                </td>
-                <td style="width: 20%"></td>
-            </tr>
-        </table>
+                        {% if committee_rev.sd_approval.sign_hash %}
+                            <!-- Signature and line in same container -->
+                            <table style="border-collapse: collapse; margin: 0 auto;">
+                                <tr>
+                                    <td>
+                                        <img height="40" width="150"
+                                             src="http://{{ host }}/manpower/user/embedd_signature?hash={{ committee_rev.sd_approval.sign_hash }}">
+                                        <!-- Line exactly same width as signature -->
+                                        <div style="width: 8%; border-bottom: 1px solid black; margin: 0 auto;">&nbsp;</div>
+                                    </td>
+                                </tr>
+                            </table>
 
-        <br>
-        <div style="text-align: center">
-            {% if unit == '0' %}
-                <p style="font-weight: bold">ROOPPUR NPP<br>UNIT No. 1, 2</p>
-            {% elif unit == '1' %}
-                <p style="font-weight: bold">ROOPPUR NPP<br>UNIT No. 1</p>
-            {% elif unit == '2' %}
-                <p style="font-weight: bold">ROOPPUR NPP<br>UNIT No. 2</p>
-            {% else %}
-                <p style="font-weight: bold">ROOPPUR NPP<br>UNIT UNDEFINED</p>
-            {% endif %}
-            <p><b>{{ task.title }}</b><br>
-                {{ task }}<br>
-                {% if form.initial.version_of_doc %}
-                    Version {{ form.initial.version_of_doc|extract_version_info }}<br>
+                            <p style="font-size: 14pt; margin-top: 2px;">
+                                (Dr. Md. Zahedul Hassan)<br>
+                                {{ committee_rev.sd_approval.signed_on|format_custom_date_MD }}
+                            </p>
+                        {% endif %}
+                    </td>
+                    <td style="width: 20%"></td>
+                </tr>
+            </table>
+
+            <div style="text-align: center">
+                {% if unit == '0' %}
+                    <p style="font-weight: bold">ROOPPUR NPP<br>UNIT No. 1, 2</p>
+                {% elif unit == '1' %}
+                    <p style="font-weight: bold">ROOPPUR NPP<br>UNIT No. 1</p>
+                {% elif unit == '2' %}
+                    <p style="font-weight: bold">ROOPPUR NPP<br>UNIT No. 2</p>
                 {% else %}
-                    Version 2 <br>
-                {% endif %}</p>
+                    <p style="font-weight: bold">ROOPPUR NPP<br>UNIT UNDEFINED</p>
+                {% endif %}
+                <p><b>{{ task.title }}</b><br>
+                    {{ task }}<br>
+                    {% if form.initial.version_of_doc %}
+                        Version {{ form.initial.version_of_doc|extract_version_info }}<br>
+                    {% else %}
+                        Version 2 <br>
+                    {% endif %}</p>
+            </div>
         </div>
-    </div>
-    <br><br><br>
-    <!-- approval year in footer -->
-    <div style="text-align: center; font-size: 9pt">
-        <p>{{ committee_rev.sd_approval.signed_on|format_approval_year }}</p>
-    </div>
+        <br><br><br><br><br><br><br>
+        <!-- approval year in footer -->
+        <div style="text-align: center; font-size: 14pt">
+            <p>{{ committee_rev.sd_approval.signed_on|format_approval_year }}</p>
+        </div>
 
-
-<div>
+    </div>
 
     <pdf:nexttemplate name="approval_page"/>
     <pdf:nextpage/>
 
-    <!-- heading of approval sheet -->
+    <div>
+        <!-- heading of approval sheet -->
 
-    <div style="padding-left: 5%; font-size: 10pt">
-        <table style="width:100%; border-collapse:collapse; text-align:center;">
-            <tr style="height: 40px;">
-                <td style="border:1px solid black; width:20%; vertical-align:middle;">
-                    Rooppur NPP
-                </td>
-
-                <td rowspan="2"
-                    style="border:1px solid black; vertical-align:middle;">
-                    {{ task.title }}
-                </td>
-
-                <td rowspan="2"
-                    style="border:1px solid black; width:30%; vertical-align:middle;">
-                    {{ task|linebreaks }}
-                </td>
-            </tr>
-
-            <tr style="height: 40px;">
-                <td style="border:1px solid black; vertical-align:middle;">
-                    {% if form.initial.version_of_doc %}
-                        Version {{ form.initial.version_of_doc|extract_version_info }}
-                    {% else %}
-                        Version 2
-                    {% endif %}
-                </td>
-            </tr>
-        </table>
-    </div>
-
-    <!-- Approval sheet table -->
-
-    <div style="padding-left: 5%;">
-        <p style="font-size: 14pt; font-weight: bold; text-align: center">Approval Sheet</p>
-        <div>
-            <table class="table table-bordered" style="width: 100%; text-align: center;  border:1px solid black; border-collapse: collapse; font-size: 12pt" >
-                <tr>
-                    <th style="border:1px solid black;">&nbsp;</th>
-                    <th style="border:1px solid black;">Position</th>
-                    <th style="border:1px solid black;">Full Name</th>
-                    <th style="border:1px solid black;">Signature</th>
-                    <th style="border:1px solid black;">Date</th>
-                </tr>
-                <tr>
-                    <td style="border:1px solid black;">Agreed by</td>
-                    <td style="border:1px solid black;">Chief Superintendent (Addl. Charge)</td>
-                    <td style="border:1px solid black;">
-                        {{ committee_rev.chief_eng_approval.signed_by.get_full_name }}
+        <div style="padding-left: 5%; font-size: 10pt">
+            <table style="width:100%; border-collapse:collapse; text-align:center;">
+                <tr style="height: 30px;">
+                    <td style="border:1px solid black; width:20%; vertical-align:middle;">
+                        Rooppur NPP
                     </td>
-                    {% if committee_rev.chief_eng_approval.sign_hash %}
-                        <td style="margin-top:5%; border:1px solid black;">
-                            <img id="signature" height="40" width="100"
-                                     src="http://{{ host }}/manpower/user/embedd_signature?hash={{ committee_rev.chief_eng_approval.sign_hash }}">
-                        </td>
-                        <td style="border:1px solid black;">{{ committee_rev.chief_eng_approval.signed_on|format_custom_date_committee }}</td>
 
-                    {% endif %}
-                </tr>
-                <tr>
-                    <td style="border:1px solid black;">Agreed by</td>
-                    <td style="border:1px solid black;">Head of Division</td>
-                    <td style="border:1px solid black;">
-                        {{ committee_rev.division_head_approval.signed_by.get_full_name }}
+                    <td rowspan="2"
+                        style="border:1px solid black; vertical-align:middle;">
+                        {{ task.title }}
                     </td>
-                    {% if committee_rev.division_head_approval.sign_hash %}
-                        <td style="margin-top:5%; border:1px solid black;">
-                            <img id="signature" height="40" width="100"
-                                 src="http://{{ host }}/manpower/user/embedd_signature?hash={{ committee_rev.division_head_approval.sign_hash }}">
-                        </td>
-                        <td style="border:1px solid black;">{{ committee_rev.division_head_approval.signed_on|format_custom_date_committee }}</td>
-                    {% endif %}
+
+                    <td rowspan="2"
+                        style="border:1px solid black; width:30%; vertical-align:middle;">
+                        {{ task|linebreaks }}
+                    </td>
                 </tr>
 
-                {% if committee_rev.committee_approval %}
-                    {% for each in committee_rev.committee_approval.all %}
-                        {% if each.signed_by != feedback.user %}
-                            <tr>
-                                <td style="border:1px solid black;">Agreed by</td>
-                                {% if each.signed_by.profile.npcbl_designation %}
-                                    <td style="border:1px solid black;">{{ each.signed_by.profile.npcbl_designation }}</td>
-                                {% else %}
-                                    <td>&nbsp;</td>
-                                {% endif %}
-                                <td style="width: 30%; word-break: break-all; white-space: normal; border:1px solid black;">
-                                    {{ each.signed_by.get_full_name }}
-                                </td>
-                                <td style="margin-top:5%; border:1px solid black;">
-                                    <img id="signature_{{ forloop.counter }}" height="40" width="100"
-                                         src="http://{{ host }}/manpower/user/embedd_signature?hash={{ each.sign_hash }}">
-                                </td>
-                                <td style="border:1px solid black;">
-                                    {{ each.signed_on|format_custom_date_committee }}
-                                </td>
-                            </tr>
+                <tr style="height: 30px;">
+                    <td style="border:1px solid black; vertical-align:middle;">
+                        {% if form.initial.version_of_doc %}
+                            Version {{ form.initial.version_of_doc|extract_version_info }}
+                        {% else %}
+                            Version 2
                         {% endif %}
-                    {% endfor %}
-                {% endif %}
-
-                <!-- Reviewer's approval sign -->
-                <tr>
-                    <td style="border:1px solid black;">Agreed by</td>
-                    {% if feedback.user.profile.npcbl_designation %}
-                        <td style="border:1px solid black;">{{ feedback.user.profile.npcbl_designation }}</td>
-                    {% else %}
-                        <td>&nbsp;</td>
-                    {% endif %}
-                    <td style="border:1px solid black;">
-                        {{ feedback.user.get_full_name }}
                     </td>
-                    {% if feedback.user.profile.signature %}
-                        <td style="margin-top:5%; border:1px solid black;">
-                            <img id="signature" height="40" width="100"
-                                 src="http://{{ host }}/manpower/user/embedd_signature?hash={{ feedback.user.profile.signature }}">
-                        </td>
-                    {% else %}
-                        <td>&nbsp;</td>
-                    {% endif %}
-                        <td style="border:1px solid black;">{{ feedback.modified_at|format_custom_date_committee }}</td>
                 </tr>
             </table>
         </div>
-    </div>
 
-</div>
+        <!-- Approval sheet table -->
+
+        <div style="padding-left: 5%;">
+            <p style="font-size: 14pt; font-weight: bold; text-align: center">Approval Sheet</p>
+            <div>
+                <table class="table table-bordered" style="width: 100%; text-align: center;  border:1px solid black; border-collapse: collapse; font-size: 12pt" >
+                    <tr>
+                        <th style="border:1px solid black;">&nbsp;</th>
+                        <th style="border:1px solid black;">Position</th>
+                        <th style="border:1px solid black;">Full Name</th>
+                        <th style="border:1px solid black;">Signature</th>
+                        <th style="border:1px solid black;">Date</th>
+                    </tr>
+                    <tr>
+                        <td style="border:1px solid black;">Agreed by</td>
+                        <td style="border:1px solid black;">Chief Superintendent (Addl. Charge)</td>
+                        <td style="border:1px solid black;">
+                            {{ committee_rev.chief_eng_approval.signed_by.get_full_name }}
+                        </td>
+                        {% if committee_rev.chief_eng_approval.sign_hash %}
+                            <td style="margin-top:5%; border:1px solid black;">
+                                <img id="signature" height="40" width="100"
+                                         src="http://{{ host }}/manpower/user/embedd_signature?hash={{ committee_rev.chief_eng_approval.sign_hash }}">
+                            </td>
+                            <td style="border:1px solid black;">{{ committee_rev.chief_eng_approval.signed_on|format_custom_date_committee }}</td>
+
+                        {% endif %}
+                    </tr>
+                    <tr>
+                        <td style="border:1px solid black;">Agreed by</td>
+                        <td style="border:1px solid black;">Head of Division</td>
+                        <td style="border:1px solid black;">
+                            {{ committee_rev.division_head_approval.signed_by.get_full_name }}
+                        </td>
+                        {% if committee_rev.division_head_approval.sign_hash %}
+                            <td style="margin-top:5%; border:1px solid black;">
+                                <img id="signature" height="40" width="100"
+                                     src="http://{{ host }}/manpower/user/embedd_signature?hash={{ committee_rev.division_head_approval.sign_hash }}">
+                            </td>
+                            <td style="border:1px solid black;">{{ committee_rev.division_head_approval.signed_on|format_custom_date_committee }}</td>
+                        {% endif %}
+                    </tr>
+
+                    {% if committee_rev.committee_approval %}
+                        {% for each in committee_rev.committee_approval.all %}
+                            {% if each.signed_by != feedback.user %}
+                                <tr>
+                                    <td style="border:1px solid black;">Agreed by</td>
+                                    {% if each.signed_by.profile.npcbl_designation %}
+                                        <td style="border:1px solid black;">{{ each.signed_by.profile.npcbl_designation }}</td>
+                                    {% else %}
+                                        <td>&nbsp;</td>
+                                    {% endif %}
+                                    <td style="width: 30%; word-break: break-all; white-space: normal; border:1px solid black;">
+                                        {{ each.signed_by.get_full_name }}
+                                    </td>
+                                    <td style="margin-top:5%; border:1px solid black;">
+                                        <img id="signature_{{ forloop.counter }}" height="40" width="100"
+                                             src="http://{{ host }}/manpower/user/embedd_signature?hash={{ each.sign_hash }}">
+                                    </td>
+                                    <td style="border:1px solid black;">
+                                        {{ each.signed_on|format_custom_date_committee }}
+                                    </td>
+                                </tr>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+
+                    <!-- Reviewer's approval sign -->
+                    <tr>
+                        <td style="border:1px solid black;">Agreed by</td>
+                        {% if feedback.user.profile.npcbl_designation %}
+                            <td style="border:1px solid black;">{{ feedback.user.profile.npcbl_designation }}</td>
+                        {% else %}
+                            <td>&nbsp;</td>
+                        {% endif %}
+                        <td style="border:1px solid black;">
+                            {{ feedback.user.get_full_name }}
+                        </td>
+                        {% if feedback.user.profile.signature %}
+                            <td style="margin-top:5%; border:1px solid black;">
+                                <img id="signature" height="40" width="100"
+                                     src="http://{{ host }}/manpower/user/embedd_signature?hash={{ feedback.user.profile.signature }}">
+                            </td>
+                        {% else %}
+                            <td>&nbsp;</td>
+                        {% endif %}
+                            <td style="border:1px solid black;">{{ feedback.modified_at|format_custom_date_committee }}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+    </div>
 
     <!-- ....................................
          ....................................
@@ -297,7 +321,8 @@
          ....................................
          .................................... -->
 
-    <pdf:nexttemplate name="details_page"/>
+
+    <pdf:nexttemplate name="normal_page"/>
     <pdf:nextpage/>
 
     <div>
@@ -334,8 +359,8 @@
         </div>
     </div>
 
-    <pdf:nexttemplate name="details_page"/>
     <pdf:nextpage/>
+
     <div style="padding-bottom:1% ">
         {% if form %}
             <h2>Review Details</h2>
@@ -359,42 +384,39 @@
         {% endif %}
     </div>
     <br><br>
-</div>
 
-<div>
+    <pdf:nextpage/>
+
     <div>
-        <pdf:nexttemplate name="comment_page"/>
-        <pdf:nextpage/>
-    </div>
-    <div style="padding-left: 5%;">
-        <div>
-            <table style="width: 100%; text-align: left; border: 1px solid dimgrey; font-size: 12pt">
-                <tr>
-                    <td colspan="5">
-                        <h2>Committee Review Comments</h2>
-                    </td>
-                </tr>
-                <tr>
-                    <th>SL. No</th>
-                    <th>Section No</th>
-                    <th>Original Text</th>
-                    <th>Proposed Text</th>
-                    <th>Remarks</th>
-                </tr>
-                {% for each in committee_rev_cmnt %}
+        <div style="padding-left: 5%;">
+            <div>
+                <table style="width: 100%; text-align: left; border: 1px solid dimgrey; font-size: 12pt">
                     <tr>
-                        <td style="width: 3%">{{ forloop.counter }}</td>
-                        <td style="width: 15%">{{ each.section_no|pdf_wrap:100|linebreaks }}</td>
-                        <td style="width: 35%; font-size: 12pt">{{ each.original_text|linebreaks }}</td>
-                        <td style="width: 35%; font-size: 12pt">{{ each.proposed_text|linebreaks }}</td>
-                        <td style="width: 20%; font-size: 12pt">{{ each.remarks|linebreaks }}</td>
+                        <td colspan="5">
+                            <h2>Committee Review Comments</h2>
+                        </td>
                     </tr>
-                {% endfor %}
-            </table>
+                    <tr>
+                        <th>SL. No</th>
+                        <th>Section No</th>
+                        <th>Original Text</th>
+                        <th>Proposed Text</th>
+                        <th>Remarks</th>
+                    </tr>
+                    {% for each in committee_rev_cmnt %}
+                        <tr>
+                            <td style="width: 3%">{{ forloop.counter }}</td>
+                            <td style="width: 15%">{{ each.section_no|pdf_wrap:100|linebreaks }}</td>
+                            <td style="width: 35%; font-size: 12pt">{{ each.original_text|linebreaks }}</td>
+                            <td style="width: 35%; font-size: 12pt">{{ each.proposed_text|linebreaks }}</td>
+                            <td style="width: 20%; font-size: 12pt">{{ each.remarks|linebreaks }}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
         </div>
+        <br>
     </div>
-    <br>
-</div>
 
 </body>
 </html>
