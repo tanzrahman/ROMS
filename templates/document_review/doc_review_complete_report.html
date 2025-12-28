@@ -90,7 +90,7 @@
                                 <td>
                                     <img height="40" width="150"
                                          src="http://{{ host }}/manpower/user/embedd_signature?hash={{ committee_rev.sd_approval.sign_hash }}">
-                                    <br>
+
                                     <!-- Line exactly same width as signature -->
                                     <div style="width: 10%; border-bottom: 1px solid black; margin: 0 auto;">&nbsp;</div>
                                 </td>
@@ -127,7 +127,7 @@
                 {% endif %}</p>
         </div>
     </div>
-    <br><br>
+    <br><br><br>
     <!-- approval year in footer -->
     <div style="text-align: center; font-size: 9pt">
         <p>{{ committee_rev.sd_approval.signed_on|format_approval_year }}</p>
