@@ -4,16 +4,6 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <style>
-        @page normal_page {
-            size: A4;
-            margin: 2cm 2cm 2.5cm 2cm;
-
-            @frame footer {
-                -pdf-frame-content: footer_normal;
-                bottom: 1cm;
-                height: 1cm;
-            }
-        }
         @page details_page {
             size: a4 portrait;
             margin: 1cm;
@@ -74,6 +64,19 @@
             }
         }
 
+        @page front_page {
+            size: a4 portrait;
+            margin: 1cm;
+
+            @frame footer {
+                -pdf-frame-content: footer_front;
+                bottom: 1cm;
+                margin-left: 2cm;
+                margin-right: 2cm;
+                height: 1cm;
+            }
+        }
+
     </style>
 </head>
 
@@ -85,8 +88,14 @@
     </div>
 </div>
 
+<div id="footer_front">
+    <div style="text-align: center; font-size: 10pt;">
+        {{ committee_rev.sd_approval.signed_on|format_approval_year }}
+    </div>
+</div>
+
 <div style='padding:5%;'>
-    <pdf:nexttemplate name="details_page"/>
+    <pdf:nexttemplate name="front_page"/>
 
     <!-- ....................................
          ....................................
