@@ -75,7 +75,7 @@
             <img src={{ npcbl_logo_path }} alt="npcbl_logo" style="width: 4.26cm; height: 5cm">
         </div>
 
-        <br><br>
+        <br>
 
         <table style="width: 100%; border-collapse: collapse;">
             <tr>
@@ -118,12 +118,12 @@
             {% else %}
                 <p style="font-weight: bold">ROOPPUR NPP<br>UNIT UNDEFINED</p>
             {% endif %}
-            <p><b>{{ task.title }}</b></p>
+            <p><b>{{ task.title }}</b>
                 <p>{{ task }}<br>
                 {% if form.initial.version_of_doc %}
                     Version {{ form.initial.version_of_doc|extract_version_info }}<br>
                 {% else %}
-                    Version 2 <br>
+                    Version 2 </p><br>
                 {% endif %}
         </div>
     </div>
