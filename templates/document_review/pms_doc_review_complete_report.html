@@ -123,7 +123,6 @@
          .................................... -->
 <div>
     <pdf:nexttemplate name="front_page"/>
-    <pdf:nextpage/>
 
     <!-- front page -->
     <div style="padding-left: 5%; padding-top: 15%;">
@@ -188,18 +187,17 @@
     <div style="text-align: center; font-size: 9pt">
         <p>{{ committee_rev.sd_approval.signed_on|format_approval_year }}</p>
     </div>
-
+    <pdf:nextpage/>
 
 <div>
 
     <pdf:nexttemplate name="approval_page"/>
-    <pdf:nextpage/>
 
     <!-- heading of approval sheet -->
 
     <div style="padding-left: 5%; font-size: 10pt">
         <table style="width:100%; border-collapse:collapse; text-align:center;">
-            <tr style="height: 40px;">
+            <tr style="height: 20px;">
                 <td style="border:1px solid black; width:20%; vertical-align:middle;">
                     Rooppur NPP
                 </td>
@@ -215,7 +213,7 @@
                 </td>
             </tr>
 
-            <tr style="height: 40px;">
+            <tr style="height: 20px;">
                 <td style="border:1px solid black; vertical-align:middle;">
                     {% if form.initial.version_of_doc %}
                         Version {{ form.initial.version_of_doc|extract_version_info }}
@@ -322,14 +320,17 @@
 
 </div>
 
+    <pdf:nextpage/>
+
     <!-- ....................................
          ....................................
               End of new template design
          ....................................
          .................................... -->
 
+    <pdf:resetpagenumber />
+
     <pdf:nexttemplate name="normal_page"/>
-    <pdf:nextpage/>
 
     <div>
         <div>
@@ -364,9 +365,9 @@
             </table>
         </div>
     </div>
+    <pdf:nextpage/>
 
     <pdf:nexttemplate name="normal_page"/>
-    <pdf:nextpage/>
     <div style="padding-bottom:1% ">
         {% if form %}
             <h2>Review Details</h2>
@@ -391,10 +392,10 @@
     </div>
     <br><br>
 </div>
+<pdf:nextpage/>
 
 <div>
     <pdf:nexttemplate name="normal_page"/>
-    <pdf:nextpage/>
     <div style="padding-left: 5%;">
         <div>
             <table style="width: 100%; text-align: left; border: 1px solid dimgrey; font-size: 12pt">
