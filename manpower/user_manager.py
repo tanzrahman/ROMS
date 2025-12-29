@@ -24,6 +24,8 @@ from system_log.models import UserLog, UserNotificationLog, UserDeactivateLog, F
     ProfileEditLog
 from task_management.ftp_handler import upload_to_ftp, FILETYPE, fetch_file
 from csv import reader
+from PIL import Image
+from io import BytesIO
 
 def request_handler(request, action=None, query_string=None):
     if (action == 'embedd_signature'):
@@ -687,13 +689,44 @@ def load_signature(request, query_string):
     response['Content-Disposition'] = 'inline; filename="' + file_object.file_name + '"'
     return response
 
+# to make white background signature image
+def force_white_background(file_bytes):
+    """
+    Accepts file bytes (BytesIO or bytes)
+    Returns BytesIO image with white background
+    """
+
+    img = Image.open(file_bytes)
+
+    # Handle transparency
+    if img.mode in ("RGBA", "LA"):
+        bg = Image.new("RGB", img.size, (255, 255, 255))
+        bg.paste(img, mask=img.split()[-1])
+        img = bg
+    else:
+        img = img.convert("RGB")
+
+    output = BytesIO()
+    img.save(output, format="PNG")
+    output.seek(0)
+
+    return output
+
 def embedd_signature(request, query_string):
     hash = request.GET.get('hash')
 
     file_object = File.objects.get(hash=hash)
     file = fetch_file(request, file_object.server_loc)
     ftype = file_object.file_type.lower()
-    response = HttpResponse(file, content_type=FILETYPE[ftype])
+
+    # to make white background signature image
+    if ftype in ["png", "jpg", "jpeg"]:
+        file = force_white_background(file)
+        content_type = "image/png"   # xhtml2pdf-safe
+    else:
+        content_type = FILETYPE.get(ftype)
+
+    response = HttpResponse(file, content_type=content_type)
     response['Content-Disposition'] = 'inline; filename="' + file_object.file_name + '"'
     return response
 
