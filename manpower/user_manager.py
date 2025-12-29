@@ -689,62 +689,14 @@ def load_signature(request, query_string):
     response['Content-Disposition'] = 'inline; filename="' + file_object.file_name + '"'
     return response
 
-# to make white background signature image
-def force_white_background(file_data):
-    """
-    ALWAYS returns RAW BYTES (not BytesIO)
-    """
-
-    # Normalize input
-    if hasattr(file_data, "content"):      # HttpResponse
-        file_data = file_data.content
-
-    if isinstance(file_data, BytesIO):
-        file_data = file_data.getvalue()
-
-    if not isinstance(file_data, (bytes, bytearray)):
-        raise ValueError("Unsupported file data type")
-
-    img = Image.open(BytesIO(file_data))
-
-    # ALWAYS flatten (JPEG + PNG)
-    bg = Image.new("RGB", img.size, (255, 255, 255))
-
-    if img.mode in ("RGBA", "LA"):
-        bg.paste(img, mask=img.split()[-1])
-    else:
-        bg.paste(img)
-
-    output = BytesIO()
-    bg.save(output, format="PNG")
-
-    return output.getvalue()   # 🔴 RAW BYTES ONLY
-
 def embedd_signature(request, query_string):
     hash = request.GET.get('hash')
 
     file_object = File.objects.get(hash=hash)
-
-    original_file = fetch_file(request, file_object.server_loc)
-
+    file = fetch_file(request, file_object.server_loc)
     ftype = file_object.file_type.lower()
-
-    if ftype in ["png", "jpg", "jpeg"]:
-        image_bytes = force_white_background(original_file)
-        content_type = "image/png"
-    else:
-        image_bytes = original_file
-        content_type = FILETYPE.get(ftype)
-
-    response = HttpResponse(
-        image_bytes,
-        content_type=content_type
-    )
-
-    response['Content-Disposition'] = (
-        f'inline; filename="{file_object.file_name}"'
-    )
-
+    response = HttpResponse(file, content_type=FILETYPE[ftype])
+    response['Content-Disposition'] = 'inline; filename="' + file_object.file_name + '"'
     return response
 
 def committee_list(request, query_string):
