@@ -690,24 +690,34 @@ def load_signature(request, query_string):
     return response
 
 # to make white background signature image
-def force_white_background(file_bytes):
+def force_white_background(file_data):
     """
-    Accepts file bytes (BytesIO or bytes)
-    Returns BytesIO image with white background
+    Accepts bytes / BytesIO / HttpResponse
+    Returns BytesIO PNG with white background
     """
 
-    img = Image.open(file_bytes)
+    # 🔹 Normalize input to BytesIO
+    if hasattr(file_data, "content"):
+        # HttpResponse
+        file_data = file_data.content
 
-    # Handle transparency
+    if isinstance(file_data, bytes):
+        file_data = BytesIO(file_data)
+
+    file_data.seek(0)
+
+    img = Image.open(file_data)
+
+    # 🔹 ALWAYS flatten onto white background
+    bg = Image.new("RGB", img.size, (255, 255, 255))
+
     if img.mode in ("RGBA", "LA"):
-        bg = Image.new("RGB", img.size, (255, 255, 255))
-        bg.paste(img, mask=img.split()[-1])
-        img = bg
+        bg.paste(img, mask=img.split()[-1])  # transparency
     else:
-        img = img.convert("RGB")
+        bg.paste(img)
 
     output = BytesIO()
-    img.save(output, format="PNG")
+    bg.save(output, format="PNG")
     output.seek(0)
 
     return output
