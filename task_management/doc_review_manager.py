@@ -744,8 +744,8 @@ def committee_recomendation(request, id):
         feed_back = committe_rev.fire_doc_review
     if (category == 'Other'):
         feed_back = committe_rev.other_doc_review
-    if (committe_rev.committee_approval.filter(signed_by=request.user).exists()):
-        return HttpResponse("You have already recommended the initial review of this Document!")
+    # if (committe_rev.committee_approval.filter(signed_by=request.user).exists()):
+    #     return HttpResponse("You have already recommended the initial review of this Document!")
 
     if(request.user.username == 'md@npcbl.gov.bd'):
         form = ApprovalSignatureForm_MD()
