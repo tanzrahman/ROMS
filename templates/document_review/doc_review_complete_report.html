@@ -277,6 +277,7 @@
                                         {{ each.signed_by.get_full_name }}
                                     </td>
                                     <td style="margin-top:5%; border:1px solid black;">
+                                        {{ each.sign_hash }}
                                         <img id="signature_{{ forloop.counter }}" height="40" width="100"
                                              src="http://{{ host }}/manpower/user/embedd_signature?hash={{ each.sign_hash }}">
                                     </td>
