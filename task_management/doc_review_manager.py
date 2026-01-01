@@ -942,8 +942,6 @@ def download_committee_review(request, id):
         'npcbl.png'
     )
 
-    files = File.objects.all()
-
     context = {
         'form': form,
         'feedback': feed_back,
@@ -953,9 +951,8 @@ def download_committee_review(request, id):
         'host':request.get_host(),
         'unit': str(feed_back.task).split('.')[2],
         'npcbl_logo_path': npcbl_logo_path,
-        'files': files,
-        'path': settings.FTP_BASE_DIR,
     }
+    
     if(no_pdf):
         return render(request, 'document_review/doc_review_complete.html', context=context)
     else:
