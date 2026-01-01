@@ -686,7 +686,6 @@ def upload_signature(request, query_string):
         except Exception as e:
             return HttpResponse("Failed, {}".format(e.__str__()))
 
-
     return render(request, 'manpower/upload_signature.html')
 
 def load_signature(request, query_string):
