@@ -132,57 +132,102 @@ FILETYPE = {
 
 
 def upload_to_ftp(file_to_upload, filename, docType=""):
-    file = file_to_upload
+    session = ftplib.FTP(
+        settings.FTP_SERVER,
+        settings.FTP_USER,
+        settings.FTP_PWD
+    )
 
-    session = ftplib.FTP(settings.FTP_SERVER,settings.FTP_USER,settings.FTP_PWD)
-
-    file_name = filename
     date = datetime.datetime.today()
     dir = date.strftime("%m%d%Y")
+
     session.cwd(settings.FTP_BASE_DIR)
-    #if the directory doesnt exists, create the directory
-    if dir not in session.nlst('/'.join(dir.split('/')[:-1])):
+
+    if dir not in session.nlst():
         session.mkd(dir)
 
-    #GOTO base_dir -> date_dir
-    upload_dir = settings.FTP_BASE_DIR +"/"+ dir
-    session.cwd(upload_dir)
+    session.cwd(dir)
 
-    # #for creating sub-directory under dir folder
-    # if sub_dir not in session.nlst():
-    #     session.mkd(sub_dir)
-    # session.cwd(sub_dir)
-
-    location = "/"+str(dir)+"/"+file_name
-
-    cmd = 'STOR '+file_name
     try:
-        session.storbinary(cmd, file)  # send the file
-        file.close()  # close file and FTP
+        # 🔥 rewind file before upload
+        file_to_upload.seek(0)
+
+        session.storbinary(f'STOR {filename}', file_to_upload)
+
         session.quit()
-        return location
-    except Exception as E:
-        print("FTP_ERROR: "+E.__str__())
-        return None
+
+        return f"/{dir}/{filename}"
+
+    except Exception as e:
+        session.quit()
+        raise e
+
+    # file = file_to_upload
+    #
+    # session = ftplib.FTP(settings.FTP_SERVER,settings.FTP_USER,settings.FTP_PWD)
+    #
+    # file_name = filename
+    # date = datetime.datetime.today()
+    # dir = date.strftime("%m%d%Y")
+    # session.cwd(settings.FTP_BASE_DIR)
+    # #if the directory doesnt exists, create the directory
+    # if dir not in session.nlst('/'.join(dir.split('/')[:-1])):
+    #     session.mkd(dir)
+    #
+    # #GOTO base_dir -> date_dir
+    # upload_dir = settings.FTP_BASE_DIR +"/"+ dir
+    # session.cwd(upload_dir)
+    #
+    # # #for creating sub-directory under dir folder
+    # # if sub_dir not in session.nlst():
+    # #     session.mkd(sub_dir)
+    # # session.cwd(sub_dir)
+    #
+    # location = "/"+str(dir)+"/"+file_name
+    #
+    # cmd = 'STOR '+file_name
+    # try:
+    #     session.storbinary(cmd, file)  # send the file
+    #     file.close()  # close file and FTP
+    #     session.quit()
+    #     return location
+    # except Exception as E:
+    #     print("FTP_ERROR: "+E.__str__())
+    #     return None
 
 def fetch_file(request,file_url):
-    session = ftplib.FTP(settings.FTP_SERVER, settings.FTP_USER, settings.FTP_PWD)
-    tmp_file = "tmp.file"
-    full_location = settings.FTP_BASE_DIR+file_url
-    try:
-        with open(tmp_file,"wb") as f:
-            session.retrbinary('RETR %s' % full_location,f.write)
-    except Exception as e:
-        print(e)
+    session = ftplib.FTP(
+        settings.FTP_SERVER,
+        settings.FTP_USER,
+        settings.FTP_PWD
+    )
 
-    file = None
-    with open(tmp_file, 'rb') as f:
-        file = f.read()
-        f.close()
-    os.remove(tmp_file)
-    # Watermarking in every page of pdf file
-    # compatible with Python versions 2.6, 2.7,
-    # and 3.2 - 3.5. (pip3 install pypdf4)
+    buffer = io.BytesIO()
+    full_location = settings.FTP_BASE_DIR + file_url
+
+    session.retrbinary(f'RETR {full_location}', buffer.write)
+    session.quit()
+
+    buffer.seek(0)  # 🔥 REQUIRED
+    return buffer.read()
+
+    # session = ftplib.FTP(settings.FTP_SERVER, settings.FTP_USER, settings.FTP_PWD)
+    # tmp_file = "tmp.file"
+    # full_location = settings.FTP_BASE_DIR+file_url
+    # try:
+    #     with open(tmp_file,"wb") as f:
+    #         session.retrbinary('RETR %s' % full_location,f.write)
+    # except Exception as e:
+    #     print(e)
+    #
+    # file = None
+    # with open(tmp_file, 'rb') as f:
+    #     file = f.read()
+    #     f.close()
+    # os.remove(tmp_file)
+    # # Watermarking in every page of pdf file
+    # # compatible with Python versions 2.6, 2.7,
+    # # and 3.2 - 3.5. (pip3 install pypdf4)
 
 
 

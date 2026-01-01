@@ -667,12 +667,9 @@ def upload_signature(request, query_string):
         sig_file_name = str(request.user.id)+"_"+signature.name
         try:
             if(request.user.profile.signature):
-                print("Signature: ", request.user.profile.signature)
                 file = File.objects.get(hash=request.user.profile.signature)
                 file_loc = file.server_loc
-                print("File loc: ", file_loc)
                 delete_file(file_loc) # delete from FTP
-                print("After deleting file from server: ", file_loc)
                 file.delete() # delete from File model
                 server_url = upload_to_ftp(signature.file, sig_file_name)
                 File.objects.create(file_name=sig_file_name, hash=request.user.profile.signature, server_loc=server_url,
