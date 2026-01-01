@@ -284,8 +284,8 @@
                                         {% for file in files %}
                                             {% if file.hash == each.sign_hash %}
                                                 <img id="signature_{{ forloop.counter }}" height="40" width="100"
-                                                     src="file:///{{ settings.FTP_BASE_DIR }}/{{ file.server_loc }}">
-                                                    <p>{{ settings.FTP_BASE_DIR }}/{{ file.server_loc }}</p>
+                                                     src="file:///{{ path }}/{{ file.server_loc }}">
+                                                    <p>{{ path }}/{{ file.server_loc }}</p>
                                             {% endif %}
                                         {% endfor %}
                                     </td>
