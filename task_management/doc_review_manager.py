@@ -942,6 +942,8 @@ def download_committee_review(request, id):
         'npcbl.png'
     )
 
+    files = File.objects.all()
+
     context = {
         'form': form,
         'feedback': feed_back,
@@ -950,7 +952,8 @@ def download_committee_review(request, id):
         'committee_rev_cmnt': committee_rev_cmnt,
         'host':request.get_host(),
         'unit': str(feed_back.task).split('.')[2],
-        'npcbl_logo_path': npcbl_logo_path
+        'npcbl_logo_path': npcbl_logo_path,
+        'files': files
     }
     if(no_pdf):
         return render(request, 'document_review/doc_review_complete.html', context=context)
