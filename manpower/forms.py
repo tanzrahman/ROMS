@@ -71,9 +71,9 @@ class UserGroupForm(forms.Form):
         print("UserGroup form init")
 
 class SignUpForm(UserCreationForm):
-    first_name = forms.CharField(max_length=30, required=False, help_text='Optional.')
-    last_name = forms.CharField(max_length=30, required=False, help_text='Optional.')
-    email = forms.EmailField(max_length=254, help_text='Required.  email address of rooppurnpp.gov.bd domain.')
+    first_name = forms.CharField(max_length=128, required=False, help_text='Optional.')
+    last_name = forms.CharField(max_length=128, required=False, help_text='Optional.')
+    email = forms.EmailField(max_length=256, help_text='Required.  email address of rooppurnpp.gov.bd domain.')
     phone = forms.CharField(max_length=11, label='Mobile No')
     department = forms.ModelChoiceField(required=True, label="Department", queryset=DepartmentShop.objects.all())
     npcbl_designation = forms.CharField(required=False, label='NPCBL Designation')
@@ -108,7 +108,7 @@ class DepartmentShopForm(forms.ModelForm):
 
 
 class UserSearchForm(forms.Form):
-    first_name = forms.CharField(max_length=30, required=False, help_text='Optional.')
+    first_name = forms.CharField(max_length=128, required=False, help_text='Optional.')
     npcbl_designation = forms.CharField(required=False, label='NPCBL Designation')
     division = forms.ModelChoiceField(required=False, label="Division", queryset=Division.objects.all())
     department = forms.ModelChoiceField(required=False, label="Department", queryset=DepartmentShop.objects.all())
@@ -152,8 +152,8 @@ class SARCommitteeForm(forms.ModelForm):
         fields = ('name', 'sar_section', 'sar_section_title', 'members', 'lead')
 
 class EditProfileForm(forms.Form):
-    first_name = forms.CharField(max_length=30, required=False)
-    last_name = forms.CharField(max_length=30, required=False)
+    first_name = forms.CharField(max_length=128, required=False)
+    last_name = forms.CharField(max_length=128, required=False)
     npcbl_designation = forms.CharField(required=False, label='NPCBL Designation')
     designation = forms.CharField(required=False, label='Plant Designation')
     division = forms.ModelChoiceField(required=False, label="Division", queryset=Division.objects.all())
