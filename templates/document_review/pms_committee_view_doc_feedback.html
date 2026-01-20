@@ -108,7 +108,7 @@
                             <td>
                                 {{ each.remarks|remarks_display_str }}
                                 {% if request.user.is_staff %}
-                                    <a href="/admin_site_control/manpower/approvalsignature/{{ each.id }}/change/">Change</a>
+                                    <a href="/admin_roms_control/manpower/approvalsignature/{{ each.id }}/change/">Change</a>
                                 {% endif %}
                                 {% if request.user == each.signed_by %}
                                     <a href="/task_management/document_review/change_document_recommendation/{{ each.id }}?second_tier_id={{ committee_rev.id }}">Change</a>
@@ -123,7 +123,7 @@
                         <td>
                             {{ committee_rev.division_head_approval.remarks|remarks_display_str }}
                             {% if request.user.is_staff %}
-                                <a href="/admin_site_control/manpower/approvalsignature/{{ committee_rev.division_head_approval.id }}/change/">Change</a>
+                                <a href="/admin_roms_control/manpower/approvalsignature/{{ committee_rev.division_head_approval.id }}/change/">Change</a>
                             {% endif %}
                         </td>
                         </td>
@@ -135,7 +135,7 @@
                         <td>
                             {{ committee_rev.chief_eng_approval.remarks|remarks_display_str }}
                             {% if request.user.is_staff %}
-                                <a href="/admin_site_control/manpower/approvalsignature/{{ committee_rev.chief_eng_approval.id }}/change/">Change</a>
+                                <a href="/admin_roms_control/manpower/approvalsignature/{{ committee_rev.chief_eng_approval.id }}/change/">Change</a>
                             {% endif %}
                         </td>
                     </tr>
@@ -146,7 +146,7 @@
                         <td>
                             {{ committee_rev.sd_approval.remarks|remarks_display_str }}
                             {% if request.user.is_staff %}
-                                <a href="/admin_site_control/manpower/approvalsignature/{{ committee_rev.sd_approval.id }}/change/">Change</a>
+                                <a href="/admin_roms_control/manpower/approvalsignature/{{ committee_rev.sd_approval.id }}/change/">Change</a>
                             {% endif %}
                         </td>
                         <td>
