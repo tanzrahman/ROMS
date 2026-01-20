@@ -134,7 +134,7 @@
                     <td style="width: 30%;">
                         <p style="font-size: 14pt;"><b>APPROVED</b><br>Managing Director</p>
 
-                        {% if committee_rev.sd_approval.sign_hash %}
+                        {% if committee_rev.sd_approval.sign_hash and committee_rev.sd_approval.remarks != 'reject'%}
                             <!-- Signature and line in same container -->
                             <table style="border-collapse: collapse; margin: 0 auto;">
                                 <tr>
