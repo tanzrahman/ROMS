@@ -458,10 +458,10 @@ def pms_second_tier_doc_review_list(request, action=None, id=None):
     # to change MD sir's approval remarks
     doc_list_ = SecondTierDocumentReview.objects.filter(task__created_date__lt='2025-07-31')
     print("doc_list: ", doc_list_.count())
-    for each in doc_list_:
-        if (each.chief_eng_approval and each.sd_approval):
-            each.sd_approval.remarks = each.chief_eng_approval.remarks
-            each.sd_approval.save()
+    # for each in doc_list_:
+    #     if (each.chief_eng_approval and each.sd_approval):
+    #         each.sd_approval.remarks = each.chief_eng_approval.remarks
+    #         each.sd_approval.save()
 
     page_no = 1
     no_of_items = 200
