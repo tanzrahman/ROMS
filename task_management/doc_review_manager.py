@@ -456,12 +456,12 @@ def second_tier_doc_review_list(request, action=None, id=None):
 
 def pms_second_tier_doc_review_list(request, action=None, id=None):
     # to change MD sir's approval remarks
-    doc_list_ = SecondTierDocumentReview.objects.filter(task__created_date__lt='2025-07-31',
-                                                        sd_approval__remarks__in=['accept_with_remarks', 'recommend_to_approve'])
+    doc_list_ = SecondTierDocumentReview.objects.filter(task__created_date__lt='2025-07-31')
     print("doc_list: ", doc_list_.count())
     for each in doc_list_:
-        each.sd_approval.remarks='approve'
-        each.sd_approval.save()
+        if (each.chief_eng_approval and each.sd_approval):
+            each.sd_approval.remarks = each.chief_eng_approval.remarks
+            each.sd_approval.save()
 
     page_no = 1
     no_of_items = 200
@@ -505,9 +505,9 @@ def pms_second_tier_doc_review_list(request, action=None, id=None):
                         filter_list.append(Q(**{'sd_approval__isnull': value}))
 
     if (len(filter_list) > 0):
-        doc_list = SecondTierDocumentReview.objects.filter(task__created_date__lt='2025-07-31', sd_approval__remarks='approve').filter(reduce(operator.and_, filter_list)).annotate(count=Count('committee_approval')).order_by('-count')
+        doc_list = SecondTierDocumentReview.objects.filter(task__created_date__lt='2025-07-31').filter(reduce(operator.and_, filter_list)).annotate(count=Count('committee_approval')).order_by('-count')
     else:
-        doc_list = SecondTierDocumentReview.objects.filter(task__created_date__lt='2025-07-31', sd_approval__remarks='approve').annotate(count=Count('committee_approval')).order_by('-count')
+        doc_list = SecondTierDocumentReview.objects.filter(task__created_date__lt='2025-07-31').annotate(count=Count('committee_approval')).order_by('-count')
 
     total_reviews = len(doc_list)
 
