@@ -456,43 +456,11 @@ def second_tier_doc_review_list(request, action=None, id=None):
 
 def pms_second_tier_doc_review_list(request, action=None, id=None):
     # to change MD sir's approval remarks
-    doc_list_ = SecondTierDocumentReview.objects.filter(task__created_date__lt='2025-07-31', sd_approval__remarks__isnull=False, task__task_id__in=['RPR.0534.0.0.WP.DZ0002',
-'RPR.0534.0.0.UKU.LBG.OP.DC0001',
-'RPR.0534.0.0.UKU.LCM.OP.DC0001',
-'RPR.0534.0.0.OP.BZ0001',
-'RPR.0534.0.0.OP.BZ0008',
-'RPR.0534.0.0.EP.DZ0002',
-'RPR.0534.0.0.EP.DZ0003',
-'RPR.0534.0.0.EP.DC0001',
-'RPR.0534.0.0.OP.BZ0011',
-'RPR.0534.0.0.OP.BZ0012',
-'RPR.0534.0.0.OP.BZ0016',
-'RPR.0534.0.0.ACM.ADM.OP.DC0001',
-'RPR.0534.0.0.ACL.TP.DC0008',
-'RPR.0534.0.0.BCT.TP.DC0002',
-'RPR.0534.0.0.AV.BY.OP.DC0003',
-'RPR.0534.0.0.CF.OP.DC0001',
-'RPR.0534.0.0.UJA.TP.DC0001',
-'RPR.0534.0.0.OP.DC0008',
-'RPR.0534.0.0.QSA.OP.DC0001',
-'RPR.0534.0.0.UTH.QHL.OP.DC0001',
-'RPR.0534.0.0.UTH.AT.OP.DC0001',
-'RPR.0534.0.0.UKS.KLF32.OP.DC0001',
-'RPR.0534.0.0.UEJ11-13.OP.DC0007',
-'RPR.0534.0.0.UST.SAT43.OP.DC0001',
-'RPR.0534.0.0.UYB.KLS26-28.OP.DC0001',
-'RPR.0534.0.0.UYB.KLS22.OP.DC0001',
-'RPR.0534.0.0.UYB.KLS33.OP.DC0001',
-'RPR.0534.1.0.A.B.DZ0064',
-'RPR.0534.1.0.UMA.PGB.OP.DC0001',
-'RPR.0534.1.0.URF.11,12SAQ25.OP.DC0001',
-'RPR.0534.1.0.URF.11,12SAQ42.OP.DC0001',
-'RPR.0534.1.0.URF.11,12SAQ41.OP.DC0001'
-])
-    print("doc_list: ", doc_list_.count())
-    for each in doc_list_:
-        each.sd_approval.remarks = 'approve'
-        each.sd_approval.save()
+    # doc_list_ = SecondTierDocumentReview.objects.filter(task__created_date__lt='2025-07-31', sd_approval__remarks__isnull=False)
+    # print("doc_list: ", doc_list_.count())
+    # for each in doc_list_:
+    #     each.sd_approval.remarks = 'approve'
+    #     each.sd_approval.save()
 
     page_no = 1
     no_of_items = 200
