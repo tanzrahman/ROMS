@@ -504,9 +504,9 @@ def pms_second_tier_doc_review_list(request, action=None, id=None):
                         filter_list.append(Q(**{'sd_approval__isnull': value}))
 
     if (len(filter_list) > 0):
-        doc_list = SecondTierDocumentReview.objects.filter(task__created_date__lt='2025-07-31', sd_approval__remarks__isnull=False).filter(reduce(operator.and_, filter_list)).annotate(count=Count('committee_approval')).order_by('-count')
+        doc_list = SecondTierDocumentReview.objects.filter(task__created_date__lt='2025-07-31', sd_approval__remarks='approve').filter(reduce(operator.and_, filter_list)).annotate(count=Count('committee_approval')).order_by('-count')
     else:
-        doc_list = SecondTierDocumentReview.objects.filter(task__created_date__lt='2025-07-31', sd_approval__remarks__isnull=False).annotate(count=Count('committee_approval')).order_by('-count')
+        doc_list = SecondTierDocumentReview.objects.filter(task__created_date__lt='2025-07-31', sd_approval__remarks='approve').annotate(count=Count('committee_approval')).order_by('-count')
 
     total_reviews = len(doc_list)
 
