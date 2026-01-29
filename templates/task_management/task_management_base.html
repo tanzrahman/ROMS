@@ -141,7 +141,7 @@
                         </div>
                     </li> -->
 
-                    {% if request.user.profile.access_level < 2 or request.user.username == 'razu.ahmmed554@rooppurnpp.gov.bd' %}
+                    {% if request.user.profile.access_level < 2 or request.user.username in 'razu.ahmmed554@rooppurnpp.gov.bd , arifur.rahman485@rooppurnpp.gov.bd' %}
 
                         <li class="nav-item">
                             <a class="nav-link" href="/task_management/document_review/pms_second_tier_doc_review_list">Document Review of PMS</a>
