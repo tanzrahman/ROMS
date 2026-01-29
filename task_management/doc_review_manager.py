@@ -456,11 +456,15 @@ def second_tier_doc_review_list(request, action=None, id=None):
 
 def pms_second_tier_doc_review_list(request, action=None, id=None):
     # to change MD sir's approval remarks
-    # doc_list_ = SecondTierDocumentReview.objects.filter(task__created_date__lt='2025-07-31', sd_approval__remarks__isnull=False)
-    # print("doc_list: ", doc_list_.count())
-    # for each in doc_list_:
-    #     each.sd_approval.remarks = 'approve'
-    #     each.sd_approval.save()
+    doc_list_ = SecondTierDocumentReview.objects.filter(task__created_date__lt='2025-07-31', sd_approval__remarks__isnull=False, task__task_id__in=['RPR.0534.1.0.A.B.DZ0064',
+    'RPR.0534.1.0.UMA.PGB.OP.DC0001',
+    'RPR.0534.1.0.URF.11,12SAQ25.OP.DC0001',
+    'RPR.0534.1.0.URF.11,12SAQ42.OP.DC0001',
+    'RPR.0534.1.0.URF.11,12SAQ41.OP.DC0001'])
+    print("doc_list: ", doc_list_.count())
+    for each in doc_list_:
+        each.sd_approval.remarks = 'approve'
+        each.sd_approval.save()
 
     page_no = 1
     no_of_items = 200
