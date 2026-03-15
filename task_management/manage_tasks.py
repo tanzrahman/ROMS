@@ -279,9 +279,9 @@ def task_list(request):
 
     no_of_items = 100
     search_form = AllTaskSearchForm(initial={'user':request.user})
-    total_completed_tasks = Task.objects.filter(created_date__gt='2025-07-31', percent_completed__exact=100).count()
-    total_incomplete_tasks = Task.objects.filter(created_date__gt='2025-07-31', percent_completed__lt=100).count()
-    total_monthly_tasks = Task.objects.filter(created_date__gt='2025-07-31').filter(planned_start_date__year=datetime.datetime.today().year, planned_start_date__month=datetime.datetime.today().month).count()
+    total_completed_tasks = Task.objects.filter(task_category='DocumentReview', percent_completed__exact=100).count()
+    total_incomplete_tasks = Task.objects.filter(task_category='DocumentReview', percent_completed__lt=100).count()
+    total_monthly_tasks = Task.objects.filter(task_category='DocumentReview', planned_start_date__year=datetime.datetime.today().year, planned_start_date__month=datetime.datetime.today().month).count()
 
     filters = []
 
@@ -341,14 +341,14 @@ def task_list(request):
         filters.append(Q(**{'division':request.user.profile.division}))
 
     if (len(filters) > 0):
-        task_list = Task.objects.filter(created_date__gt='2025-07-31').filter(reduce(operator.and_, filters))
+        task_list = Task.objects.filter(task_category='DocumentReview').filter(reduce(operator.and_, filters))
         search_summary= {
-            'total_completed_tasks': task_list.filter(created_date__gt='2025-07-31', percent_completed__exact=100).count(),
-            'total_incomplete_tasks': task_list.filter(created_date__gt='2025-07-31', percent_completed__lt=100).count(),
+            'total_completed_tasks': task_list.filter(percent_completed__exact=100).count(),
+            'total_incomplete_tasks': task_list.filter(percent_completed__lt=100).count(),
             'monthly_tasks': task_list.filter(planned_start_date__year=datetime.datetime.today().year, planned_start_date__month=datetime.datetime.today().month).count()
         }
     else:
-        task_list = Task.objects.filter(created_date__gt='2025-07-31')
+        task_list = Task.objects.filter(task_category='DocumentReview')
 
     #get feedback report
     total_feedback = TaskFeedBack.objects.filter(task__in=task_list)
