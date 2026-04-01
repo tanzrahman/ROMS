@@ -349,6 +349,15 @@ def view_specific_review(request,id):
 
 
 def second_tier_doc_review_list(request, action=None, id=None):
+    doc_list = SecondTierDocumentReview.objects.filter(task__created_date__gt='2025-07-31', sd_approval__isnull=True)
+    print("Number of doc: ", doc_list.count())
+    user = User.objects.get(username='md@npcbl.gov.bd')
+    for i in doc_list:
+        print(i)
+        approval = ApprovalSignature.objects.create(sign_hash='61bb2ea2542f9caa472d4a083af1bfa61a73d5dc', signed_on=datetime.datetime.now(), signed_by=user, remarks='approve')
+        i.sd_approval = approval
+        i.save()
+
     page_no = 1
     no_of_items = 200
 

@@ -190,7 +190,7 @@
                                     <td><a href="/task_management/open_task/{{ task.id }}"
                                            target="_blank">{{ task }}</a>
                                         {% if user_can_reassign_task %}
-                                            {% if task.division == request.user.profile.division or request.user.profile.access_level < 2 or request.user.username in 'razu.ahmmed554@rooppurnpp.gov.bd, arifur.rahman485@rooppurnpp.gov.bd' %}
+                                            {% if task.division == request.user.profile.division or request.user.profile.access_level < 2 %}
                                                 <a href="/task_management/edit_task/{{ task.id }}"
                                                    class="btn btn-outline-primary" target="_blank">Edit Task</a>
                                             {% endif %}

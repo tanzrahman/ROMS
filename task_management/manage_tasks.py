@@ -73,7 +73,7 @@ def edit_task(request,task_id):
 
     task = Task.objects.get(id=task_id)
 
-    if(request.user.profile.access_level > 3):
+    if(request.user.profile.access_level > 1):
         if (request.user.profile.division != task.division):
             return HttpResponse("You Cannot Change Tasks from Other division")
 
