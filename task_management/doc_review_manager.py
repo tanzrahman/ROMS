@@ -944,8 +944,8 @@ def download_committee_review(request, id):
     no_pdf = False
 
     for each in committee_rev_cmnt:
-        print(len(each.proposed_text),len(each.original_text),len(each.remarks))
-        if(len(each.proposed_text)> 2200 or len(each.original_text)>2200 or len(each.remarks)>2200):
+        print("Length: ", len(each.proposed_text),len(each.original_text),len(each.remarks))
+        if(len(each.proposed_text)>5000 or len(each.original_text)>5000 or len(each.remarks)>5000):
             no_pdf = True
 
     npcbl_logo_path = os.path.join(
@@ -1003,7 +1003,7 @@ def pms_download_committee_review(request, id):
 
     for each in committee_rev_cmnt:
         print(len(each.proposed_text),len(each.original_text),len(each.remarks))
-        if(len(each.proposed_text)> 2200 or len(each.original_text)>2200 or len(each.remarks)>2200):
+        if(len(each.proposed_text)>5000 or len(each.original_text)>5000 or len(each.remarks)>5000):
             no_pdf = True
 
     npcbl_logo_path = os.path.join(
