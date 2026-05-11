@@ -235,7 +235,13 @@
                     </tr>
                     <tr>
                         <td style="border:1px solid black;">Agreed by</td>
-                        <td style="border:1px solid black;">Chief Superintendent (Addl. Charge)</td>
+                        <td style="border:1px solid black;">
+                            {% if committee_rev.chief_eng_approval.signed_by.username == 'mushfika.ahmed538@rooppurnpp.gov.bd' %}
+                                Chief Superintendent (Addl. Charge)
+                            {% else %}
+                                Chief Superintendent
+                            {% endif %}
+                        </td>
                         <td style="border:1px solid black;">
                             {{ committee_rev.chief_eng_approval.signed_by.get_full_name }}
                         </td>
