@@ -32,7 +32,7 @@ def homepage(request):
     if(request.user.profile.grade>50 and request.user.profile.grade<100):
         return redirect('/consultant')
 
-    total_documents = Task.objects.filter(created_date__gt='2025-07-31', task_category='DocumentReview').count()
+    total_documents = Task.objects.filter(created_date__gt='2025-07-31', task_category__in=['DocumentReview', 'Document Review']).count()
 
     op_doc = len(OperationalDocumentReview.objects.filter(task__created_date__gt='2025-07-31'))
     regulation_doc = len(RegulationDocumentReview.objects.filter(task__created_date__gt='2025-07-31'))
