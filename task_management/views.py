@@ -47,7 +47,7 @@ def homepage(request):
     second_tier_doc_review = {}
 
     for division in divisions:
-        total_doc_review.update({str(division): Task.objects.filter(created_date__gt='2025-07-31', division=division, task_category='DocumentReview').count()})
+        total_doc_review.update({str(division): Task.objects.filter(created_date__gt='2025-07-31', division=division, task_category__in=['DocumentReview', 'Document Review']).count()})
 
         first_tier_doc_review_count = len(OperationalDocumentReview.objects.filter(task__created_date__gt='2025-07-31', task__division=division)) + len(RegulationDocumentReview.objects.filter(task__created_date__gt='2025-07-31', task__division=division)) \
                               + len(FireAndEmergencyDocumentReview.objects.filter(task__created_date__gt='2025-07-31', task__division=division)) + len(OthersDocumentReview.objects.filter(task__created_date__gt='2025-07-31', task__division=division))
