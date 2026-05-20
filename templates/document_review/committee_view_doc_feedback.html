@@ -123,11 +123,11 @@
                         <td>
                             {{ committee_rev.division_head_approval.remarks|remarks_display_str }}
                             {% if request.user.is_staff %}
-                                <a href="/admin_roms_control/manpower/approvalsignature/{{ committee_rev.chief_eng_approval.id }}/change/">Change</a>
+                                <a href="/admin_roms_control/manpower/approvalsignature/{{ committee_rev.division_head_approval.id }}/change/">Change</a>
                             {% endif %}
-                            {% if request.user == committee_rev.division_head_approval.signed_by %}
-                                <a href="/task_management/document_review/change_document_recommendation/{{ committee_rev.chief_eng_approval.id }}?second_tier_id={{ committee_rev.id }}">Change</a>
-                            {% endif %}
+                            <!--{% if request.user == committee_rev.division_head_approval.signed_by %}
+                                <a href="/task_management/document_review/change_document_recommendation/{{ committee_rev.division_head_approval.id }}?second_tier_id={{ committee_rev.id }}">Change</a>
+                            {% endif %}-->
                         </td>
                     </tr>
 
